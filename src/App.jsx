@@ -1,9 +1,17 @@
+import { Home } from "./components/Home"
+import { LoginPage } from "./components/LoginPage"
+import { NavBar } from "./components/NavBar"
+import { Route, Routes } from "react-router-dom"
+
 function App() {
 
   return (
     <>
-    <h1>Eventor</h1>
-    <p> An Event Managment System</p>
+    <NavBar />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="login" element={<LoginPage />} />
+      </Routes>
     </>
   )
 }
