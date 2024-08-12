@@ -244,6 +244,6 @@ export const AdminDashboard = () => {
           </Container>
         </Box>
       </Box>
-    </ThemeProvider>
+    </ThemeProvider> 
   );
 };
