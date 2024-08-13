@@ -31,9 +31,10 @@ export const Login = () => {
     <ThemeProvider theme={theme}>
       <Grid
         container
+        display='flex'
         justifyContent="center"
         alignItems="center"
-        style={{ minHeight: "100vh", backgroundColor: "#f5f5f5" }}
+        style={{ height: "100vh", minHeight: "100vh", margin: 'auto', maxWidth: '1400px' }}
       >
         <Grid item xs={12} sm={8} md={6} lg={4}>
           <Paper

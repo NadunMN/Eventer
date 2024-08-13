@@ -1,8 +1,7 @@
 import React from 'react';
 import './Abouts.css'; // Import the CSS file for styling
-import teamMember1 from '../assets/images/team-member1.jpg';
-import teamMember2 from '../assets/images/team-member2.jpg';
-
+import teamMember1 from '../../asset/team-member1.jpg';
+import teamMember2 from '../../asset/team-member2.jpg';
 export  const About = () => {
   return (
     <div className="about-container">

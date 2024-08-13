@@ -19,7 +19,7 @@ export const Register = () => {
     padding: 20,
     height: "auto",
     width: "90%",
-    maxWidth: "750px",
+    maxWidth: "600px",
     margin: "100px auto",
 
     
