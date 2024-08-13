@@ -24,6 +24,21 @@ export const NavBar = () => {
               Login
               {" "}
             </Button>
+            <Button color="inherit" component={Link} to="/register">
+              {" "}
+              Register
+              {" "}
+            </Button>
+            <Button color="inherit" component={Link} to="/add-event">
+              {" "}
+              Add Event
+              {" "}
+            </Button>
+            <Button color="inherit" component={Link} to="/admin-dashboard">
+              {" "}
+              Dashboard
+              {" "}
+            </Button>
           </Toolbar>
         </AppBar>
       </Grid>
