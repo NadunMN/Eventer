@@ -1,2 +1,2 @@
 # Eventer
-An Event Management System
+An Event Management System build using MERN stack

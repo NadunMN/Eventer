@@ -8,7 +8,6 @@ export const Home = () => {
             Eventor
         </Typography>
         <Typography variant="body1">An Event Managment System</Typography>
-
         </Stack>
         </>
     )
