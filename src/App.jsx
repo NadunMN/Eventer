@@ -21,7 +21,7 @@ function App() {
         <Route path="login" element={<Login />} />
         <Route path="register" element={<Register />} />
         <Route path="add-event" element={<AddEvent />} />
-        <Route path="admin-dashboard" el ement={<AdminDashboard />} />
+        <Route path="admin-dashboard" element={<AdminDashboard />} />
         <Route path="Event" element={<Event />} />
         <Route path="About" element={<About />} /> 
         <Route path="Contact" element={<Contact />} />
