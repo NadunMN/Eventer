@@ -9,7 +9,7 @@ const EventSchema = new mongoose.Schema({
   image: String,
 });
 
-const EventSchemanew = new mongoose.Schema({
+const EventS = new mongoose.Schema({
   title: {type: String, required: true},
   start_date: {type: String, required: true},
   start_time: {type: String, required: true},

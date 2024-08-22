@@ -1,4 +1,4 @@
-const Event = require('../models/eventModel')
+const EventModel = require('../models/eventModel')
 
 // api to get Events
 const getEvents = async (req, res) => {
