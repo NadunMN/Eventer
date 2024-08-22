@@ -11,7 +11,7 @@
   "venue": "Tech Convention Center, New York",
   "capacity": 500,
   "participants": "John Doe, Jane Smith, Bob Johnson",
-  "image": "https://example.com/images/tech-conference-2024.jpg"
+  "image": "src/asset/eventimg/img1.jpeg"
 },
 {
   "_id": {
@@ -26,7 +26,7 @@
   "venue": "Sunshine Park, Los Angeles",
   "capacity": 10000,
   "participants": "The Rockers, DJ Beats, The Jazz Ensemble",
-  "image": "https://example.com/images/music-festival-2024.jpg"
+  "image": "src/asset/eventimg/img2.jpeg"
 },
 {
   "_id": {
@@ -41,7 +41,7 @@
   "venue": "City Art Gallery, San Francisco",
   "capacity": 200,
   "participants": "Artist A, Artist B, Artist C",
-  "image": "https://example.com/images/art-exhibition-2024.jpg"
+  "image": "src/asset/eventimg/img1.jpeg"
 },
 {
   "_id": {
@@ -56,7 +56,7 @@
   "venue": "Downtown Conference Hall, Chicago",
   "capacity": 150,
   "participants": "John Startup, Mary Business",
-  "image": "https://example.com/images/startup-workshop-2024.jpg"
+  "image": "src/asset/eventimg/img2.jpeg"
 },
 {
   "_id": {
@@ -71,5 +71,5 @@
   "venue": "Tech Hub, Seattle",
   "capacity": 50,
   "participants": "Alice Developer, Bob Coder",
-  "image": "https://example.com/images/coding-bootcamp-2024.jpg"
+  "image": "src/asset/eventimg/img1.jpeg"
 }]

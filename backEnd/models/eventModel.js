@@ -2,14 +2,6 @@ const mongoose = require("mongoose");
 
 // Define the event schema
 const EventSchema = new mongoose.Schema({
-  title: {type: String, requireed: true},
-  date: String,
-  location: String,
-  description: String,
-  image: String,
-});
-
-const EventS = new mongoose.Schema({
   title: {type: String, required: true},
   start_date: {type: String, required: true},
   start_time: {type: String, required: true},
