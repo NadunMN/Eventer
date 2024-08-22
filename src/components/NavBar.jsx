@@ -1,5 +1,6 @@
 import { AppBar, Button, Grid, Toolbar, Typography } from "@mui/material";
 import { Link } from "react-router-dom";
+import logo from "../asset/site-logo.png";
 
 export const NavBar = () => {
   return (
@@ -7,12 +8,18 @@ export const NavBar = () => {
       <Grid>
         <AppBar
           sx={{
-            bgcolor: "black",
+            bgcolor: "orange",
           }}
         >
-          <Toolbar>
+          <Toolbar ml
+>
             <Typography variant="h5" flexGrow={1}>
-              LOGO
+              <Link to='/'>
+                <img src={logo} style={{
+                  width: "80px"
+                }}/>
+              </Link>
+
             </Typography>
             <Button color="inherit" component={Link} to="/">
               {" "}
