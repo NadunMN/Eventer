@@ -3,7 +3,7 @@ import { Stack, Typography } from "@mui/material"
 export const Home = () => {
     return(
         <>
-        <Stack align={'center'} > 
+        <Stack align={'center'}> 
         <Typography variant='h2' mt={10}>
             Eventor
         </Typography>
