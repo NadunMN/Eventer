@@ -12,7 +12,7 @@ const SearchForm = ({ setListOfEvents }) => {
         event.preventDefault();
         try {
             // eslint-disable-next-line no-undef
-            const response = await axios.get(`${Api_utl}:5000/searchEvents`, {
+            const response = await axios.get(`${Api_utl}:5000/api/searchEvents`, {
                 params: {title: searchString}
             });
             setListOfEvents(response.data);
