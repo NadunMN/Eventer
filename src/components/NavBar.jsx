@@ -34,9 +34,23 @@ export const NavBar = () => {
               Add Event
               {" "}
             </Button>
+            <Button color="inherit" component={Link} to="/Event">
+              {" "}
+              Events
+              {" "}
+            </Button>
             <Button color="inherit" component={Link} to="/admin-dashboard">
               {" "}
               Dashboard
+            </Button>
+            <Button color="inherit" component={Link} to="/About">
+              {" "}
+              About
+              {" "}
+            </Button>
+              <Button color="inherit" component={Link} to="/Contact">
+              {" "}
+              Contact Us
               {" "}
             </Button>
           </Toolbar>
