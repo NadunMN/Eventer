@@ -86,7 +86,7 @@ export const AddEvent = () => {
       return;
     }
     console.log(formData);
-    // Here you would typically send the data to your backend
+    // Here send the data to your backend
   };
 
   return (
