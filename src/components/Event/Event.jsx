@@ -13,7 +13,7 @@ const Event = () => {
   
   //get all events
   useEffect (() => {
-      axios.get("http://localhost:5000/getEvent")
+      axios.get("http://localhost:5000/api/getEvent")
       .then((response) => {
           setListOfEvent(response.data)
       } )
