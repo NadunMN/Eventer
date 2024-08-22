@@ -1,7 +1,13 @@
 const express = require("express");
-const mongoose = require("mongoose");
 const cors = require("cors");
-const EventModel = require("./models/event");
+const connectDB = require("./config/db")
+const eventRoutes = require("./routes/eventRoutes")
+const EventModel = require("./models/eventModel");
+const errorHadler = require("./middleware/errorHandler");
+const router = require("./routes/eventRoutes");
+
+//enviromental variable form .env
+require('dotenv').config()
 
 const app = express();
 
@@ -10,10 +16,15 @@ app.use(cors());
 app.use(express.json()); // To parse JSON bodies
 
 // Connect to MongoDB
-mongoose.connect("mongodb://localhost:27017/eventer", {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
+connectDB()
+
+// Routes
+app.use('/api', eventRoutes)
+
+// Error handling
+app.use(errorHadler)
+
+
 
 // api to get Events
 app.get("/getEvent", async (req, res) => {
@@ -26,6 +37,8 @@ app.get("/getEvent", async (req, res) => {
 });
 
 //api for search events
+
+
 app.get("/searchEvents", async(req,res) => {
   try {
     const searchString = req.query.title//get the title from the query prameters
@@ -43,6 +56,7 @@ app.get("/searchEvents", async(req,res) => {
     res.status(500).json({ message: " Error searching event", error})
   }
 })
+
 // Start server
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, '0.0.0.0', () => {
