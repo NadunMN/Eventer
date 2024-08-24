@@ -74,5 +74,5 @@ const SearchForm = ({ setListOfEvents }) => {
     </>
   );
 };
-
+ 
 export default SearchForm;
