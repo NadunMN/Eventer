@@ -8,6 +8,7 @@ import { Register } from "./components/Register"
 import { AddEvent } from "./components/AddEvent"
 import { AdminDashboard } from "./components/AdminDashboard"
 import Event from "./components/Event/Event"
+import { Footer } from "./components/Footer"
 
 
 function App() {
@@ -28,6 +29,7 @@ function App() {
         <Route path="Event" element={<Event />} />
         
       </Routes>
+      <Footer/>
    </>
 
   )
