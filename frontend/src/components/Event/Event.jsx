@@ -38,11 +38,6 @@ const Event = () => {
   return (
     <>
       {/* <GetEvent /> */}
-      <AppBar position="static">
-        <Toolbar>
-          <Typography variant="h6">Event</Typography>
-        </Toolbar>
-      </AppBar>
 
       <Container>
         <SearchForm  setListOfEvents={setListOfEvent}/>
