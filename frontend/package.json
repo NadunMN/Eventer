@@ -17,6 +17,7 @@
     "@emotion/styled": "^11.13.0",
     "@mui/icons-material": "^5.16.7",
     "@mui/material": "^5.16.7",
+    "@rollup/rollup-win32-x64-msvc": "^4.21.0",
     "axios": "^1.7.4",
     "bootstrap": "^5.3.3",
     "cors": "^2.8.5",
