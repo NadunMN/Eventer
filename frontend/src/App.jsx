@@ -9,13 +9,14 @@ import { AddEvent } from "./components/AddEvent"
 import { AdminDashboard } from "./components/AdminDashboard"
 import Event from "./components/Event/Event"
 import { Footer } from "./components/Footer"
+import './App.css'
 
 
 function App() {
 
   return (
    <>
-    <NavBar />
+     <NavBar />
 
       <Routes>
         <Route path="/" element={<Home />} />
@@ -29,7 +30,9 @@ function App() {
         <Route path="Event" element={<Event />} />
         
       </Routes>
-      <Footer/>
+      <Footer/> 
+      
+      
    </>
 
   )
