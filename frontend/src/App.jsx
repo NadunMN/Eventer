@@ -10,6 +10,7 @@ import { AdminDashboard } from "./components/AdminDashboard"
 import Event from "./components/Event/Event"
 import { Footer } from "./components/Footer"
 import './App.css'
+import Dashboard from './components/Dashboard'
 
 
 function App() {
@@ -18,7 +19,7 @@ function App() {
    <>
      <NavBar />
 
-      <Routes>
+      {/* <Routes>
         <Route path="/" element={<Home />} />
         <Route path="login" element={<Login />} />
         <Route path="register" element={<Register />} />
@@ -29,7 +30,8 @@ function App() {
         <Route path="Contact" element={<Contact />} />
         <Route path="Event" element={<Event />} />
         
-      </Routes>
+      </Routes> */}
+      <Dashboard/>
       <Footer/> 
       
       
