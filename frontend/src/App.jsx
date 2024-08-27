@@ -9,6 +9,7 @@ import { AddEvent } from "./components/AddEvent"
 import { AdminDashboard } from "./components/AdminDashboard"
 import Event from "./components/Event/Event"
 import { Footer } from "./components/Footer"
+import Dashboard  from "./components/Dashboard"
 import './App.css'
 
 
@@ -28,6 +29,7 @@ function App() {
         <Route path="About" element={<About />} /> 
         <Route path="Contact" element={<Contact />} />
         <Route path="Event" element={<Event />} />
+        <Route path="user-dashboard" element={<Dashboard />} />
         
       </Routes>
       <Footer/> 
