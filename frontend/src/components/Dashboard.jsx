@@ -22,7 +22,7 @@ export default function Dashboard() {
     useEffect(()=>{
         const fetchCount = async() => {
            try {
-            const response = await (axios.get('http://localhost:5000/api/route/addition'));
+            const response = await (axios.get('http://localhost:5000/api/addition'));
 
             setCount(response.data.addition);
 
