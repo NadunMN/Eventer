@@ -19,45 +19,45 @@ import {
 import { styled } from "@mui/system";
 import { Link } from "react-router-dom";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-import LogoutIcon from '@mui/icons-material/Logout';
-import DashboardIcon from '@mui/icons-material/Dashboard';
-import LoginIcon from '@mui/icons-material/Login';
+import LogoutIcon from "@mui/icons-material/Logout";
+import DashboardIcon from "@mui/icons-material/Dashboard";
+import LoginIcon from "@mui/icons-material/Login";
 import axios from "axios";
 import logo from "../asset/site-logo.png";
 
 const StyledAppBar = styled(AppBar)(({ theme }) => ({
-  background: 'linear-gradient(45deg, #673ab7 30%, #3f51b5 90%)',
-  boxShadow: '0 3px 5px 2px rgba(103, 58, 183, .3)',
+  background: "linear-gradient(45deg, #673ab7 30%, #3f51b5 90%)",
+  boxShadow: "0 3px 5px 2px rgba(103, 58, 183, .3)",
 }));
 
 const StyledToolbar = styled(Toolbar)({
-  display: 'flex',
-  justifyContent: 'space-between',
+  display: "flex",
+  justifyContent: "space-between",
 });
 
 const LogoTypography = styled(Typography)({
   flexGrow: 1,
-  '& img': {
-    width: '80px',
-    transition: 'transform 0.3s ease-in-out',
-    '&:hover': {
-      transform: 'scale(1.1)',
+  "& img": {
+    width: "80px",
+    transition: "transform 0.3s ease-in-out",
+    "&:hover": {
+      transform: "scale(1.1)",
     },
   },
 });
 
 const NavButton = styled(Button)(({ theme }) => ({
-  color: 'white',
+  color: "white",
   margin: theme.spacing(0, 1),
-  '&:hover': {
-    backgroundColor: 'rgba(255, 255, 255, 0.1)',
+  "&:hover": {
+    backgroundColor: "rgba(255, 255, 255, 0.1)",
   },
 }));
 
 const StyledIconButton = styled(IconButton)(({ theme }) => ({
-  color: 'white',
-  '&:hover': {
-    backgroundColor: 'rgba(255, 255, 255, 0.1)',
+  color: "white",
+  "&:hover": {
+    backgroundColor: "rgba(255, 255, 255, 0.1)",
   },
 }));
 
@@ -67,13 +67,13 @@ const StyledMenuList = styled(MenuList)(({ theme }) => ({
 
 const StyledMenuItem = styled(MenuItem)(({ theme }) => ({
   padding: theme.spacing(1, 2),
-  '&:hover': {
+  "&:hover": {
     backgroundColor: theme.palette.action.hover,
   },
 }));
 
 export const NavBar = () => {
-  const userId = "#";
+  const userId = "66ca354e2a89dacb9c33c046";
   const [user, setUser] = useState({});
   const [userRole, setUserRole] = useState("user");
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -92,7 +92,7 @@ export const NavBar = () => {
   };
 
   const handleListKeyDown = (event) => {
-    if (event.key === 'Tab' || event.key === 'Escape') {
+    if (event.key === "Tab" || event.key === "Escape") {
       event.preventDefault();
       setOpen(false);
     }
@@ -124,15 +124,20 @@ export const NavBar = () => {
           </Link>
         </LogoTypography>
         <Box>
-          <NavButton component={Link} to="/">Home</NavButton>
-          <NavButton component={Link} to="/event">Events</NavButton>
-          <NavButton component={Link} to="/about">About</NavButton>
-          <NavButton component={Link} to="/contact">Contact Us</NavButton>
+          <NavButton component={Link} to="/">
+            Home
+          </NavButton>
+          <NavButton component={Link} to="/event">
+            Events
+          </NavButton>
+          <NavButton component={Link} to="/about">
+            About
+          </NavButton>
+          <NavButton component={Link} to="/contact">
+            Contact Us
+          </NavButton>
           <Tooltip title={isLoggedIn ? "Profile" : "Login"}>
-            <StyledIconButton
-              ref={anchorRef}
-              onClick={handleToggle}
-            >
+            <StyledIconButton ref={anchorRef} onClick={handleToggle}>
               <AccountCircleIcon />
             </StyledIconButton>
           </Tooltip>
@@ -150,7 +155,8 @@ export const NavBar = () => {
           <Grow
             {...TransitionProps}
             style={{
-              transformOrigin: placement === 'bottom-end' ? 'right top' : 'right bottom',
+              transformOrigin:
+                placement === "bottom-end" ? "right top" : "right bottom",
             }}
           >
             <Paper elevation={3}>
@@ -169,14 +175,20 @@ export const NavBar = () => {
                       <ListItemText primary="Profile" />
                     </StyledMenuItem>
                   )}
-                  {isLoggedIn && userRole === "admin" && (
+                  {isLoggedIn && (
                     <StyledMenuItem onClick={handleClose} divider>
                       <ListItemIcon>
                         <DashboardIcon />
                       </ListItemIcon>
                       <ListItemText primary="Dashboard" />
+                      {userRole === "admin" ? (
+                        <NavButton component={Link} to="/admin-dashboard"> Dashboard</NavButton>
+                      ) : (
+                        <NavButton component={Link} to="/user-dashboard"> Dashboard</NavButton>
+                      )}
                     </StyledMenuItem>
                   )}
+
                   {isLoggedIn ? (
                     <StyledMenuItem onClick={handleClose}>
                       <ListItemIcon>
