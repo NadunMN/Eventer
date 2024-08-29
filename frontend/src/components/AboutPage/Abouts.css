@@ -1,0 +1,24 @@
+/* General Styling */
+body {
+  font-family: 'Arial', sans-serif;
+  line-height: 1.6;
+  color: #333;
+  margin: 0;
+  padding: 0;
+  /* background-color: #f4f4f4; */
+}
+
+.about-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* Header Section */
+.about-header {
+  text-align: center;
+  background-color: #007BFF;
+  color: white;
+  padding: 50px 0;
+ 
+}
