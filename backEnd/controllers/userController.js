@@ -1,4 +1,5 @@
 const userModel = require("../models/userModel");
+const bcrypt = require("bcryptjs");
 
 // Get all user data
 const getAllUser = async (req, res) => {
@@ -22,7 +23,42 @@ const getUser = async (req, res) => {
     }
 };
 
+const register = async (req, res) => {
+    const { fName, lName, role, email, username, password } = req.body;
+    console.log(req.body);
+    
+
+    try {
+        // Chrck if the user already exist
+        let user = await userModel.findOne( { email });
+        if (user){
+            return res.status(400).json({ msg: "User already exists" });
+        }
+
+        const salt = await bcrypt.genSalt(10);
+        const  encryptPassword = await bcrypt.hash(password, salt);
+        // Create new User
+        user = new userModel({
+            fName,
+            lName,
+            email,
+            role,
+            username,
+            password: encryptPassword
+        });
+
+        await user.save();
+
+        res.status(201).json({ msg: "User registered successfully" });
+    } catch (err){
+        console.log(err.message);
+        res.status(500).send("Server error");
+        
+    }
+};
+
 module.exports ={
     getAllUser,
-    getUser
+    getUser,
+    register
 }
