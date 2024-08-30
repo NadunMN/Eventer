@@ -51,7 +51,7 @@ const SearchForm = ({ setListOfEvents }) => {
       setError("");
     } catch (error) {
       setListOfEvents([]);
-      setError("Event not found or error occurred!");
+      setError("r error occurred!");
     }
   };
 
