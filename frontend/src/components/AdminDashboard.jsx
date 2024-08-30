@@ -200,7 +200,6 @@ export const AdminDashboard = () => {
             elevation={3}
             sx={{
               height: "100%",
-              mt: 8,
               p: 2,
               display: "flex",
               flexDirection: "column",
@@ -235,7 +234,7 @@ export const AdminDashboard = () => {
             </List>
           </Paper>
         </Box>
-        <Box component="main" sx={{ flexGrow: 1, p: 3, mt: 8 }}>
+        <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
           <Container maxWidth="lg">
             <Typography variant="h4" gutterBottom sx={{ mb: 4 }}>
               {activeTab.charAt(0).toUpperCase() + activeTab.slice(1)}

@@ -8,6 +8,8 @@ const route = require("./routes/regEventRoutes")
 const userRoutes = require("./routes/userRoutes")
 
 const errorHadler = require("./middleware/errorHandler");
+const bodyParser = require("body-parser");
+
 
 //enviromental variable form .env
 require('dotenv').config()
@@ -17,7 +19,7 @@ const app = express();
 // Middleware
 app.use(cors());
 app.use(express.json()); // To parse JSON bodies
-
+app.use(bodyParser.json());
 // Connect to MongoDB
 connectDB()
 
