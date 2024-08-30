@@ -10,13 +10,14 @@ import {
   DialogTitle,
   DialogContent,
   CardMedia,
+  Box,
 } from "@mui/material";
 import { useState, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import axios from "axios";
 import SearchForm from "./SearchForm";
-import { red } from "@mui/material/colors";
-import {eventData} from "./EventData"
+import { Navigate } from "react-router-dom";
+import EventDialogBox from "./EventDialogBox";
 
 const Event = () => {
   const [listOfEvent, setListOfEvent] = useState([]);
@@ -49,7 +50,7 @@ const Event = () => {
     xs: 20,
     sm: 12,
     md: 8,
-    lg: 4,
+    lg: 5,
     sx: {
       mt: 1,
       pl: 8,
@@ -61,18 +62,18 @@ const Event = () => {
 
   return (
     <>
-      <SearchForm setListOfEvents={setListOfEvent} sx={{}} />
+      <SearchForm setListOfEvents={setListOfEvent} />
 
       <Container maxWidth="xl" fixed sx={{ mt: 5 }}>
         <Grid container spacing={2} columns={20}>
           {listOfEvent.map((event) => (
-            <Grid item key={event.id} {...gridItemProps}>
+            <Grid item key={event._id} {...gridItemProps}>
               <Card
                 sx={{
                   height: 450,
                   display: "flex",
                   flexDirection: "column",
-                  alignItems: "center",
+                  textAlign: "center",
                   justifyContent: "space-between",
                   backgroundColor: "#f0f0f0",
                   borderRadius: 3,
@@ -109,14 +110,34 @@ const Event = () => {
                   </Typography>
                   <Typography variant="body2">{event.description}</Typography>
                   <Typography variant="body2">{event.venue}</Typography>
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    onClick={() => handleOpen(event)}
-                    sx={{ alignSelf: "center", marginTop: "auto" }}
-                  >
-                    More Info
-                  </Button>
+                  <Box>
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      onClick={() => handleOpen(event)}
+                      sx={{
+                        alignSelf: "center",
+                        marginTop: 1,
+                        ml: 1,
+                        mr: 2,
+                      }}
+                    >
+                      More Info
+                    </Button>
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      onClick={() => handleOpen(event)}
+                      sx={{
+                        alignSelf: "center",
+                        marginTop: 1,
+                        ml: 2,
+                        mr: 1,
+                      }}
+                    >
+                      Buy
+                    </Button>
+                  </Box>
                 </CardContent>
               </Card>
             </Grid>
@@ -126,19 +147,25 @@ const Event = () => {
 
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle>{selectedEvent?.title}</DialogTitle>
-        <DialogContent display="flex" flexDirection="column">
-          <Typography variant="h6">
-            Start Date: {selectedEvent?.start_date}
-          </Typography>
-          <Typography variant="h6">
-            Start Time: {selectedEvent?.start_time}
-          </Typography>
-          <Typography variant="h6">
-            EndDate: {selectedEvent?.end_date}
-          </Typography>
-          <Typography variant="h6">
-            End Time: {selectedEvent?.end_time}
-          </Typography>
+        <DialogContent display="flex">
+          <Box sx={{ display: "flex" , textaling: 'center'}}>
+            <div>
+              <Typography variant="h6">
+                Start Date: {selectedEvent?.start_date}
+              </Typography>
+              <Typography variant="h6">
+                EndDate: {selectedEvent?.end_date}
+              </Typography>
+            </div>
+            <div>
+              <Typography variant="h6">
+                Start Time: {selectedEvent?.start_time}
+              </Typography>
+              <Typography variant="h6">
+                End Time: {selectedEvent?.end_time}
+              </Typography>
+            </div>
+          </Box>
           <Typography variant="h6">
             Capacity: {selectedEvent?.capacity}
           </Typography>
@@ -146,7 +173,12 @@ const Event = () => {
           <Typography variant="body1">{selectedEvent?.description}</Typography>
         </DialogContent>
         <Button
-          oneClick = {() => <eventData />}
+          oneClick={() => {
+            if (!selectedEvent) {
+              Navigate(`/event/${selectedEvent._id}`)
+              console.log("show data!");
+            }
+          }}
           variant="contained"
           color="primary"
           sx={{
