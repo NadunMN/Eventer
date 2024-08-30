@@ -13,6 +13,7 @@ import React, { useEffect, useState } from "react";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
+import axios from "axios";
 
 export const Register = () => {
   const paperStyle = {
@@ -21,10 +22,7 @@ export const Register = () => {
     width: "90%",
     maxWidth: "600px",
     margin: "100px auto",
-
-    
   };
-  
 
   const [showPassword, setShowPassword] = useState(false);
   const [password, setPassword] = useState("");
@@ -36,6 +34,11 @@ export const Register = () => {
     capital: false,
     special: false,
   });
+
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
 
   const handlePasswordVisibility = () => {
     setShowPassword(!showPassword ? true : false);
@@ -54,13 +57,38 @@ export const Register = () => {
     validatePassword(password);
   }, [password]);
 
-  const handleFocus = () =>{
+  const handleFocus = () => {
     setIsFocused(true);
-  }
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (password != confirmPassword) {
+      return;
+    }
+    const userData = {
+      first: firstName,
+      last_name: lastName,
+      email,
+      username,
+      password,
+      role: "user"
+    };
+    console.log(userData);
+    try {
+      const response = await axios.post("http://localhost:5000/api/register", userData);
+      console.log(response);
+      console.log("Sucssess");
+      
+    } catch (err){
+      console.log(err);
+      alert("Registration Failed");
+      
+    }
+  };
 
   const getHelperText = () => {
-    if (isFocused){
-
+    if (isFocused) {
       return (
         <div>
           <Typography color={passwordRequirements.length ? "green" : "red"}>
@@ -82,14 +110,14 @@ export const Register = () => {
 
   const getConfirmPasswordHelperText = () => {
     if (confirmPassword === "") return "";
-    return password === confirmPassword ? "" : "Password do not match";
-  }
+    return password === confirmPassword ? "" : "Passwords do not match";
+  };
 
   return (
     <Grid>
-      <Paper elevation={10} style={paperStyle} sx={{borderRadius: '16px',}}>
+      <Paper elevation={10} style={paperStyle} sx={{ borderRadius: "16px" }}>
         <Grid align={"center"}>
-          <Avatar style={{ backgroundColor: '#673ab7' }}>
+          <Avatar style={{ backgroundColor: "#673ab7" }}>
             <LockOutlinedIcon />
           </Avatar>
           <Typography variant="h5" component="h5" mt={2}>
@@ -97,11 +125,43 @@ export const Register = () => {
           </Typography>
           <Stack spacing={5}>
             <Stack spacing={2} direction={"row"}>
-            <TextField label="First Name" type="text" variant="standard" fullWidth required />
-            <TextField label="Last Name" type="text" variant="standard" fullWidth required />
+              <TextField
+                label="First Name"
+                type="text"
+                variant="standard"
+                fullWidth
+                required
+                value={firstName}
+                onChange={(e) => setFirstName(e.target.value)}
+              />
+              <TextField
+                label="Last Name"
+                type="text"
+                variant="standard"
+                fullWidth
+                required
+                value={lastName}
+                onChange={(e) => setLastName(e.target.value)}
+              />
             </Stack>
-            <TextField label="Email" type="email" variant="standard" fullWidth required />
-            <TextField label="Username" type="text" variant="standard" fullWidth required />
+            <TextField
+              label="Email"
+              type="email"
+              variant="standard"
+              fullWidth
+              required
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+            <TextField
+              label="Username"
+              type="text"
+              variant="standard"
+              fullWidth
+              required
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+            />
             <TextField
               label="New password"
               variant="standard"
@@ -130,6 +190,7 @@ export const Register = () => {
               label="Confirm password"
               variant="standard"
               type={showPassword ? "text" : "password"}
+              value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
               InputProps={{
                 endAdornment: (
@@ -149,7 +210,12 @@ export const Register = () => {
               fullWidth
               required
             />
-            <Button type="submit" variant="contained" style={{marginBottom: 50, backgroundColor: 'primary.main'}} >
+            <Button
+              type="submit"
+              variant="contained"
+              style={{ marginBottom: 50, backgroundColor: "primary.main" }}
+              onClick={handleSubmit}
+            >
               Sign up
             </Button>
           </Stack>
