@@ -16,6 +16,7 @@ const getUser = async (req, res) => {
     try{
         const { id } = req.params;
         const user = await userModel.findById(id);
+        
         res.status(200).json(user)
     } catch(err){
         res.status(500).json({ message: "Error fetching events", err });
@@ -24,7 +25,7 @@ const getUser = async (req, res) => {
 };
 
 const register = async (req, res) => {
-    const { fName, lName, role, email, username, password } = req.body;
+    const { first_name, last_name, role, email, username, password } = req.body;
     console.log(req.body);
     
 
@@ -39,8 +40,8 @@ const register = async (req, res) => {
         const  encryptPassword = await bcrypt.hash(password, salt);
         // Create new User
         user = new userModel({
-            fName,
-            lName,
+            first_name,
+            last_name,
             email,
             role,
             username,
