@@ -16,6 +16,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import axios from "axios";
 import SearchForm from "./SearchForm";
 import { red } from "@mui/material/colors";
+import {eventData} from "./EventData"
 
 const Event = () => {
   const [listOfEvent, setListOfEvent] = useState([]);
@@ -62,8 +63,7 @@ const Event = () => {
     <>
       <SearchForm setListOfEvents={setListOfEvent} sx={{}} />
 
-      <Container maxWidth="xl" fixed sx={{mt:5}}>
-
+      <Container maxWidth="xl" fixed sx={{ mt: 5 }}>
         <Grid container spacing={2} columns={20}>
           {listOfEvent.map((event) => (
             <Grid item key={event.id} {...gridItemProps}>
@@ -146,6 +146,7 @@ const Event = () => {
           <Typography variant="body1">{selectedEvent?.description}</Typography>
         </DialogContent>
         <Button
+          oneClick = {() => <eventData />}
           variant="contained"
           color="primary"
           sx={{
