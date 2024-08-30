@@ -1,20 +1,3 @@
-<<<<<<< HEAD
-import {About} from "./components/AboutPage/About"
-import {Contact} from "./components/contactPage/Contact"
-import { Home } from "./components/Home"
-import { Login } from "./components/Login"
-import { NavBar } from "./components/NavBar"
-import { Route, Routes } from "react-router-dom"
-import { Register } from "./components/Register"
-import { AddEvent } from "./components/AddEvent"
-import { AdminDashboard } from "./components/AdminDashboard"
-import Event from "./components/Event/Event"
-import { Footer } from "./components/Footer"
-import Dashboard  from "./components/Dashboard"
-import './App.css'
-import Dashboard from './components/Dashboard'
-
-=======
 import { About } from "./components/AboutPage/About";
 import { Contact } from "./components/contactPage/Contact";
 import { Home } from "./components/Home";
@@ -29,14 +12,13 @@ import { Footer } from "./components/Footer";
 import Dashboard from "./components/Dashboard";
 import "./App.css";
 import EventData from "./components/Event/EventData";
->>>>>>> eventData
 
 function App() {
   return (
     <>
       <NavBar />
 
-      {/* <Routes>
+      <Routes>
         <Route path="/" element={<Home />} />
         <Route path="login" element={<Login />} />
         <Route path="register" element={<Register />} />
@@ -49,22 +31,10 @@ function App() {
         <Route path="Contact" element={<Contact />} />
         <Route path="Event" element={<Event />} />
         <Route path="user-dashboard" element={<Dashboard />} />
-<<<<<<< HEAD
-        
-      </Routes> */}
-      <Dashboard/>
-      <Footer/> 
-      
-      
-   </>
-
-  )
-=======
       </Routes>
       <Footer />
     </>
   );
->>>>>>> eventData
 }
 
 export default App;
