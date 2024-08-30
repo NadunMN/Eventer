@@ -46,6 +46,12 @@ const Event = () => {
     setSelectedEvent(null);
   };
 
+  const handleNavigate = () => {
+    if (selectedEvent) {
+      Navigate(`/event/${selectedEvent._id}`)
+    }
+  }
+
   const gridItemProps = {
     xs: 20,
     sm: 12,
@@ -127,7 +133,7 @@ const Event = () => {
                     <Button
                       variant="contained"
                       color="primary"
-                      onClick={() => handleOpen(event)}
+                      onClick={handleNavigate}
                       sx={{
                         alignSelf: "center",
                         marginTop: 1,
