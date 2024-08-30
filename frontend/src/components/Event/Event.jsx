@@ -48,7 +48,8 @@ const Event = () => {
               <Card>
                 <CardMedia 
                   component="img"
-                  height="140"
+                  height={150}
+                  width={100}
                   image={event.image}
                   alt={event.image}
                 />
