@@ -6,7 +6,8 @@ import LinkedInIcon from '@mui/icons-material/LinkedIn';
 
 export const Footer = () => {
     return (
-        <Box
+        <div className="footer-div">
+        <Box 
             sx={{
                 display: 'flex',
                 flexDirection: 'column',
@@ -81,10 +82,11 @@ export const Footer = () => {
                 </Grid>
                 <Grid item xs={12} sx={{ borderTop: '1px solid #333', pt: 2, mt: 4, textAlign: 'center' }}>
                     <Typography variant="body2">
-                        © {new Date().getFullYear()} Company Name. All rights reserved.
+                        © {new Date().getFullYear()} Eventer. All rights reserved.
                     </Typography>
                 </Grid>
             </Grid>
         </Box>
+        </div>
     )
 }

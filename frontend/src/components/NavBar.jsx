@@ -73,7 +73,7 @@ const StyledMenuItem = styled(MenuItem)(({ theme }) => ({
 }));
 
 export const NavBar = () => {
-  const userId = "#";
+  const userId = "<add_user_id>";
   const [user, setUser] = useState({});
   const [userRole, setUserRole] = useState("user");
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -175,14 +175,26 @@ export const NavBar = () => {
                       <ListItemText primary="Profile" />
                     </StyledMenuItem>
                   )}
-                  {isLoggedIn && userRole === "admin" && (
+                  {isLoggedIn && (
                     <StyledMenuItem onClick={handleClose} divider>
                       <ListItemIcon>
                         <DashboardIcon />
                       </ListItemIcon>
                       <ListItemText primary="Dashboard" />
+                      {userRole === "admin" ? (
+                        <NavButton component={Link} to="/admin-dashboard">
+                          {" "}
+                          Dashboard
+                        </NavButton>
+                      ) : (
+                        <NavButton component={Link} to="/user-dashboard">
+                          {" "}
+                          Dashboard
+                        </NavButton>
+                      )}
                     </StyledMenuItem>
                   )}
+
                   {isLoggedIn ? (
                     <StyledMenuItem onClick={handleClose}>
                       <ListItemIcon>
