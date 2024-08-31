@@ -12,17 +12,18 @@ import Accountname from './Accountname'
 export default function Favorite() {
   
   return (
-    <div className='div-main-user'>
+    <>
+    // <div className='div-main-user'>
       
-    <TemporaryDrawer/>
+    // <TemporaryDrawer/>
     
-    <div className='fuck'>
-       <Box sx={{display: 'flex', justifyContent: 'flex-start', flexDirection: 'column', width: "100%", }} >
-        <Accountname/>
+    // <div className='fuck'>
+    //    <Box sx={{display: 'flex', justifyContent: 'flex-start', flexDirection: 'column', width: "100%", }} >
+    //     <Accountname/>
        
                 
        
-            <Divider  sx={{my: 3,  }} />
+    //         <Divider  sx={{my: 3,  }} />
 
             <Box className='box'  sx={{
             display: 'flex',
@@ -49,10 +50,11 @@ export default function Favorite() {
                 
         </Box>
 
-       </Box>
+    //    </Box>
                 
        
-       </div>
-    </div>
+    //    </div>
+    // </div>
+   </>
   );
 }

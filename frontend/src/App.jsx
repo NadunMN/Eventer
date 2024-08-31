@@ -11,7 +11,8 @@ import Event from "./components/Event/Event"
 import { Footer } from "./components/Footer"
 import Dashboard  from "./components/Dashboard"
 import './App.css'
-import Dashboard from './components/Dashboard'
+import UserProfile from './components/UserProfie'
+import TemporaryDrawer from "./components/Drawer"
 
 
 function App() {
@@ -20,23 +21,20 @@ function App() {
    <>
      <NavBar />
 
-      {/* <Routes>
+      <Routes>
         <Route path="/" element={<Home />} />
         <Route path="login" element={<Login />} />
         <Route path="register" element={<Register />} />
         <Route path="add-event" element={<AddEvent />} />
         <Route path="admin-dashboard" element={<AdminDashboard />} />
-        <Route path="Event" element={<Event />} />
+        <Route path="event" element={<Event />} />
         <Route path="About" element={<About />} /> 
         <Route path="Contact" element={<Contact />} />
         <Route path="Event" element={<Event />} />
         <Route path="user-dashboard" element={<Dashboard />} />
         
-      </Routes> */}
-      <Dashboard/>
+      </Routes>
       <Footer/> 
-      
-      
    </>
 
   )
