@@ -17,7 +17,6 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import axios from "axios";
 import SearchForm from "./SearchForm";
 import { Navigate } from "react-router-dom";
-import EventDialogBox from "./EventDialogBox";
 
 const Event = () => {
   const [listOfEvent, setListOfEvent] = useState([]);
@@ -48,9 +47,9 @@ const Event = () => {
 
   const handleNavigate = () => {
     if (selectedEvent) {
-      Navigate(`/event/${selectedEvent._id}`)
+      Navigate(`/`);
     }
-  }
+  };
 
   const gridItemProps = {
     xs: 20,
@@ -154,7 +153,7 @@ const Event = () => {
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle>{selectedEvent?.title}</DialogTitle>
         <DialogContent display="flex">
-          <Box sx={{ display: "flex" , textaling: 'center'}}>
+          <Box sx={{ display: "flex", textaling: "center" }}>
             <div>
               <Typography variant="h6">
                 Start Date: {selectedEvent?.start_date}
@@ -181,8 +180,7 @@ const Event = () => {
         <Button
           oneClick={() => {
             if (!selectedEvent) {
-              Navigate(`/event/${selectedEvent._id}`)
-              console.log("show data!");
+              Navigate(`/event/${selectedEvent._id}`);
             }
           }}
           variant="contained"
