@@ -176,22 +176,20 @@ export const NavBar = () => {
                     </StyledMenuItem>
                   )}
                   {isLoggedIn && (
-                    <StyledMenuItem onClick={handleClose} divider>
+                    <StyledMenuItem
+                      onClick={handleClose}
+                      component={Link}
+                      to={
+                        userRole === "admin"
+                          ? "/admin-dashboard"
+                          : "/user-dashboard"
+                      }
+                      divider
+                    >
                       <ListItemIcon>
                         <DashboardIcon />
-                        {/* <ListItemText primary="Dashboard" /> */}
-                        {userRole === "admin" ? (
-                          <NavButton component={Link} to="/admin-dashboard">
-                            {" "}
-                            Dashboard
-                          </NavButton>
-                        ) : (
-                          <NavButton component={Link} to="/user-dashboard">
-                            {" "}
-                            Dashboard
-                          </NavButton>
-                        )}
                       </ListItemIcon>
+                      <ListItemText primary="Dashboard" />
                     </StyledMenuItem>
                   )}
 
