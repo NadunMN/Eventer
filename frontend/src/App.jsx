@@ -13,6 +13,7 @@ import Dashboard from "./components/Dashboard";
 import "./App.css";
 import EventData from "./components/Event/EventData";
 
+
 function App() {
   return (
     <>
@@ -24,9 +25,9 @@ function App() {
         <Route path="register" element={<Register />} />
         <Route path="add-event" element={<AddEvent />} />
         <Route path="admin-dashboard" element={<AdminDashboard />} />
+
         <Route path="Event" element={<Event />}>
-          <Route path=":Id" element={<EventData />} />
-        </Route>
+        <Route path=":Id" element={<EventData />} />
         <Route path="About" element={<About />} />
         <Route path="Contact" element={<Contact />} />
         <Route path="Event" element={<Event />} />
@@ -35,6 +36,7 @@ function App() {
       <Footer />
     </>
   );
+
 }
 
 export default App;
