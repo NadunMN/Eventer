@@ -29,7 +29,6 @@ function App() {
         </Route>
         <Route path="About" element={<About />} />
         <Route path="Contact" element={<Contact />} />
-        <Route path="Event" element={<Event />} />
         <Route path="user-dashboard" element={<Dashboard />} />
       </Routes>
       <Footer />

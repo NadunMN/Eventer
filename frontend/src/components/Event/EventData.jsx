@@ -19,10 +19,13 @@ export default function EventData() {
     if (!eventDetails) return <div>Loading...</div>;
 
   return (
-    <Container>
-        <Typography variant='h4'>{eventDetails.title}</Typography>
-        <Typography variant='h4'>{eventDetails.start_date}</Typography>
-        <Typography variant='h4'>{eventDetails.venue}</Typography>
-    </Container>
+    // <Container>
+    //     <Typography variant='h4'>{eventDetails.title}</Typography>
+    //     <Typography variant='h4'>{eventDetails.start_date}</Typography>
+    //     <Typography variant='h4'>{eventDetails.venue}</Typography>
+    // </Container>
+    <>
+    event data
+    </>
   )
 }
