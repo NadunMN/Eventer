@@ -1,10 +1,12 @@
 import React from "react";
+import { Dialog, DialogTitle, DialogContent, Typography, Button, Box } from "@mui/material";
 
-function EventDialogBox( {props}) {
-    const Event = () => {
-        const [open, setOpen] = useState(false);
-        const [selectedEvent, setSelectedEvent] = useState(null);
-    }
+function EventDialogBox({ selectedEvent, open, onClose }) {
+  const Event = () => {
+    const [open, setOpen] = useState(false);
+    const [selectedEvent, setSelectedEvent] = useState(null);
+  };
+
   return (
     <div>
       <Dialog open={open} onClose={handleClose}>
@@ -38,7 +40,6 @@ function EventDialogBox( {props}) {
           oneClick={() => {
             if (!selectedEvent) {
               Navigate(`/event/${selectedEvent._id}`);
-              console.log("show data!");
             }
           }}
           variant="contained"
