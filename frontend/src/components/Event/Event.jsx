@@ -149,7 +149,7 @@ const Event = () => {
         </Grid>
       </Container>
 
-      {/* <EventDialogBox selectedEvent={selectedEvent} open={open} onClose={handleClose} /> */}
+      <EventDialogBox selectedEvent={selectedEvent} open={open} onClose={handleClose} />
     </>
   );
 };

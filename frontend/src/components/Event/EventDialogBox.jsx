@@ -1,15 +1,26 @@
 import React from "react";
-import { Dialog, DialogTitle, DialogContent, Typography, Button, Box } from "@mui/material";
+import {
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  Typography,
+  Button,
+  Box,
+} from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 function EventDialogBox({ selectedEvent, open, onClose }) {
-  const Event = () => {
-    const [open, setOpen] = useState(false);
-    const [selectedEvent, setSelectedEvent] = useState(null);
+  //for navigate to specific event
+  const navigate = useNavigate(); //hook for navigation
+  const handleBynow = () => {
+    if (selectedEvent) {
+      navigate(`/event/${selectedEvent._id}`); //navigate to selected Event page
+    }
   };
 
   return (
     <div>
-      <Dialog open={open} onClose={handleClose}>
+      <Dialog open={open} onClose={onClose}>
         <DialogTitle>{selectedEvent?.title}</DialogTitle>
         <DialogContent display="flex">
           <Box sx={{ display: "flex", textaling: "center" }}>
@@ -37,11 +48,7 @@ function EventDialogBox({ selectedEvent, open, onClose }) {
           <Typography variant="body1">{selectedEvent?.description}</Typography>
         </DialogContent>
         <Button
-          oneClick={() => {
-            if (!selectedEvent) {
-              Navigate(`/event/${selectedEvent._id}`);
-            }
-          }}
+          oneClick={handleBynow}
           variant="contained"
           color="primary"
           sx={{
