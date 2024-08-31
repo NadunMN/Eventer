@@ -6,7 +6,8 @@ import LinkedInIcon from '@mui/icons-material/LinkedIn';
 
 export const Footer = () => {
     return (
-        <Box
+        <div className="footer-div">
+        <Box 
             sx={{
                 display: 'flex',
                 flexDirection: 'column',
@@ -86,5 +87,6 @@ export const Footer = () => {
                 </Grid>
             </Grid>
         </Box>
+        </div>
     )
 }
