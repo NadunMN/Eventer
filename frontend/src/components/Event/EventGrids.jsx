@@ -9,18 +9,7 @@ import {
   CardMedia,
   Box,
 } from "@mui/material";
-import { useNavigate } from "react-router-dom";
-function EventGrids() {
-  const navigate = useNavigate();
-
-  const handleNavigate = () => {
-    if (selectedEvent) {
-      navigate(`/event/${selectedEvent._id}`);
-    }
-  };
-
-
-
+function EventGrids({ listOfEvent, handleOpen, handleNavigate }) {
   const gridItemProps = {
     xs: 20,
     sm: 12,
