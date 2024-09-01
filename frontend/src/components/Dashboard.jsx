@@ -13,7 +13,10 @@ import axios from 'axios';
 import MediaCard from './Card';
 
 export default function Dashboard() {
-    const [count, setCount] = useState(0);
+    const [countRegistered, setCountRegistered] = useState(0);
+    const [countCreated, setCountCreated] = useState(0);
+    const [countFavorite, setCountFavorite] = useState(0);
+
     const [activeItem, setActiveItem] = useState('DashBoard');
 
     useEffect(() => {
@@ -26,18 +29,50 @@ export default function Dashboard() {
     useEffect(() => {
         localStorage.setItem('activeItem', activeItem);
     }, [activeItem]);
+
     
     useEffect(() => {
-        const fetchCount = async () => {
+        const registeredEventCount = async () => {
             try {
-                const response = await axios.get('http://localhost:5000/api/addition');
-                setCount(response.data.addition);
+                const response = await axios.get('http://localhost:5000/api/countRegisteredEvent');
+                setCountRegistered(response.data.countRegisteredEvent);
             } catch (err) {
-                console.log(err);
+                console.error("Error fetching countRegistered:", err);
             }
-        }
-        fetchCount();
+        };
+
+        registeredEventCount();
     }, []);
+
+
+    useEffect(() => {
+        const createdEventCount = async () => {
+            try {
+                const response = await axios.get('http://localhost:5000/api/countCreatedEvent');
+                setCountCreated(response.data.countCreatedEvent);
+            } catch (err) {
+                console.error("Error fetching countRegistered:", err);
+            }
+        };
+
+        createdEventCount();
+    }, []);
+
+
+    useEffect(() => {
+        const favoriteEventCount = async () => {
+            try {
+                const response = await axios.get('http://localhost:5000/api/countFavoriteEvent');
+                setCountFavorite(response.data.countFavoriteEvent);
+            } catch (err) {
+                console.error("Error fetching countRegistered:", err);
+            }
+        };
+
+        favoriteEventCount();
+    }, []);
+
+
 
     const renderContent = () => {
         switch (activeItem) {
@@ -52,17 +87,17 @@ export default function Dashboard() {
                         }}
                     >
                         <Box sx={{ width: 300, height: 200, bgcolor: '#ede7f6', borderRadius: 10, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }} >
-                            <Typography variant="h2">{count}</Typography>
+                            <Typography variant="h2">{countRegistered}</Typography>
                             <HowToRegIcon />
                             <Typography variant="h6">Registered</Typography>
                         </Box>
                         <Box sx={{ width: 300, height: 200, bgcolor: '#ede7f6', borderRadius: 10, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }} >
-                            <Typography variant="h2">34</Typography>
+                            <Typography variant="h2">{countCreated}</Typography>
                             <CreateIcon />
                             <Typography variant="h6">Event Created</Typography>
                         </Box>
                         <Box sx={{ width: 300, height: 200, bgcolor: '#ede7f6', borderRadius: 10, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }} >
-                            <Typography variant="h2">34</Typography>
+                            <Typography variant="h2">{countFavorite}</Typography>
                             <GradeIcon />
                             <Typography variant="h6">Favorite</Typography>
                         </Box>
@@ -148,7 +183,7 @@ export default function Dashboard() {
     return (
         <div className='div-main-user'>
             <TemporaryDrawer activeItem={activeItem} setActiveItem={setActiveItem} />
-            <div className='fuck'>
+            <div className='dashboard-main-wapper'>
                 <Box sx={{ display: 'flex', justifyContent: 'flex-start', flexDirection: 'column', width: "100%" }}>
                     <Accountname />
                     <Divider sx={{ my: 3 }} />

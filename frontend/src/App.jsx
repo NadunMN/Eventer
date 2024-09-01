@@ -25,7 +25,7 @@ function App() {
         <Route path="add-event" element={<AddEvent />} />
         <Route path="admin-dashboard" element={<AdminDashboard />} />
         <Route path="Event" element={<Event />}>
-          <Route path=":Id" element={<EventData />} />
+          <Route path=":_id" element={<EventData />} />
         </Route>
         <Route path="About" element={<About />} />
         <Route path="Contact" element={<Contact />} />

@@ -1,23 +1,25 @@
-import { Container, Typography } from '@mui/material'
-import axios from 'axios'
-import React, { useEffect } from 'react'
-import { useParams } from 'react-router-dom'
+// import { Container, Typography } from '@mui/material'
+// import axios from 'axios'
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 
 export default function EventData() {
-    const { id } = useParams()
-    const [eventDetails, setEventDetails] = useState(null)
+  const Api_url = "http://localhost";
 
-    useEffect(() => {
-        if (id) {
-            axios
-                .get(`http://localhost:5000/api/getEvent/${id}`)
-                .then((response) => setEventDetails(response.data))
-                .catch((error) => console.error("Error fetching event details:" , error))
-        }
-    },[id])
-    
-    if (!eventDetails) return <div>Loading...</div>;
+  const { _id } = useParams();
+  // const [eventDetails, setEventDetails] = useState(null)
 
+  // useEffect(() => {
+  //     if (_id) {
+  //         axios
+  //             .get(`http://localhost:5000/api/getEvent/${_id}`)
+  //             .then((response) => setEventDetails(response.data))
+  //             .catch((error) => console.error("Error fetching event details:" , error))
+  //     }
+  // },[_id])
+
+
+  // if (!eventDetails) return <div>Loading...</div>;
   return (
     // <Container>
     //     <Typography variant='h4'>{eventDetails.title}</Typography>
@@ -25,7 +27,7 @@ export default function EventData() {
     //     <Typography variant='h4'>{eventDetails.venue}</Typography>
     // </Container>
     <>
-    event data
+      <dev> event data {_id} </dev>
     </>
-  )
+  );
 }

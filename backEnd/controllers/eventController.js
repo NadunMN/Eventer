@@ -31,6 +31,24 @@ const searchEvents = async (req, res) => {
   }
 };
 
+
+//get event by id
+const getOneEvent = async (req, res) => {
+  try {
+    const { id } = req.params; //get the title from the query prameters
+    const foundEvent = await EventModel.findById(id);
+    if (foundEvent) {
+      res.status(200).json(foundEvent); //send the user data if found
+    } else {
+      res.status(404).json({ message: "Event not found!" });
+    }
+  } catch (error) {
+    res.status(500).json({ message: " Error searching event", error });
+  }
+};
+
+
+
 const createEvent = async (req, res) => {
   try {
     if (
@@ -67,4 +85,5 @@ module.exports = {
   getEvents,
   searchEvents,
   createEvent,
+  getOneEvent,
 };

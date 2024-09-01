@@ -59,7 +59,6 @@ function EventGrids({ listOfEvent, handleOpen, handleNavigate }) {
                     display: "flex",
                     flexDirection: "column",
                     justifyContent: "space-between",
-                    flexGrow: 1,
                     padding: 2,
                   }}
                 >

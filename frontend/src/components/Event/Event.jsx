@@ -2,9 +2,10 @@ import { useState, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import axios from "axios";
 import SearchForm from "./SearchForm";
-import { Navigate, useNavigate } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 import EventDialogBox from "./EventDialogBox";
 import EventGrids from "./EventGrids";
+import EventData from "./EventData";
 
 const Event = () => {
   const [listOfEvent, setListOfEvent] = useState([]);
@@ -34,6 +35,7 @@ const Event = () => {
     setSelectedEvent(null);
   };
 
+
   const handleNavigate = (event) => {
     if (event) {
       navigate(`/event/${event._id}`);
@@ -53,6 +55,8 @@ const Event = () => {
         open={open}
         onClose={handleClose}
       />
+      
+      <Outlet />
     </>
   );
 };
