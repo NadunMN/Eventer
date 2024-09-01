@@ -17,13 +17,15 @@ import {
   Box,
 } from "@mui/material";
 import { styled } from "@mui/system";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import LogoutIcon from "@mui/icons-material/Logout";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import LoginIcon from "@mui/icons-material/Login";
 import axios from "axios";
 import logo from "../asset/site-logo.png";
+import { useLogout } from "../hooks/useLogout";
+import { useAuthContext } from "../hooks/useAuthContext";
 
 const StyledAppBar = styled(AppBar)(({ theme }) => ({
   background: "linear-gradient(45deg, #673ab7 30%, #3f51b5 90%)",
@@ -73,12 +75,15 @@ const StyledMenuItem = styled(MenuItem)(({ theme }) => ({
 }));
 
 export const NavBar = () => {
-  const userId = "<add_user_id>";
-  const [user, setUser] = useState({});
+  const { logout } = useLogout();
+  const { user } = useAuthContext();
   const [userRole, setUserRole] = useState("user");
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [open, setOpen] = useState(false);
+  const [userId, setUserId] = useState("66d3683ec827b97b07dac045");
   const anchorRef = useRef(null);
+
+  const navigate = useNavigate();
 
   const handleToggle = () => {
     setOpen((prevOpen) => !prevOpen);
@@ -96,6 +101,11 @@ export const NavBar = () => {
       event.preventDefault();
       setOpen(false);
     }
+  };
+
+  const handleLogout = () => {
+    logout();
+    handleClose();
   };
 
   useEffect(() => {
@@ -167,43 +177,44 @@ export const NavBar = () => {
                   aria-labelledby="composition-button"
                   onKeyDown={handleListKeyDown}
                 >
-                  {isLoggedIn && (
-                    <StyledMenuItem onClick={handleClose}>
-                      <ListItemIcon>
-                        <AccountCircleIcon />
-                      </ListItemIcon>
-                      <ListItemText primary="Profile" />
-                    </StyledMenuItem>
-                  )}
-                  {isLoggedIn && (
-                    <StyledMenuItem onClick={handleClose} divider>
-                      <ListItemIcon>
-                        <DashboardIcon />
-                      </ListItemIcon>
-                      <ListItemText primary="Dashboard" />
-                      {userRole === "admin" ? (
-                        <NavButton component={Link} to="/admin-dashboard">
-                          {" "}
-                          Dashboard
-                        </NavButton>
-                      ) : (
-                        <NavButton component={Link} to="/user-dashboard">
-                          {" "}
-                          Dashboard
-                        </NavButton>
-                      )}
-                    </StyledMenuItem>
-                  )}
+                  {user ? (
+                    <>
+                      <StyledMenuItem onClick={handleClose}>
+                        <ListItemIcon>
+                          <AccountCircleIcon />
+                        </ListItemIcon>
+                        <ListItemText primary="Profile" />
+                      </StyledMenuItem>
 
-                  {isLoggedIn ? (
-                    <StyledMenuItem onClick={handleClose}>
-                      <ListItemIcon>
-                        <LogoutIcon />
-                      </ListItemIcon>
-                      <ListItemText primary="Logout" />
-                    </StyledMenuItem>
+                      <StyledMenuItem
+                        component={Link}
+                        to={
+                          userRole === "admin"
+                            ? "/admin-dashboard"
+                            : "/user-dashboard"
+                        }
+                        onClick={handleClose}
+                        divider
+                      >
+                        <ListItemIcon>
+                          <DashboardIcon />
+                        </ListItemIcon>
+                        <ListItemText primary="Dashboard" />
+                      </StyledMenuItem>
+                      <StyledMenuItem onClick={handleLogout}>
+                        <ListItemIcon>
+                          <LogoutIcon />
+                        </ListItemIcon>
+                        <ListItemText primary="Logout" />
+                      </StyledMenuItem>
+                    </>
                   ) : (
-                    <StyledMenuItem onClick={handleClose}>
+                    <StyledMenuItem
+                      onClick={() => {
+                        logout();
+                        handleClose();
+                      }}
+                    >
                       <ListItemIcon>
                         <LoginIcon />
                       </ListItemIcon>
