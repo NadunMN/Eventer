@@ -3,7 +3,7 @@ const cors = require("cors");
 const connectDB = require("./config/db")
 const eventRoutes = require("./routes/eventRoutes")
 
-const route = require("./routes/regEventRoutes")
+const userProfileRoutes = require("./routes/userProfileRoutes")
 
 const userRoutes = require("./routes/userRoutes")
 
@@ -26,7 +26,7 @@ connectDB()
 // Routes
 app.use('/api', eventRoutes)
 
-app.use('/api', route)
+app.use('/api', userProfileRoutes)
 
 app.use('/api', userRoutes)
 
