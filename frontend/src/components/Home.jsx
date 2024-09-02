@@ -4,6 +4,7 @@ import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import Box from '@mui/material/Box';
 import ButtonBaseDemo from './Category'
 import MediaCard from './Card'
+import Brandcarousel from './Carousel'
 
 
 export const Home = () => {
@@ -59,35 +60,7 @@ export const Home = () => {
 
         </div>
 
-        <div className='logos-div'>
-
-            <Box className='box-logos'
-            mt = {5}
-            width='100%'
-            // height='100%'
-            display="flex"
-            p={2}
-            alignItems="center"
-            justifyContent="center"
-            gap={18}
-            sx={{bgcolor: "white"}}>
-                <div className="logo-1-img">
-                <img className="image-1" src="/src/asset/Icon/images (1).jpg"></img>
-                </div>
-                <div className="logo-1-img">
-                <img className="image-1" src="/src/asset/Icon/images.jpg"></img>
-                </div>
-
-                <div className="logo-1-img">
-                <img className="image-1" src="/src/asset/Icon/logo.png"></img>
-                </div>
-
-                <div className="logo-1-img">
-                <img className="image-1" src="/src/asset/Icon/Rotaract-300x130.png"></img>
-                </div>
-            </Box>
-
-        </div>
+        <Brandcarousel/>
 
             
         <Box className='box'  mt= {5} ml ={-110} sx={{
