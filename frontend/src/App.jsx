@@ -12,6 +12,7 @@ import { Footer } from "./components/Footer";
 import Dashboard from "./components/Dashboard";
 import "./App.css";
 import EventData from "./components/Event/EventData";
+import RegisteredEvent from './components/RegisteredEvent';
 
 function App() {
   return (
@@ -32,6 +33,7 @@ function App() {
         <Route path="user-dashboard" element={<Dashboard />} />
       </Routes>
       <Footer />
+      {/* <RegisteredEvent/> */}
     </>
   );
 }
