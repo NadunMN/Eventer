@@ -33,6 +33,8 @@ const countFavoriteEvent = async (req, res) => {
     }
 };
 
+
+//Registered Event
 const getRegisteredEvents = async (req, res) => {
     try {
       const events = await Student.find({"registered": true});
@@ -41,6 +43,17 @@ const getRegisteredEvents = async (req, res) => {
       res.status(500).json({ message: "Error fetching events", error });
     }
   };
+
+//Favorite Event
+const getFavoriteEvents = async (req, res) => {
+    try {
+      const events = await Student.find({"favorite": true});
+      res.json(events);
+    } catch (error) {
+      res.status(500).json({ message: "Error fetching events", error });
+    }
+  };
+
   
 
 
@@ -49,4 +62,5 @@ module.exports={
     countCreatedEvent,
     countFavoriteEvent,
     getRegisteredEvents,
+    getFavoriteEvents,
 };

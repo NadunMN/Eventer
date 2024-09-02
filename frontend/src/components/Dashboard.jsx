@@ -12,12 +12,12 @@ import Accountname from './Accountname';
 import axios from 'axios';
 import MediaCard from './Card';
 import RegisteredEvent from './RegisteredEvent';
+import FavoriteEvent from './FavoriteEvent';
 
 export default function Dashboard() {
     const [countRegistered, setCountRegistered] = useState(0);
     const [countCreated, setCountCreated] = useState(0);
     const [countFavorite, setCountFavorite] = useState(0);
-    const [listOfEvent, setListOfEvent] = useState([]);
 
 
     const [activeItem, setActiveItem] = useState('DashBoard');
@@ -121,7 +121,7 @@ export default function Dashboard() {
                         flexWrap: 'wrap', // Enable wrapping of flex items
                         
                     }}>
-                            <RegisteredEvent/>
+                            <FavoriteEvent/>
                             
                         </Box>
                         </Box>
@@ -154,19 +154,7 @@ export default function Dashboard() {
                         gap: 3, 
                         flexWrap: 'wrap', // Enable wrapping of flex items  
                     }}>
-                <MediaCard/>
-                <MediaCard/>
-                <MediaCard/>
-                <MediaCard/>
-                <MediaCard/>
-                <MediaCard/>
-                <MediaCard/>
-                <MediaCard/>
-                <MediaCard/>
-                <MediaCard/>
-                <MediaCard/>
-                <MediaCard/>
-                <MediaCard/>
+                <RegisteredEvent/>
                 
         </Box>
                     </div>
