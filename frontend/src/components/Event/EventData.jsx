@@ -9,7 +9,10 @@ export default function EventData() {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    if (!eventId) return; //ensure eventId is available
+    if (!eventId) {
+      <div>"no eventId"</div>;
+      return;
+    } //ensure eventId is available
 
     const fetchEvent = async () => {
       try {
@@ -27,7 +30,7 @@ export default function EventData() {
       }
     };
     fetchEvent();
-  }, []);
+  }, [eventId]);
 
   if (loading) {
     return <>loading....</>;
@@ -39,7 +42,7 @@ export default function EventData() {
 
   return (
     <>
-      {/* <h1>{event.title}</h1> */}
+      <h1>{event.title}</h1>
       {eventId}
       <div>hi</div>
     </>
