@@ -1,33 +1,47 @@
-// import { Container, Typography } from '@mui/material'
-// import axios from 'axios'
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
+import axios from "axios";
 
 export default function EventData() {
-  const Api_url = "http://localhost";
+  const { eventId } = useParams(); //get the event ID from the route params
+  const [event, setEvent] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  const { _id } = useParams();
-  // const [eventDetails, setEventDetails] = useState(null)
+  useEffect(() => {
+    if (!eventId) return; //ensure eventId is available
 
-  // useEffect(() => {
-  //     if (_id) {
-  //         axios
-  //             .get(`http://localhost:5000/api/getEvent/${_id}`)
-  //             .then((response) => setEventDetails(response.data))
-  //             .catch((error) => console.error("Error fetching event details:" , error))
-  //     }
-  // },[_id])
+    const fetchEvent = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:5000/api/getEvent/${eventId}`
+        );
+        setEvent(response.data);
+        setError(null);
+      } catch (error) {
+        setError(
+          error.response?.data?.message || "cannot fetching the event Data!"
+        );
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchEvent();
+  }, []);
 
+  if (loading) {
+    return <>loading....</>;
+  }
 
-  // if (!eventDetails) return <div>Loading...</div>;
+  if (error) {
+    return <>{error}</>;
+  }
+
   return (
-    // <Container>
-    //     <Typography variant='h4'>{eventDetails.title}</Typography>
-    //     <Typography variant='h4'>{eventDetails.start_date}</Typography>
-    //     <Typography variant='h4'>{eventDetails.venue}</Typography>
-    // </Container>
     <>
-      <dev> event data {_id} </dev>
+      {/* <h1>{event.title}</h1> */}
+      {eventId}
+      <div>hi</div>
     </>
   );
 }

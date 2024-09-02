@@ -35,27 +35,33 @@ const Event = () => {
     setSelectedEvent(null);
   };
 
-
   const handleNavigate = (event) => {
     if (event) {
       navigate(`/event/${event._id}`);
     }
   };
 
+  //determine if the current path is child route
+  const isChildRoute = location.pathname !== "/event";
+
   return (
     <>
-      <SearchForm setListOfEvents={setListOfEvent} />
-      <EventGrids
-        listOfEvent={listOfEvent}
-        handleOpen={handleOpen}
-        handleNavigate={handleNavigate}
-      />
-      <EventDialogBox
-        selectedEvent={selectedEvent}
-        open={open}
-        onClose={handleClose}
-      />
-      
+      {!isChildRoute && (
+        <>
+          <SearchForm setListOfEvents={setListOfEvent} />
+          <EventGrids
+            listOfEvent={listOfEvent}
+            handleOpen={handleOpen}
+            handleNavigate={handleNavigate}
+          />
+          <EventDialogBox
+            selectedEvent={selectedEvent}
+            open={open}
+            onClose={handleClose}
+          />
+        </>
+      )}
+
       <Outlet />
     </>
   );
