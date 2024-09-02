@@ -1,3 +1,4 @@
+const { default: mongoose } = require("mongoose");
 const EventModel = require("../models/eventModel");
 
 // api to get Events
@@ -36,6 +37,10 @@ const searchEvents = async (req, res) => {
 const getOneEvent = async (req, res) => {
   try {
     const { id } = req.params; //get the title from the query prameters
+
+    if (!mongoose.Types.ObjectId.isValid(id)){
+      return res.status(400).json({ message: "Invalid event ID !"})
+    }
     const foundEvent = await EventModel.findById(id);
     if (foundEvent) {
       res.status(200).json(foundEvent); //send the user data if found
@@ -43,7 +48,7 @@ const getOneEvent = async (req, res) => {
       res.status(404).json({ message: "Event not found!" });
     }
   } catch (error) {
-    res.status(500).json({ message: " Error searching event", error });
+    res.status(500).json({ message: "cannot Request !", error });
   }
 };
 
