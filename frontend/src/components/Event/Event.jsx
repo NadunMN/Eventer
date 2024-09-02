@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import axios from "axios";
 import SearchForm from "./SearchForm";
-import { Outlet, useNavigate } from "react-router-dom";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import EventDialogBox from "./EventDialogBox";
 import EventGrids from "./EventGrids";
 import EventData from "./EventData";
@@ -35,27 +35,33 @@ const Event = () => {
     setSelectedEvent(null);
   };
 
-
   const handleNavigate = (event) => {
     if (event) {
       navigate(`/event/${event._id}`);
     }
   };
 
+  //determine if the current path is child route
+  const isChildRoute = location.pathname !== "/event";
+
   return (
     <>
-      <SearchForm setListOfEvents={setListOfEvent} />
-      <EventGrids
-        listOfEvent={listOfEvent}
-        handleOpen={handleOpen}
-        handleNavigate={handleNavigate}
-      />
-      <EventDialogBox
-        selectedEvent={selectedEvent}
-        open={open}
-        onClose={handleClose}
-      />
-      
+      {!isChildRoute && (
+        <>
+
+          <SearchForm setListOfEvents={setListOfEvent} />
+          <EventGrids
+            listOfEvent={listOfEvent}
+            handleOpen={handleOpen}
+          />
+          <EventDialogBox
+            selectedEvent={selectedEvent}
+            open={open}
+            onClose={handleClose}
+          />
+        </>
+      )}
+
       <Outlet />
     </>
   );
