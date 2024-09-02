@@ -104,6 +104,7 @@ export const NavBar = () => {
   };
 
   const handleLogout = () => {
+    navigate("/login", { replace: true });
     logout();
     handleClose();
   };
@@ -214,6 +215,8 @@ export const NavBar = () => {
                         logout();
                         handleClose();
                       }}
+                      component={Link}
+                      to="/login"
                     >
                       <ListItemIcon>
                         <LoginIcon />

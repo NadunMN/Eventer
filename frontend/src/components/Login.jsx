@@ -24,7 +24,6 @@ export const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
   const handlePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
@@ -53,7 +52,7 @@ export const Login = () => {
       >
         <Grid item xs={12} sm={8} md={6} lg={4}>
           <Paper
-            elevation={3}
+            elevation={0}
             sx={{
               padding: 4,
               display: "flex",
