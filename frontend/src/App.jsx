@@ -4,7 +4,7 @@ import { Home } from "./components/Home";
 import { Login } from "./components/Login";
 import { NavBar } from "./components/NavBar";
 import { Route, Routes } from "react-router-dom";
-import { Register } from "./components/Register";
+import { Signup } from "./components/Signup";
 import { AddEvent } from "./components/AddEvent";
 import { AdminDashboard } from "./components/AdminDashboard";
 import Event from "./components/Event/Event";
@@ -22,7 +22,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="login" element={<Login />} />
-        <Route path="register" element={<Register />} />
+        <Route path="signup" element={<Signup />} />
         <Route path="add-event" element={<AddEvent />} />
         <Route path="admin-dashboard" element={<AdminDashboard />} />
         <Route path="Event" element={<Event />}>
