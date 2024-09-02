@@ -12,6 +12,7 @@ import { Footer } from "./components/Footer";
 import Dashboard from "./components/Dashboard";
 import "./App.css";
 import EventData from "./components/Event/EventData";
+import RegisteredEvent from './components/RegisteredEvent';
 
 function App() {
   return (
@@ -25,13 +26,14 @@ function App() {
         <Route path="add-event" element={<AddEvent />} />
         <Route path="admin-dashboard" element={<AdminDashboard />} />
         <Route path="Event" element={<Event />}>
-          <Route path=":_id" element={<EventData />} />
+          <Route path=":eventId" element={<EventData />} />
         </Route>
         <Route path="About" element={<About />} />
         <Route path="Contact" element={<Contact />} />
         <Route path="user-dashboard" element={<Dashboard />} />
       </Routes>
       <Footer />
+      {/* <RegisteredEvent/> */}
     </>
   );
 }
