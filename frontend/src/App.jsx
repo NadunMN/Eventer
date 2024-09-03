@@ -33,7 +33,7 @@ function App() {
         <Route path="user-dashboard" element={<Dashboard />} />
       </Routes>
       <Footer />
-      {/* <RegisteredEvent/> */}
+      {/* <Dashboard/> */}
     </>
   );
 }

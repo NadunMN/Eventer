@@ -92,7 +92,7 @@ const createEvent = async (req, res) => {
 // creating a new event
 const createEventWithImage = async (req, res) => {
   try {
-    const { title, start_date, start_time, end_date, end_time, description, venue, capacity, participants } = req.body;
+    const { title, start_date, start_time, end_date, end_time, description, venue, capacity, participants,cover_image } = req.body;
     const event = new EventModel({
       title,
       start_date,
@@ -118,9 +118,9 @@ const getEventImage = async (req, res) => {
   try {
     const event = await EventModel.findById(req.params.id);
 
-    if (event && event.image) {
+    if (event && event.caver_image) {
       res.set('Content-Type', 'image/jpeg'); // Set the content type to image
-      res.send(event.image);
+      res.send(event.cover_image);
     } else {
       res.status(404).json({ error: 'Image not found' });
     }
