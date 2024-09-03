@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Stack, Typography, Avatar, Button } from '@mui/material';
 import CustomizedDialogs from './Dialog'; // Assuming Dialog is correctly set up in this file
-import erajiImage from '../asset/eraji2.jpg';
+import erajiImage from '../asset/eraji5.jpg';
 
 function Accountname() {
   const [open, setOpen] = useState(false);

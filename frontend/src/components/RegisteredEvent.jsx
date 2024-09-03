@@ -12,6 +12,7 @@ import axios from 'axios';
 export default function RegisteredEvent() {
 
     const [events, setEvents] = useState([]);
+    console.log(events);
 
         // get registered all Events
         useEffect(() => {
@@ -31,16 +32,36 @@ export default function RegisteredEvent() {
   
   return (
     <>
-        <div className="event-list">
-      {events.length > 0 ? (
-        events.map((event) => (
-          <div className="event-card" key={event._id}>
-            <img src={event.imageUrl} alt={event.title} className="event-image" />
-            <div className="event-details">
-              <h2>{event.title}</h2>
-              <p>{event.description}</p>
-            </div>
-          </div>
+       <div>
+
+{events.length > 0 ? (
+  events.map((event) => (
+    <div>
+      <Card sx={{ maxWidth: 345, bgcolor:'blue' }}>
+        <CardMedia
+          sx={{ height: 140 }}
+          image={event.imageUrl}
+          title={event.title} 
+        />
+        <CardContent>
+          <Typography gutterBottom variant="h5" component="div">
+          {event.title}
+          </Typography>
+          <Typography variant="body2" color="text.secondary">
+          {event.description}
+          </Typography>
+        </CardContent>
+        <CardActions>
+          <Button sx={{ color: "#311b92" }} size="small">
+            Share
+          </Button>
+          <Button size="small" sx={{ color: "#311b92" }}>
+            Learn More
+          </Button>
+        </CardActions>
+      </Card>
+    </div>
+
         ))
       ) : (
         <p>No registered events found.</p>
