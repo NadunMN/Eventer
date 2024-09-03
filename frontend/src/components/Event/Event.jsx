@@ -7,23 +7,37 @@ import EventDialogBox from "./EventDialogBox";
 import EventGrids from "./EventGrids";
 import EventData from "./EventData";
 
+import MediaCard from "../Card";
+import { useAuthContext } from "../../hooks/useAuthContext";
+
+
 const Event = () => {
   const [listOfEvent, setListOfEvent] = useState([]);
   const [open, setOpen] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState(null);
   const navigate = useNavigate();
+  const { user } = useAuthContext();
 
   //get all events
   useEffect(() => {
-    axios
-      .get("http://localhost:5000/api/getEvent")
-      .then((response) => {
-        setListOfEvent(response.data);
-      })
-      .catch((error) => {
-        console.error("there was an error fetching ta data! ", error);
-      });
-  }, []);
+    if (user) {
+      axios
+        .get("http://localhost:5000/api/event/getEvent", {
+          headers: {
+            Authorization: `Bearer ${user.token}`,
+          },
+        })
+        .then((response) => {
+          setListOfEvent(response.data);
+          console.log(response);
+        })
+        .catch((error) => {
+          console.error("there was an error fetching ta data! ", error);
+        });
+    } else {
+      console.log("You must be logged in");
+    }
+  }, [user]);
 
   const handleOpen = (event) => {
     setSelectedEvent(event);
@@ -48,12 +62,8 @@ const Event = () => {
     <>
       {!isChildRoute && (
         <>
-
           <SearchForm setListOfEvents={setListOfEvent} />
-          <EventGrids
-            listOfEvent={listOfEvent}
-            handleOpen={handleOpen}
-          />
+          <EventGrids listOfEvent={listOfEvent} handleOpen={handleOpen} />
           <EventDialogBox
             selectedEvent={selectedEvent}
             open={open}
@@ -61,8 +71,6 @@ const Event = () => {
           />
         </>
       )}
-
-
       <Outlet />
     </>
   );

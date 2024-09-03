@@ -35,7 +35,6 @@ const searchEvents = async (req, res) => {
   }
 };
 
-
 //get event by id
 const getOneEvent = async (req, res) => {
   try {
@@ -55,8 +54,6 @@ const getOneEvent = async (req, res) => {
   }
 };
 
-
-
 const createEvent = async (req, res) => {
   try {
     if (
@@ -72,13 +69,14 @@ const createEvent = async (req, res) => {
       });
     }
     const newEvent = {
-      name: req.body.name,
+      title: req.body.name,
       description: req.body.description,
       start_time: req.body.start_time,
       start_date: req.body.start_date,
       end_time: req.body.end_time,
       end_date: req.body.end_date,
       capacity: req.body.capacity,
+      created_by: req.user._id,
     };
 
     const event = await EventModel.create(newEvent);

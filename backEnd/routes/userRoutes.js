@@ -8,8 +8,8 @@ const {
   login,
 } = require("../controllers/userController");
 
-router.get("/users", getAllUser);
-router.get("/user/:id", getUser);
+router.get("/", getAllUser);
+router.get("/:id", getUser);
 router.post("/signup", signup);
 router.post("/login", login);
 
