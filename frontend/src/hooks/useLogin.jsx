@@ -14,7 +14,7 @@ export const useLogin = () => {
     setError(null);
 
     try {
-      const res = await axios.post("http://localhost:5000/api/login", {
+      const res = await axios.post("http://localhost:5000/api/user/login", {
         email,
         password,
       });
