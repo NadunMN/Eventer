@@ -1,6 +1,6 @@
 const { default: mongoose } = require("mongoose");
 const EventModel = require("../models/eventModel");
-const multer = require('multer');
+const multer = require("multer");
 
 const upload = multer(); //upload a form data to the db
 
@@ -40,8 +40,8 @@ const getOneEvent = async (req, res) => {
   try {
     const { id } = req.params; //get the title from the query prameters
 
-    if (!mongoose.Types.ObjectId.isValid(id)){
-      return res.status(400).json({ message: "Invalid event ID !"})
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({ message: "Invalid event ID !" });
     }
     const foundEvent = await EventModel.findById(id);
     if (foundEvent) {
@@ -90,8 +90,7 @@ const createEvent = async (req, res) => {
 // creating a new event
 const createEventWithImage = async (req, res) => {
   try {
-    const { title, start_date, start_time, end_date, end_time, description, venue, capacity, participants,cover_image } = req.body;
-    const event = new EventModel({
+    const {
       title,
       start_date,
       start_time,
@@ -101,13 +100,26 @@ const createEventWithImage = async (req, res) => {
       venue,
       capacity,
       participants,
-      cover_image: req.file.buffer // Save the image as a buffer
+      cover_image,
+    } = req.body;
+    const event = new EventModel({
+      title,
+      start_date,
+      start_time,
+      end_date,
+      end_time,
+      description,
+      venue,
+      capacity,
     });
+    if (req.file) {
+      event.cover_image = req.file.buffer; // Save the image as a buffer
+    }
 
     await event.save();
     res.status(201).json(event);
   } catch (error) {
-    res.status(500).json({ error: 'Failed to create event' });
+    res.status(500).json({ error: "Failed to create event" });
   }
 };
 
@@ -116,14 +128,14 @@ const getEventImage = async (req, res) => {
   try {
     const event = await EventModel.findById(req.params.id);
 
-    if (event && event.caver_image) {
-      res.set('Content-Type', 'image/jpeg'); // Set the content type to image
-      res.send(event.cover_image);
+    if (event && event.image) {
+      res.set("Content-Type", "image/jpeg"); // Set the content type to image
+      res.send(event.image);
     } else {
-      res.status(404).json({ error: 'Image not found' });
+      res.status(404).json({ error: "Image not found" });
     }
   } catch (error) {
-    res.status(500).json({ error: 'Failed to fetch image' });
+    res.status(500).json({ error: "Failed to fetch image" });
   }
 };
 
@@ -133,16 +145,30 @@ const getEventById = async (req, res) => {
     const event = await EventModel.findById(req.params.id);
 
     if (!event) {
-      return res.status(404).json({ error: 'Event not found' });
+      return res.status(404).json({ error: "Event not found" });
     }
 
     res.status(200).json(event);
   } catch (error) {
-    res.status(500).json({ error: 'Failed to fetch event' });
+    res.status(500).json({ error: "Failed to fetch event" });
   }
 };
 
+const deleteEvent = async (req, res) => {
+  try {
+    const { id } = req.params;
 
+    const result = await EventModel.findByIdAndDelete(id);
+
+    if (!result) {
+      res.status(404).json({ message: "Event not found" });
+    }
+
+    res.status(200).json({ message: "Event delete successfully" });
+  } catch (err) {
+    res.status(500).send({ message: err.message });
+  }
+};
 
 module.exports = {
   getEvents,
@@ -152,4 +178,5 @@ module.exports = {
   createEventWithImage,
   getEventImage,
   getEventById,
+  deleteEvent,
 };

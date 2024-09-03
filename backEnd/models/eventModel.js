@@ -13,8 +13,8 @@ const EventSchema = new mongoose.Schema({
   participants: { type: [String] },
   cover_image: { type: Buffer }, // If image is not always required, remove `required: true`
   participants: { type: String },
-  created_by: { type: String, required: true },
-  created_at: { type: String, required: true },
+  created_by: { type: String },
+  created_at: { type: String },
 });
 
 // Create the event model
