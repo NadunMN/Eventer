@@ -1,24 +1,131 @@
-/* General Styling */
-body {
-  font-family: 'Arial', sans-serif;
-  line-height: 1.6;
-  color: #333;
-  margin: 0;
-  padding: 0;
-  /* background-color: #f4f4f4; */
-}
-
 .about-container {
+  font-family: 'Roboto', sans-serif;
+  color: #a109d4;
   max-width: 1200px;
   margin: 0 auto;
-  padding: 20px;
+  padding: 50px 20px;
+  background-color: #ffffff;
 }
 
-/* Header Section */
 .about-header {
+  position: relative;
   text-align: center;
-  background-color: #007BFF;
+  padding: 100px 20px;
+  background-size: cover;
+  background-position: center;
   color: white;
-  padding: 50px 0;
- 
+}
+
+.about-header::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(30, 7, 239, 0.5); /* Dark overlay for better text readability */
+  z-index: 1;
+}
+
+.about-header h1 {
+  position: relative;
+  z-index: 2;
+  font-size: 3.5em;
+  font-weight: 700;
+  letter-spacing: 2px;
+  margin-bottom: 20px;
+  color: #fff; /* Ensure the text is white */
+}
+
+.about-intro, .about-mission, .about-team, .about-features, .about-testimonials {
+  margin: 60px 0;
+  padding: 40px 20px;
+  background-color: rgb(227, 234, 207);
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(3, 7, 16, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.about-intro:hover, .about-mission:hover, .about-team:hover, .about-features:hover, .about-testimonials:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 6px 20px rgba(21, 10, 230, 0.15);
+}
+
+.about-intro h2, .about-mission h2, .about-team h2, .about-features h2, .about-testimonials h2 {
+  color: #350889;
+  font-size: 2.5em;
+  margin-bottom: 20px;
+}
+
+.about-intro p, .about-mission p, .about-team p, .about-features ul, .about-testimonials blockquote {
+  font-size: 1.2em;
+  line-height: 1.8;
+  color: #333333; /* Improved text color for better contrast */
+}
+
+.about-team .team-members {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.about-team .team-member {
+  text-align: center;
+  margin: 20px;
+  flex-basis: 45%;
+  background-color: #bce2ec;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(10, 10, 10, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.about-team .team-member img {
+  width: 100%;
+  max-width: 150px;
+  border-radius: 50%;
+  margin-bottom: 15px;
+}
+
+.about-team .team-member h3 {
+  margin: 15px 0 5px;
+  font-size: 1.5em;
+  color: #3b6793;
+}
+
+.about-team .team-member p {
+  font-size: 1.1em;
+  color: #7f8c8d;
+}
+
+.about-features ul {
+  list-style-type: disc;
+  margin-left: 20px;
+}
+
+.about-features ul li {
+  margin-bottom: 10px;
+}
+
+.about-testimonials blockquote {
+  font-size: 1.3em;
+  font-style: italic;
+  color: #7f8c8d;
+  margin: 20px 0;
+  padding-left: 20px;
+  border-left: 5px solid #e74c3c;
+}
+
+.about-testimonials cite {
+  display: block;
+  margin-top: 10px;
+  font-size: 1.1em;
+  font-style: normal;
+  color: #34495e;
+}
+
+@media (max-width: 768px) {
+  .about-team .team-member {
+    flex-basis: 100%;
+  }
 }

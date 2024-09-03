@@ -44,8 +44,8 @@ const ContactForm = () => {
       sx={{ display: 'flex', flexDirection: 'column', gap: 2, width: '200%', maxWidth: 500, mx: 'auto', mt: 5 }}
       onSubmit={handleSubmit}
     >
-      <Typography variant="h4" component="h1" gutterBottom>
-        Contact Us
+      <Typography variant="h5" component="h1" gutterBottom>
+        Or Leave a Short Messege
       </Typography>
       {formSubmitted && <Alert severity="success">Your message has been sent successfully!</Alert>}
       <TextField
