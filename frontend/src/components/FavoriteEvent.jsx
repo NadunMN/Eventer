@@ -9,14 +9,14 @@ import Divider from '@mui/material/Divider';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 
-export default function RegisteredEvent() {
+export default function FavoriteEvent() {
 
     const [events, setEvents] = useState([]);
 
         // get registered all Events
         useEffect(() => {
             axios
-              .get("http://localhost:5000/api/getRegisteredEvents")
+              .get("http://localhost:5000/api/getFavoriteEvents")
               .then((response) => {
                 console.log(response.data);
                 
@@ -43,7 +43,7 @@ export default function RegisteredEvent() {
           </div>
         ))
       ) : (
-        <p>No registered events found.</p>
+        <p>No Favorite events found.</p>
       )}
     </div> 
     

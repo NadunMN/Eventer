@@ -16,29 +16,43 @@ import {
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
-
 import theme from "../style/theme";
-
+import { useLogin } from "../hooks/useLogin";
 
 export const Login = () => {
+  const { login, isLoading, error } = useLogin();
   const [showPassword, setShowPassword] = useState(false);
-
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const handlePasswordVisibility = () => {
     setShowPassword(!showPassword);
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const res = await login(email, password);
+    console.log(res);
+    console.log("Login successfully");
   };
 
   return (
     <ThemeProvider theme={theme}>
       <Grid
         container
-        display='flex'
+        display="flex"
         justifyContent="center"
         alignItems="center"
-        style={{ height: "100vh", minHeight: "100vh", margin: 'auto', maxWidth: '1400px' }}
+        style={{
+          height: "100vh",
+          minHeight: "100vh",
+          margin: "auto",
+          maxWidth: "1400px",
+        }}
       >
         <Grid item xs={12} sm={8} md={6} lg={4}>
           <Paper
-            elevation={3}
+            elevation={0}
             sx={{
               padding: 4,
               display: "flex",
@@ -55,21 +69,29 @@ export const Login = () => {
             </Typography>
             <Stack spacing={3} sx={{ width: "100%" }}>
               <TextField
-                label="Username"
+                label="Email"
+                type="email"
+                value={email}
                 variant="outlined"
                 fullWidth
                 required
                 sx={{ bgcolor: "background.paper" }}
+                onChange={(e) => setEmail(e.target.value)}
               />
               <TextField
                 label="Password"
                 variant="outlined"
+                value={password}
                 type={showPassword ? "text" : "password"}
                 InputProps={{
                   endAdornment: (
                     <InputAdornment position="end">
                       <IconButton onClick={handlePasswordVisibility} edge="end">
-                        {showPassword ? <VisibilityOffIcon /> : <VisibilityIcon />}
+                        {showPassword ? (
+                          <VisibilityOffIcon />
+                        ) : (
+                          <VisibilityIcon />
+                        )}
                       </IconButton>
                     </InputAdornment>
                   ),
@@ -77,12 +99,14 @@ export const Login = () => {
                 fullWidth
                 required
                 sx={{ bgcolor: "primary" }}
+                onChange={(e) => setPassword(e.target.value)}
               />
               <Button
                 type="submit"
                 fullWidth
                 variant="contained"
                 sx={{ mt: 3, mb: 2, py: 1.5, textTransform: "none" }}
+                onClick={handleSubmit}
               >
                 Log in
               </Button>

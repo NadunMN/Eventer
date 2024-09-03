@@ -31,13 +31,13 @@ const getUser = async (req, res) => {
 };
 
 const signup = async (req, res) => {
-  const { first_name, last_name, role, email, username, password } = req.body;
-  const created_at = new Date().toISOString();
+  const { first_name, last_name, role, email, username, password, created_at } =
+    req.body;
   console.log(req.body);
 
   try {
     // Check if the user already exist
-    const user = await userModel.findOne({ email });
+    let user = await userModel.findOne({ email });
     if (user) {
       return res.status(400).json({ msg: "Email is already exists" });
     }

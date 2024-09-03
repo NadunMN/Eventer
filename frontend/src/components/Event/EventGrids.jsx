@@ -62,7 +62,6 @@ function EventGrids({ listOfEvent, handleOpen }) {
                 />
                 <CardContent
                   sx={{
-                    flexGrow: 1,
                     display: "flex",
                     flexDirection: "column",
                     justifyContent: "space-between",

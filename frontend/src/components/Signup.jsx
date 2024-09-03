@@ -14,8 +14,11 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import axios from "axios";
+import { useSignup } from "../hooks/useSignup";
 
-export const Register = () => {
+export const Signup = () => {
+  const { signup, isLoading, error } = useSignup();
+
   const paperStyle = {
     padding: 20,
     height: "auto",
@@ -66,25 +69,33 @@ export const Register = () => {
     if (password != confirmPassword) {
       return;
     }
+    const created_at = new Date().toISOString();
     const userData = {
-      first: firstName,
+      first_name: firstName,
       last_name: lastName,
       email,
       username,
       password,
-      role: "user"
+      role: "user",
+      created_at,
     };
     console.log(userData);
-    try {
-      const response = await axios.post("http://localhost:5000/api/register", userData);
-      console.log(response);
-      console.log("Sucssess");
-      
-    } catch (err){
-      console.log(err);
-      alert("Registration Failed");
-      
-    }
+    const res = await signup(userData);
+    console.log(res);
+
+    console.log("Sucssess");
+
+    // try {
+    //   const response = await axios.post(
+    //     "http://localhost:5000/api/register",
+    //     userData
+    //   );
+    //   console.log(response);
+    //   console.log("Sucssess");
+    // } catch (err) {
+    //   console.log(err);
+    //   alert("Registration Failed");
+    // }
   };
 
   const getHelperText = () => {
@@ -121,7 +132,7 @@ export const Register = () => {
             <LockOutlinedIcon />
           </Avatar>
           <Typography variant="h5" component="h5" mt={2}>
-            Register
+            SignUp
           </Typography>
           <Stack spacing={5}>
             <Stack spacing={2} direction={"row"}>
@@ -215,9 +226,11 @@ export const Register = () => {
               variant="contained"
               style={{ marginBottom: 50, backgroundColor: "primary.main" }}
               onClick={handleSubmit}
+              disabled={isLoading}
             >
               Sign up
             </Button>
+            {error && <Typography variant="body1">{error}</Typography>}
           </Stack>
         </Grid>
       </Paper>
