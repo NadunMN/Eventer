@@ -1,5 +1,8 @@
 // const mongoose = require('mongoose');
 const Student = require('../models/regEventModel');
+const EventModel = require('../models/eventModel');
+const multer = require('multer');
+const upload = multer();
 
 
 //Registered Event count
@@ -37,7 +40,7 @@ const countFavoriteEvent = async (req, res) => {
 //Registered Event
 const getRegisteredEvents = async (req, res) => {
     try {
-      const events = await Student.find({"registered": true});
+      const events = await EventModel.find({"registered": true});
       res.json(events);
     } catch (error) {
       res.status(500).json({ message: "Error fetching events", error });
@@ -47,7 +50,7 @@ const getRegisteredEvents = async (req, res) => {
 //Favorite Event
 const getFavoriteEvents = async (req, res) => {
     try {
-      const events = await Student.find({"favorite": true});
+      const events = await EventModel.find({"favorite": true});
       res.json(events);
     } catch (error) {
       res.status(500).json({ message: "Error fetching events", error });

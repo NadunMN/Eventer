@@ -10,11 +10,11 @@ const EventSchema = new mongoose.Schema({
   description: { type: String },
   venue: { type: String, required: true },
   capacity: { type: Number },
-  participants: { type: String },
-  image: { type: String, required: true },
+  participants: { type: [String] }, 
+  cover_image: { type: Buffer}, // If image is not always required, remove `required: true`
 });
 
-// // Create the event model
+// Create the event model
 const EventModel = mongoose.model("events", EventSchema);
 
 module.exports = EventModel;
