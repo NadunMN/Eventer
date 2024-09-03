@@ -7,6 +7,8 @@ import EventDialogBox from "./EventDialogBox";
 import EventGrids from "./EventGrids";
 import EventData from "./EventData";
 import MediaCard from "../Card";
+import { Container, Box } from "@mui/material";
+import CategoryDropdown from "./CategoryDropdown";
 
 const Event = () => {
   const [listOfEvent, setListOfEvent] = useState([]);
@@ -49,12 +51,19 @@ const Event = () => {
     <>
       {!isChildRoute && (
         <>
+          <Container
+            fixed
+            sx={{
+              display: "flex",
+              m: 4,
+              gap: 2,
+            }}
+          >
+            <CategoryDropdown />
+            <SearchForm setListOfEvents={setListOfEvent} />
+          </Container>
 
-          <SearchForm setListOfEvents={setListOfEvent} />
-          <EventGrids
-            listOfEvent={listOfEvent}
-            handleOpen={handleOpen}
-          />
+          <EventGrids listOfEvent={listOfEvent} handleOpen={handleOpen} />
           <EventDialogBox
             selectedEvent={selectedEvent}
             open={open}
@@ -63,7 +72,6 @@ const Event = () => {
         </>
       )}
 
-      <MediaCard />
       <Outlet />
     </>
   );

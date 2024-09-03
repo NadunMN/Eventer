@@ -11,7 +11,7 @@ import {
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
-function EventGrids({ listOfEvent, handleOpen }) {
+function EventGrids({ listOfEvent }) {
   const navigate = useNavigate();
   const handleNavigate = (event) => {
     navigate(`/event/${event._id}`);
@@ -80,19 +80,6 @@ function EventGrids({ listOfEvent, handleOpen }) {
                     <Button
                       variant="contained"
                       color="primary"
-                      onClick={() => handleOpen(event)}
-                      sx={{
-                        alignSelf: "center",
-                        marginTop: 1,
-                        ml: 1,
-                        mr: 2,
-                      }}
-                    >
-                      More Info
-                    </Button>
-                    <Button
-                      variant="contained"
-                      color="primary"
                       onClick={() => handleNavigate(event)}
                       sx={{
                         alignSelf: "center",
@@ -101,7 +88,7 @@ function EventGrids({ listOfEvent, handleOpen }) {
                         mr: 1,
                       }}
                     >
-                      Buy
+                      More info
                     </Button>
                   </Box>
                 </CardContent>
