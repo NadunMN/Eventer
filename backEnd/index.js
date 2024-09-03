@@ -9,7 +9,7 @@ const userRoutes = require("./routes/userRoutes");
 
 const errorHadler = require("./middleware/errorHandler");
 const bodyParser = require("body-parser");
-const multer = require('multer');
+const multer = require("multer");
 
 const upload = multer();
 

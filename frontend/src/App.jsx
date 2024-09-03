@@ -35,10 +35,8 @@ function App() {
 
       console.log("Id: ", userId);
       console.log("Role: ", userRole);
-    } else {
-      <Navigate to="/login" />;
     }
-  }, [user]);
+  }, [userId]);
 
   return (
     <>
@@ -51,7 +49,7 @@ function App() {
           path="signup"
           element={!user ? <Signup /> : <Navigate to="/" />}
         />
-        <Route path="add-event" element={<AddEvent />} />
+        <Route path="create-event" element={<AddEvent />} />
         <Route path="admin-dashboard" element={<AdminDashboard />} />
         <Route path="Event" element={<Event />}>
           <Route path=":eventId" element={<EventData />} />
