@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Typography,
   Container,
@@ -9,15 +9,19 @@ import {
   CardMedia,
   Box,
   IconButton,
+  CardActions,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
+import FavoriteBorder from "@mui/icons-material/FavoriteBorder";
 
 function EventGrids({ listOfEvent }) {
   const navigate = useNavigate();
   const handleNavigate = (event) => {
     navigate(`/event/${event._id}`);
   };
+
+  const [isFavorite, setIsFavorite] = useState(false);
 
   const gridItemProps = {
     xs: 20,
@@ -34,8 +38,8 @@ function EventGrids({ listOfEvent }) {
   };
   return (
     <div>
-      <Container maxWidth="xl" fixed sx={{ mt: 5 }}>
-        <Grid container spacing={2} columns={20}>
+      <Container maxWidth="xl" fixed sx={{ mt: 9 }}>
+        <Grid container spacing={8} columns={20}>
           {listOfEvent.map((event) => (
             <Grid item key={event._id} {...gridItemProps}>
               <Card
@@ -48,8 +52,8 @@ function EventGrids({ listOfEvent }) {
                   backgroundColor: "#f0f0f0",
                   borderRadius: 3,
                   boxShadow: 10,
-                  gap: 2,
-                  transition: "al 0.3s ease",
+                  gap: 1,
+                  transition: "all 0.3s ease",
                   "&:hover": {
                     backgroundColor: "#e0e0e0",
                     transform: "scale(1.02)",
@@ -67,7 +71,8 @@ function EventGrids({ listOfEvent }) {
                     display: "flex",
                     flexDirection: "column",
                     justifyContent: "space-between",
-                    padding: 2,
+                    // padding: 1.2,
+                    mt: 0,
                   }}
                 >
                   <Typography variant="h5" gutterBottom>
@@ -78,37 +83,35 @@ function EventGrids({ listOfEvent }) {
                   </Typography>
                   <Typography variant="body2">{event.description}</Typography>
                   <Typography variant="body2">{event.venue}</Typography>
-                  <Box
-                    sx={{
-                      display: 'flex',
-                      flexDirection: 'row',
-                      justifyContent: "space-between",
-                      alingItems: "center",
-                      mt: 4,
-                      pl:4,
-                      pr:4
-                    }}
-                  >
-                    <Button
-                      variant="contained"
-                      color="primary"
-                      onClick={() => handleNavigate(event)}
-                    >
-                      More info
-                    </Button>
-                    <FavoriteBorderIcon fontSize="large" />
-                    <IconButton
-                      sx={{
-                        position: "absolute",
-                        bottom: 10,
-                        right: 40,
-                        color: "gray",
-                      }}
-                      aria-label="add to favorites"
-                      size="xl"
-                    ></IconButton>
-                  </Box>
                 </CardContent>
+                <CardActions
+                  sx={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alingItems: "center",
+                    mt: 0,
+                    pl: 4,
+                    pr: 4,
+                  }}
+                >
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={() => handleNavigate(event)}
+                  >
+                    More info
+                  </Button>
+                  <Box>
+                    <IconButton
+                      variant="outlined"
+                      color={isFavorite ? "warning" : "neutral"}
+                      sx={{ mr: "auto" }}
+                      onClick={() => {setIsFavorite(!isFavorite)}}
+                    >
+                      <FavoriteBorder sx={{ fontSize: 30 }} />
+                    </IconButton>
+                  </Box>
+                </CardActions>
               </Card>
             </Grid>
           ))}
