@@ -44,9 +44,12 @@ const SearchForm = ({ setListOfEvents }) => {
   const handleSearchEvent = async (event) => {
     event.preventDefault();
     try {
-      const response = await axios.get(`${Api_url}:5000/api/searchEvents`, {
-        params: { title: searchString },
-      });
+      const response = await axios.get(
+        `${Api_url}:5000/api/event/searchEvents`,
+        {
+          params: { title: searchString },
+        }
+      );
       setListOfEvents(response.data);
       setError("");
     } catch (error) {

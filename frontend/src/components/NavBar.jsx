@@ -26,6 +26,7 @@ import axios from "axios";
 import logo from "../asset/site-logo.png";
 import { useLogout } from "../hooks/useLogout";
 import { useAuthContext } from "../hooks/useAuthContext";
+import { jwtDecode } from "jwt-decode";
 
 const StyledAppBar = styled(AppBar)(({ theme }) => ({
   background: "linear-gradient(45deg, #673ab7 30%, #3f51b5 90%)",
@@ -77,12 +78,8 @@ const StyledMenuItem = styled(MenuItem)(({ theme }) => ({
 export const NavBar = () => {
   const { logout } = useLogout();
   const { user } = useAuthContext();
-  const [userRole, setUserRole] = useState("user");
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [open, setOpen] = useState(false);
-  const [userId, setUserId] = useState("66d3683ec827b97b07dac045");
   const anchorRef = useRef(null);
-
   const navigate = useNavigate();
 
   const handleToggle = () => {
@@ -109,23 +106,6 @@ export const NavBar = () => {
     handleClose();
   };
 
-  useEffect(() => {
-    axios
-      .get(`http://localhost:5000/api/user/${userId}`)
-      .then((res) => {
-        const userData = res.data;
-        if (userData) {
-          setUser(userData);
-          setUserRole(userData.role);
-          setIsLoggedIn(true);
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-        setIsLoggedIn(false);
-      });
-  }, []);
-
   return (
     <StyledAppBar position="static">
       <StyledToolbar>
@@ -147,7 +127,7 @@ export const NavBar = () => {
           <NavButton component={Link} to="/contact">
             Contact Us
           </NavButton>
-          <Tooltip title={isLoggedIn ? "Profile" : "Login"}>
+          <Tooltip title={user ? "Profile" : "Login"}>
             <StyledIconButton ref={anchorRef} onClick={handleToggle}>
               <AccountCircleIcon />
             </StyledIconButton>
@@ -189,11 +169,7 @@ export const NavBar = () => {
 
                       <StyledMenuItem
                         component={Link}
-                        to={
-                          userRole === "admin"
-                            ? "/admin-dashboard"
-                            : "/user-dashboard"
-                        }
+                        to="/dashboard"
                         onClick={handleClose}
                         divider
                       >

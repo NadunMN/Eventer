@@ -13,7 +13,7 @@ export const useSignup = () => {
 
     try {
       const res = await axios.post(
-        "http://localhost:5000/api/signup",
+        "http://localhost:5000/api/user/signup",
         userData
       );
       console.log(res);

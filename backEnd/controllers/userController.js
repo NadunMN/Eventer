@@ -4,8 +4,8 @@ const validator = require("validator");
 const jwt = require("jsonwebtoken");
 
 //create jw token
-const createToken = (_id) => {
-  return jwt.sign({ _id }, process.env.SECRET, { expiresIn: "1d" });
+const createToken = (_id, role) => {
+  return jwt.sign({ _id, role }, process.env.SECRET, { expiresIn: "1d" });
 };
 
 // Get all user data
@@ -62,12 +62,12 @@ const signup = async (req, res) => {
     const signUser = await user.save();
 
     // Create token
-    const token = createToken(signUser._id);
+    const token = createToken(signUser._id, signUser.role);
 
     res.status(201).json({ msg: "User registered successfully", token });
   } catch (err) {
     console.log(err.message);
-    res.status(500).send("Server error");
+    res.status(500).send("Server Error");
   }
 };
 
@@ -92,7 +92,7 @@ const login = async (req, res) => {
       return res.status(401).send("Incorrect password");
     }
 
-    const token = createToken(user._id);
+    const token = createToken(user._id, user.role);
     return res.status(200).json({ message: "Login successfully", token });
   } catch {
     return res.status(500).send("Server error");
