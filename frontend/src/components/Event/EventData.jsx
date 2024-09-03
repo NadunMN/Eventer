@@ -12,7 +12,6 @@ export default function EventData() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-
   useEffect(() => {
     if (!eventId) {
       <div>"no eventId"</div>;
@@ -31,7 +30,9 @@ export default function EventData() {
           error.response?.data?.message || "cannot fetching the event Data!"
         );
       } finally {
-        setLoading(false);
+        const timer = setTimeout(() => {
+          setLoading(false);
+        }, 1200);
       }
     };
     fetchEvent();
@@ -50,38 +51,17 @@ export default function EventData() {
   return (
     <Container maxWidth="lg">
       <Box>
-        <EventBanner />
+        <EventBanner event={event}/>
       </Box>
       <Grid container spacing={4}>
         <Grid item xs={12} md={6}>
-          <EventDetails />
+          <EventDetails event={event}/>
         </Grid>
 
         <Grid item xs={12} md={6}>
-          <EventDescription />
+          <EventDescription event={event}/>
         </Grid>
       </Grid>
     </Container>
   );
 }
-
-// <box>
-
-//   <Container fixed>
-//     <img src={image} alt = "image"
-//     ></img>
-//     <Typography variant="h2">{event.title}</Typography>
-//     <Typography variant="p">{event.description}</Typography>
-//     <Typography variant="h6">Start Date: {event.start_date}</Typography>
-
-//     <div>
-//       <Typography variant="h6">EndDate: {event.end_date}</Typography>
-//     </div>
-//     <div>
-//       <Typography variant="h6">Start Time: {event.start_time}</Typography>
-//       <Typography variant="h6">End Time: {event.end_time}</Typography>
-//       <Typography variant="h6">End Time: {event.image}</Typography>
-//     </div>
-//   </Container>
-
-// </box>

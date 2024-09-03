@@ -1,29 +1,35 @@
 import { Box, IconButton, Typography } from "@mui/material";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 
-function EventBanner() {
+function EventBanner({ event }) {
   return (
-    <Box
-      sx={{
-        position: "relative",
-        backgroundColor: "#3f51b5",
-        height: '200px',
-        color: 'white',
-        display: 'flex',
-        alignItems: 'center', 
-        jestifyContent: 'center'
-      }}
-    >
-      <Typography variant="h3" component="h3" sx={{ flexGrow: 1 }}>
-        Event Title
-      </Typography>
-
-      <IconButton
-        sx={{ position: "absolute", top: 10, right: 10, color: "white" }}
-        aria-label="add to favorites"
+    <Box>
+      <Box
+        sx={{
+          backgroundImage: `url(/${event.image})`,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          position: "relative",
+          backgroundColor: "#3f51b5",
+          height: "400px",
+          display: "flex",
+          alignItems: "center",
+          jestifyContent: "center",
+        }}
       >
-        <FavoriteBorderIcon />
-      </IconButton>
+        <IconButton
+          sx={{ position: "absolute", bottom: 10, right: 40, color: "gray"}}
+          aria-label="add to favorites"
+          size="xl"
+        >
+          <FavoriteBorderIcon />
+        </IconButton>
+      </Box>
+      <Box>
+        <Typography variant="h3" component="h3" sx={{ flexGrow: 6 }}>
+          {event.title}
+        </Typography>
+      </Box>
     </Box>
   );
 }

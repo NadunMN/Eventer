@@ -8,8 +8,10 @@ import {
   Button,
   CardMedia,
   Box,
+  IconButton,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 
 function EventGrids({ listOfEvent }) {
   const navigate = useNavigate();
@@ -76,20 +78,35 @@ function EventGrids({ listOfEvent }) {
                   </Typography>
                   <Typography variant="body2">{event.description}</Typography>
                   <Typography variant="body2">{event.venue}</Typography>
-                  <Box>
+                  <Box
+                    sx={{
+                      display: 'flex',
+                      flexDirection: 'row',
+                      justifyContent: "space-between",
+                      alingItems: "center",
+                      mt: 4,
+                      pl:4,
+                      pr:4
+                    }}
+                  >
                     <Button
                       variant="contained"
                       color="primary"
                       onClick={() => handleNavigate(event)}
-                      sx={{
-                        alignSelf: "center",
-                        marginTop: 1,
-                        ml: 2,
-                        mr: 1,
-                      }}
                     >
                       More info
                     </Button>
+                    <FavoriteBorderIcon fontSize="large" />
+                    <IconButton
+                      sx={{
+                        position: "absolute",
+                        bottom: 10,
+                        right: 40,
+                        color: "gray",
+                      }}
+                      aria-label="add to favorites"
+                      size="xl"
+                    ></IconButton>
                   </Box>
                 </CardContent>
               </Card>

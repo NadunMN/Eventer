@@ -1,6 +1,6 @@
 import {Box, Card , CardContent, Typography , Button } from "@mui/material";
 
-export default function EventDescription() {
+export default function EventDescription({ event }) {
   return (
     <Box>
       <Card sx={{md: 4}}>
@@ -15,7 +15,7 @@ export default function EventDescription() {
       </Card>
 
       <Typography variant="body1">
-        this is the description of the event .
+        {event.description}
       </Typography>
     </Box>
   );

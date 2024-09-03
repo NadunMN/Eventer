@@ -6,7 +6,7 @@ import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import PeopleIcon from '@mui/icons-material/People';
 
-const EventDetails = () => {
+const EventDetails = ({ event }) => {
   return (
     <Box>
       <List>
@@ -14,31 +14,31 @@ const EventDetails = () => {
           <ListItemIcon>
             <EventIcon />
           </ListItemIcon>
-          <ListItemText primary="Start Date: January 1, 2025" />
+          <ListItemText> Start Date: {event.start_date} </ListItemText>
         </ListItem>
         <ListItem>
           <ListItemIcon>
             <AccessTimeIcon />
           </ListItemIcon>
-          <ListItemText primary="Start Time: 10:00 AM" />
+          <ListItemText> Start Date: {event.start_time} </ListItemText>
         </ListItem>
         <ListItem>
           <ListItemIcon>
             <EventIcon />
           </ListItemIcon>
-          <ListItemText primary="End Date: January 2, 2025" />
+          <ListItemText> Start Date: {event.end_date} </ListItemText>
         </ListItem>
         <ListItem>
           <ListItemIcon>
             <AccessTimeIcon />
           </ListItemIcon>
-          <ListItemText primary="End Time: 6:00 PM" />
+          <ListItemText> Start Date: {event.end_time} </ListItemText>
         </ListItem>
         <ListItem>
           <ListItemIcon>
             <LocationOnIcon />
           </ListItemIcon>
-          <ListItemText primary="Venue: Main Hall" />
+          <ListItemText> {event.venue} </ListItemText>
         </ListItem>
         <ListItem>
           <ListItemIcon>
