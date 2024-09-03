@@ -13,13 +13,6 @@ const multer = require("multer");
 const upload = require("../middleware/uploadMiddleware.js");
 
 // const upload = multer();
-const express = require("express");
-const {
-  getEvents,
-  searchEvents,
-  createEvent,
-  getOneEvent,
-} = require("../controllers/eventController");
 const requireAuth = require("../middleware/requireAuth");
 
 // Require auth for all routes

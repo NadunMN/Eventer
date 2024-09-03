@@ -70,19 +70,6 @@ const Event = () => {
         </>
       )}
 
-      <MediaCard />
-      <SearchForm setListOfEvents={setListOfEvent} />
-      <EventGrids
-        listOfEvent={listOfEvent}
-        handleOpen={handleOpen}
-        handleNavigate={handleNavigate}
-      />
-      <EventDialogBox
-        selectedEvent={selectedEvent}
-        open={open}
-        onClose={handleClose}
-      />
-
       <Outlet />
     </>
   );
