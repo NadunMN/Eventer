@@ -120,6 +120,7 @@ export const AdminDashboard = () => {
           setDeleteType(null);
           console.log(`${deleteType} deleted:`, res.data);
         })
+
         .catch((error) => {
           console.error(`Error deleting ${deleteType}:`, error);
         });
