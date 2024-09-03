@@ -6,8 +6,10 @@ import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import EventDialogBox from "./EventDialogBox";
 import EventGrids from "./EventGrids";
 import EventData from "./EventData";
+
 import MediaCard from "../Card";
 import { useAuthContext } from "../../hooks/useAuthContext";
+
 
 const Event = () => {
   const [listOfEvent, setListOfEvent] = useState([]);
@@ -69,7 +71,6 @@ const Event = () => {
           />
         </>
       )}
-
       <Outlet />
     </>
   );

@@ -197,6 +197,19 @@
     align-items: center;
 }
 
+.card-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem; /* Space between cards */
+    /* justify-content: center; Center align grid items */
+    /* background-color: #311b92; */
+    /* width: 1000px; */
 
+  }
+  
+  .card-item {
+    max-width: 100%; /* Ensure cards fit within grid cells */
+  }
+  
 
 
