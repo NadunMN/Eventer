@@ -2,18 +2,20 @@ import React from 'react';
 import './Abouts.css'; // Import the CSS file for styling
 import teamMember1 from '../../asset/team-member1.jpg';
 import teamMember2 from '../../asset/team-member2.jpg';
-export  const About = () => {
+import headerBg from '../../asset/aboutImage.jpg'; // Import the background image
+
+export const About = () => {
   return (
     <div className="about-container">
       {/* Header Section */}
-      <header className="about-header">
-        <h1>About Our Event Management App</h1>
+      <header className="about-header" style={{ backgroundImage: `url(${headerBg})` }}>
+        <h1>About Us</h1>
       </header>
 
       {/* Introduction Section */}
       <section className="about-intro">
         <h2>Introduction</h2>
-        <p>Our event management app is designed to simplify the process of organizing and attending events. Whether you are planning a small gathering or a large conference, our app has all the features you need to make your event a success.</p>
+        <p>Our event management web app is designed to simplify the process of organizing and attending events. Whether you are planning a small gathering or a large conference, our app has all the features you need to make your event a success.</p>
       </section>
 
       {/* Mission Statement Section */}
@@ -27,14 +29,24 @@ export  const About = () => {
         <h2>Meet the Team</h2>
         <div className="team-members">
           <div className="team-member">
-            <img src={teamMember1} alt="Team Member 1" />
-            <h3>Kurunagala Moda Nadun</h3>
-            <p>CEO & Founder</p>
+            <img src={teamMember2} alt="Team Member 1" />
+            <h3>Sachith</h3>
+            <p>Event Organizer</p>
+          </div>
+          <div className="team-member">
+            <img src={teamMember1} alt="Team Member 2" />
+            <h3>Nadun Madushanka</h3>
+            <p>Event Coordinator</p>
           </div>
           <div className="team-member">
             <img src={teamMember2} alt="Team Member 2" />
-            <h3>Nuwara Moda Sachith </h3>
-            <p>Lead Developer</p>
+            <h3>Mahesh Kumara</h3>
+            <p>Attendee Manager</p>
+          </div>
+          <div className="team-member">
+            <img src={teamMember2} alt="Team Member 2" />
+            <h3>Dinuka</h3>
+            <p>Technical Support</p>
           </div>
           {/* Add more team members as needed */}
         </div>
@@ -59,15 +71,6 @@ export  const About = () => {
           <cite>- Emily Johnson</cite>
         </blockquote>
       </section>
-
-      {/* Footer Section */}
-      <footer className="about-footer">
-        <p>© 2024 Event Management App. All rights reserved.</p>
-        <div className="social-links">
-          <a href="#!">Facebook</a> | <a href="#!">Twitter</a> | <a href="#!">LinkedIn</a>
-        </div>
-      </footer>
     </div>
   );
 };
-

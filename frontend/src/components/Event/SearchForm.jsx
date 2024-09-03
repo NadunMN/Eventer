@@ -6,19 +6,19 @@ import axios from "axios";
 
 const Api_url = "http://localhost";
 
-const SearchWrapper = styled('div')(({ theme }) => ({
-  padding: '2px 4px',
-  display: 'flex',
-  alignItems: 'center',
-  width: '100%',
+const SearchWrapper = styled("div")(({ theme }) => ({
+  padding: "2px 4px",
+  display: "flex",
+  alignItems: "center",
+  width: "100%",
   maxWidth: 600,
-  margin: '20px auto',
+  margin: "20px auto",
   borderRadius: theme.shape.borderRadius,
   backgroundColor: theme.palette.background.paper,
-  boxShadow: '0 3px 5px 2px rgba(0, 0, 0, .1)',
-  transition: 'box-shadow 0.3s ease-in-out',
-  '&:hover': {
-    boxShadow: '0 5px 15px 5px rgba(0, 0, 0, .2)',
+  boxShadow: "0 3px 5px 2px rgba(0, 0, 0, .1)",
+  transition: "box-shadow 0.3s ease-in-out",
+  "&:hover": {
+    boxShadow: "0 5px 15px 5px rgba(0, 0, 0, .2)",
   },
 }));
 
@@ -34,7 +34,7 @@ const StyledIconButton = styled(IconButton)(({ theme }) => ({
 const ErrorMessage = styled(Typography)(({ theme }) => ({
   color: theme.palette.error.main,
   marginTop: theme.spacing(1),
-  textAlign: 'center',
+  textAlign: "center",
 }));
 
 const SearchForm = ({ setListOfEvents }) => {
@@ -44,9 +44,12 @@ const SearchForm = ({ setListOfEvents }) => {
   const handleSearchEvent = async (event) => {
     event.preventDefault();
     try {
-      const response = await axios.get(`${Api_url}:5000/api/searchEvents`, {
-        params: { title: searchString },
-      });
+      const response = await axios.get(
+        `${Api_url}:5000/api/event/searchEvents`,
+        {
+          params: { title: searchString },
+        }
+      );
       setListOfEvents(response.data);
       setError("");
     } catch (error) {

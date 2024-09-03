@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Stack, Typography, Avatar, Button } from '@mui/material';
 import CustomizedDialogs from './Dialog'; // Assuming Dialog is correctly set up in this file
+import erajiImage from '../asset/eraji5.jpg';
 
 function Accountname() {
   const [open, setOpen] = useState(false);
@@ -16,7 +17,7 @@ function Accountname() {
   return (
     <div>
       <Stack direction="row" spacing={5} sx={{ display: 'flex', justifyContent: 'flex-start', mt: 3 }}>
-        <Avatar alt="Nadun Madusanka" src="../asset/eraji.jpg" title="Nadun Madusanka" sx={{ width: 220, height: 220 }} />
+        <Avatar alt="Nadun Madusanka" src={erajiImage} title="Nadun Madusanka" sx={{ width: 220, height: 220 }} />
         <Stack
           sx={{
             display: 'flex',
