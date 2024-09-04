@@ -21,7 +21,7 @@ export default function EventData() {
     const fetchEvent = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:5000/api/getEvent/${eventId}`
+          `http://localhost:5000/api/event/getEvent/${eventId}`
         );
         setEvent(response.data);
         setError(null);
