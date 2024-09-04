@@ -15,10 +15,11 @@ import { useNavigate } from "react-router-dom";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FavoriteBorder from "@mui/icons-material/FavoriteBorder";
 
-function EventGrids({ listOfEvent }) {
+function EventGrids({ listOfEvent, handleOpen }) {
   const navigate = useNavigate();
 
   const handleNavigate = (event) => {
+    handleOpen(true);
     navigate(`/event/${event._id}`);
   };
 

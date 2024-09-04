@@ -26,31 +26,6 @@ export default function EventData() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // useEffect(() => {
-  //   if (!eventId) {
-  //     <div>"no eventId"</div>;
-  //     return;
-  //   } //ensure eventId is available
-
-  //   const fetchEvent = async () => {
-  //     try {
-  //       const response = await axios.get(
-  //         `http://localhost:5000/api/event/getEvent/${eventId}`
-  //       );
-  //       setEvent(response.data);
-  //       setError(null);
-  //     } catch (error) {
-  //       setError(
-  //         error.response?.data?.message || "cannot fetching the event Data!"
-  //       );
-  //     } finally {
-  //       const timer = setTimeout(() => {
-  //         setLoading(false);
-  //       }, 1200);
-  //     }
-  //   };
-  //   fetchEvent();
-  // }, [eventId]);
 
   useEffect(() => {
     const fetchEvent = async () => {
@@ -61,11 +36,6 @@ export default function EventData() {
 
         let eventData = response.data;
         console.log(eventData);
-
-        // Ensure eventData is an array
-        // if (!Array.isArray(eventData)) {
-        //   eventData = [eventData];
-        // }
 
         // Process the event data
         if (eventData.cover_image) {
@@ -106,17 +76,18 @@ export default function EventData() {
         <Box>
           <EventBanner event={event} />
         </Box>
-        <Grid container spacing={4}>
+        <Grid container spacing={4}></Grid>
           <Grid item xs={12} md={6}>
             <EventDetails event={event} />
           </Grid>
 
-          <Grid item xs={12} md={6}>
-            <EventDescription event={event} />
-          </Grid>
+        <Grid item xs={12} md={6}>
+          <Typography variant="body1">{event.description}</Typography>
         </Grid>
       </Container>
       <Reviews />
     </>
   );
 }
+
+

@@ -35,6 +35,42 @@ const searchEvents = async (req, res) => {
   }
 };
 
+//api for get events related to specific category
+const getCategory = async (req, res) => {
+  try {
+    const category = req.query.category; // Get the category from the query parameters
+
+    if (!category) {
+      return res.status(400).json({ message: 'Category is required' });
+    }
+
+    // Find events by category
+    const events = await EventModel.find({ category });
+
+    if (events.length > 0) {
+      res.status(200).json(events); // Send the events if found
+    } else {
+      res.status(404).json({ message: 'No events found for this category' });
+    }
+  } catch (error) {
+    res.status(500).json({ message: 'Error retrieving events', error });
+  }
+};
+
+// Controller for fetching all event data
+const getEventById = async (req, res) => {
+  try {
+    const event = await EventModel.findById(req.params.id);
+    if (!event) {
+      return res.status(404).json({ error: "Event not found" });
+    } else {
+      res.status(200).json(event); //send the user data if found
+    }
+  } catch (error) {
+    res.status(500).json({ error: "Failed to fetch image" });
+  }
+};
+
 //get event by id
 const getOneEvent = async (req, res) => {
   try {
@@ -132,20 +168,6 @@ const getEventImage = async (req, res) => {
   }
 };
 
-// Controller for fetching all event data
-const getEventById = async (req, res) => {
-  try {
-    const event = await EventModel.findById(req.params.id);
-
-    if (!event) {
-      return res.status(404).json({ error: "Event not found" });
-    } else {
-      res.status(200).json(event); //send the user data if found
-    }
-  } catch (error) {
-    res.status(500).json({ error: "Failed to fetch image" });
-  }
-};
 
 //delete an event
 const deleteEvent = async (req, res) => {
@@ -188,4 +210,5 @@ module.exports = {
   getEventById,
   deleteEvent,
   editEvent,
+  getCategory,
 };
