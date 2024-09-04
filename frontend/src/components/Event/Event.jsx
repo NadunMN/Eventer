@@ -4,14 +4,9 @@ import axios from "axios";
 import SearchForm from "./SearchForm";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import EventGrids from "./EventGrids";
-import EventData from "./EventData";
-import RegisteredeEvent from "../RegisteredEvent";
-
-import MediaCard from "../Card";
 import { Container, Box } from "@mui/material";
 import CategoryDropdown from "./CategoryDropdown";
 import { useAuthContext } from "../../hooks/useAuthContext";
-import { Reviews } from "../Reviews";
 
 // Function to convert binary data to base64
 const convertBinaryToBase64 = (binaryData, contentType) => {
