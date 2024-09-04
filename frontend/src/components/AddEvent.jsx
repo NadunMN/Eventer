@@ -108,9 +108,7 @@ export const AddEvent = () => {
       );
       alert("Event created successfully!");
       console.log("Appended cover_image:", coverImg);
-      // Handle success (e.g., redirect or show a success message)
     } catch (error) {
-      // Handle error (e.g., show an error message)
       console.error("Error uploading event:", error);
     }
   };
