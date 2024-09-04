@@ -3,7 +3,6 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import axios from "axios";
 import SearchForm from "./SearchForm";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
-import EventDialogBox from "./EventDialogBox";
 import EventGrids from "./EventGrids";
 import EventData from "./EventData";
 import RegisteredeEvent from "../RegisteredEvent";
