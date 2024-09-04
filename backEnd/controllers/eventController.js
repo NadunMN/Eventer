@@ -153,16 +153,13 @@ const getEventById = async (req, res) => {
 
     if (!event) {
       return res.status(404).json({ error: "Event not found" });
-
-    }else{
+    } else {
       res.status(200).json(event); //send the user data if found
-
     }
   } catch (error) {
     res.status(500).json({ error: "Failed to fetch image" });
   }
 };
-
 
 //delete an event
 const deleteEvent = async (req, res) => {
@@ -181,6 +178,20 @@ const deleteEvent = async (req, res) => {
   }
 };
 
+const editEvent = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const result = await EventModel.findByIdAndUpdate(id, req.body);
+    if (!result) {
+      return res.status(404).json({ message: "Event not found" });
+    }
+    res.status(200).json({ message: "Update event successfully" });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
 module.exports = {
   getEvents,
   searchEvents,
@@ -190,5 +201,5 @@ module.exports = {
   getEventImage,
   getEventById,
   deleteEvent,
-
+  editEvent,
 };

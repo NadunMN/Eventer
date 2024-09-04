@@ -40,8 +40,10 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import axios from "axios";
+import { AddUser } from "./AddUser";
 
 export const AdminDashboard = () => {
+  const [chartData, setChartData] = useState([]);
   const [events, setEvents] = useState([]);
   const [userData, setUserData] = useState([]);
   const [activeTab, setActiveTab] = useState("events");
@@ -49,6 +51,20 @@ export const AdminDashboard = () => {
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   const [selectedItemId, setSelectedItemId] = useState(null);
   const [deleteType, setDeleteType] = useState(null);
+  const monthlyData = {
+    Jan: { events: 0, attendees: 0 },
+    Feb: { events: 0, attendees: 0 },
+    Mar: { events: 0, attendees: 0 },
+    Apr: { events: 0, attendees: 0 },
+    May: { events: 0, attendees: 0 },
+    Jun: { events: 0, attendees: 0 },
+    Jul: { events: 0, attendees: 0 },
+    Aug: { events: 0, attendees: 0 },
+    Sep: { events: 0, attendees: 0 },
+    Oct: { events: 0, attendees: 0 },
+    Nov: { events: 0, attendees: 0 },
+    Dec: { events: 0, attendees: 0 },
+  };
 
   // Fetch data
   useEffect(() => {
@@ -62,8 +78,34 @@ export const AdminDashboard = () => {
           headers: { Authorization: `Bearer ${token}` },
         })
         .then((res) => {
-          setEvents(res.data);
-          console.log("Events data:", res.data);
+          const eventsData = res.data;
+          setEvents(eventsData);
+          console.log("Events data:", eventsData);
+          console.log("Parti", events.participants);
+
+          // Process monthly data
+          const monthlyDataCopy = { ...monthlyData }; // Copy to avoid mutating the original object
+          eventsData.forEach((event) => {
+            const eventDate = new Date(event.start_date);
+            const month = eventDate.toLocaleString("default", {
+              month: "short",
+            });
+
+            if (monthlyDataCopy[month]) {
+              monthlyDataCopy[month].events += 1;
+              monthlyDataCopy[month].attendees += event.participants.length;
+            }
+          });
+
+          // Convert the object into the desired array format
+          const formattedData = Object.keys(monthlyDataCopy).map((month) => ({
+            name: month,
+            events: monthlyDataCopy[month].events,
+            attendees: monthlyDataCopy[month].attendees,
+          }));
+
+          setChartData(formattedData);
+          console.log(formattedData);
         })
         .catch((error) => {
           console.error("Error fetching events:", error);
@@ -123,6 +165,7 @@ export const AdminDashboard = () => {
 
         .catch((error) => {
           console.error(`Error deleting ${deleteType}:`, error);
+          // Initialize an object to store monthly event counts and attendees
         });
     }
   };
@@ -132,6 +175,8 @@ export const AdminDashboard = () => {
     setSelectedItemId(null);
     setDeleteType(null);
   };
+
+  const handleAddUser = () => {};
 
   const theme = createTheme({
     palette: {
@@ -149,53 +194,57 @@ export const AdminDashboard = () => {
     switch (activeTab) {
       case "events":
         return (
-          <TableContainer component={Paper} elevation={3}>
-            <Table>
-              <TableHead>
-                <TableRow>
-                  <TableCell>Event Name</TableCell>
-                  <TableCell>Date</TableCell>
-                  <TableCell>Attendees</TableCell>
-                  <TableCell>Actions</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {events.length > 0 ? (
-                  events.map((event) => (
-                    <TableRow key={event._id}>
-                      <TableCell>{event.title}</TableCell>
-                      <TableCell>{event.start_date}</TableCell>
-                      <TableCell>
-                        {event.participant ? event.participant.length : 0}
-                      </TableCell>
-                      <TableCell>
-                        <Button
-                          size="small"
-                          variant="contained"
-                          color="primary"
-                          sx={{ mr: 1 }}
-                        >
-                          Edit
-                        </Button>
-                        <Button
-                          size="small"
-                          variant="contained"
-                          color="secondary"
-                          onClick={() => handleDeleteClick(event._id, "event")}
-                        >
-                          Delete
-                        </Button>
-                      </TableCell>
-                    </TableRow>
-                  ))
-                ) : (
+          <>
+            <TableContainer component={Paper} elevation={3}>
+              <Table>
+                <TableHead>
                   <TableRow>
-                    <TableCell colSpan={4}>No events found</TableCell>
+                    <TableCell>Event Name</TableCell>
+                    <TableCell>Date</TableCell>
+                    <TableCell>Attendees</TableCell>
+                    <TableCell>Actions</TableCell>
                   </TableRow>
-                )}
-              </TableBody>
-            </Table>
-          </TableContainer>
+                </TableHead>
+                <TableBody>
+                  {events.length > 0 ? (
+                    events.map((event) => (
+                      <TableRow key={event._id}>
+                        <TableCell>{event.title}</TableCell>
+                        <TableCell>{event.start_date}</TableCell>
+                        <TableCell>
+                          {event.participants ? event.participants.length : 0}
+                        </TableCell>
+                        <TableCell>
+                          <Button
+                            size="small"
+                            variant="contained"
+                            color="primary"
+                            sx={{ mr: 1 }}
+                          >
+                            Edit
+                          </Button>
+                          <Button
+                            size="small"
+                            variant="contained"
+                            color="secondary"
+                            onClick={() =>
+                              handleDeleteClick(event._id, "event")
+                            }
+                          >
+                            Delete
+                          </Button>
+                        </TableCell>
+                      </TableRow>
+                    ))
+                  ) : (
+                    <TableRow>
+                      <TableCell colSpan={4}>No events found</TableCell>
+                    </TableRow>
+                  )}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          </>
         );
       case "users":
         return (
@@ -259,7 +308,7 @@ export const AdminDashboard = () => {
             </Typography>
             <Box sx={{ width: "100%", height: 300 }}>
               <ResponsiveContainer>
-                <BarChart data={analyticsData}>
+                <BarChart data={chartData}>
                   <CartesianGrid strokeDasharray="3 3" />
                   <XAxis dataKey="name" />
                   <YAxis yAxisId="left" orientation="left" stroke="#8884d8" />

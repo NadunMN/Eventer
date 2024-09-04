@@ -10,7 +10,6 @@ import EventData from "./EventData";
 import MediaCard from "../Card";
 import { useAuthContext } from "../../hooks/useAuthContext";
 
-
 const Event = () => {
   const [listOfEvent, setListOfEvent] = useState([]);
   const [open, setOpen] = useState(false);
@@ -20,23 +19,15 @@ const Event = () => {
 
   //get all events
   useEffect(() => {
-    if (user) {
-      axios
-        .get("http://localhost:5000/api/event/getEvent", {
-          headers: {
-            Authorization: `Bearer ${user.token}`,
-          },
-        })
-        .then((response) => {
-          setListOfEvent(response.data);
-          console.log(response);
-        })
-        .catch((error) => {
-          console.error("there was an error fetching ta data! ", error);
-        });
-    } else {
-      console.log("You must be logged in");
-    }
+    axios
+      .get("http://localhost:5000/api/event/getEvent")
+      .then((response) => {
+        setListOfEvent(response.data);
+        console.log(response);
+      })
+      .catch((error) => {
+        console.error("there was an error fetching ta data! ", error);
+      });
   }, [user]);
 
   const handleOpen = (event) => {

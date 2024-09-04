@@ -101,7 +101,6 @@ export const NavBar = () => {
   };
 
   const handleLogout = () => {
-    setOpen(false);
     navigate("/login", { replace: true });
     logout();
     handleClose();

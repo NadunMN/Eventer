@@ -83,13 +83,13 @@ const login = async (req, res) => {
     const user = await userModel.findOne({ email });
 
     if (!user) {
-      return res.status(401).send("Invalid email or user does not exist");
+      return res.status(401).send("Invalid email or password");
     }
 
     const match = await bcrypt.compare(password, user.password);
 
     if (!match) {
-      return res.status(401).send("Incorrect password");
+      return res.status(401).send("Invalid email or password");
     }
 
     const token = createToken(user._id, user.role);
@@ -111,7 +111,7 @@ const editUser = async (req, res) => {
     });
 
     if (!result) {
-      res.status(404).json({ message: "User not found" });
+      return res.status(404).json({ message: "User not found" });
     }
     res.status(200).json({ message: "Update user successfully" });
   } catch (err) {
