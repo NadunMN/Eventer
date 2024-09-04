@@ -18,16 +18,14 @@ const convertBinaryToBase64 = (binaryData, contentType) => {
 
 const CategoryDropdown = ({ setListOfEvents }) => {
   const [category, setCategory] = useState("");
-  const [error, setError] = useState(""); 
-  const navigate = useNavigate(); // Initialize useNavigate
+  const [error, setError] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("");
+  const navigate = useNavigate();
 
-
-  //function to handle change in category
   const handleChange = async (event) => {
     const selectedCategory = event.target.value;
     setCategory(selectedCategory);
-    console.log(selectedCategory);
-
+    setSelectedCategory(selectedCategory);
 
     try {
       const response = await axios.get(
@@ -48,16 +46,20 @@ const CategoryDropdown = ({ setListOfEvents }) => {
         }
         return event;
       });
+
       setListOfEvents(processedEvents);
       setError("");
 
       if (selectedCategory) {
-        navigate(`/event/${selectedCategory}`); // Navigate to the selected category
+        navigate(`/${selectedCategory}`);
+      }
+      if (selectedCategory == "") {
+        navigate(`/`);
       }
     } catch (error) {
       setCategory("");
-      console.error("Failed to fetch the event:", error);
-      setError("Failed to fetch the event");
+      console.error("Failed to fetch the events:", error);
+      setError("Failed to fetch the events");
     }
   };
 
@@ -85,12 +87,12 @@ const CategoryDropdown = ({ setListOfEvents }) => {
         <MenuItem value="">
           <em>None</em>
         </MenuItem>
-        <MenuItem value="event">event</MenuItem>
-        <MenuItem value="sports">sports</MenuItem>
-        <MenuItem value="parties">parties</MenuItem>
-        <MenuItem value="communitie">communitie</MenuItem>
-        <MenuItem value="theaters">theaters</MenuItem>
-        <MenuItem value="concerts">concerts</MenuItem>
+        <MenuItem value="event">Event</MenuItem>
+        <MenuItem value="sports">Sports</MenuItem>
+        <MenuItem value="parties">Parties</MenuItem>
+        <MenuItem value="communities">Communities</MenuItem>
+        <MenuItem value="theaters">Theaters</MenuItem>
+        <MenuItem value="concerts">Concerts</MenuItem>
       </Select>
     </FormControl>
   );

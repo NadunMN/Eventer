@@ -31,24 +31,27 @@ const Event = () => {
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [isSelect, setIsSelect] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
   const navigate = useNavigate();
   const { user } = useAuthContext();
 
   const handleOpen = (event) => {
-    setSelectedEvent(event);
-    setOpen(true);
+    // setOpen(true);
+    setIsOpen(true);
   };
 
-  const handleClose = () => {
-    setOpen(false);
-    setSelectedEvent(null);
-  };
+  // const handleClose = () => {
+  //   setSelectedEvent(null);
+  //   setIsOpen(false);
+  // };
 
-  const handleNavigate = (event) => {
-    if (event) {
-      navigate(`/event/${event._id}`);
-    }
-  };
+  // const handleNavigate = (event) => {
+  //   if (event) {
+  //     setIsOpen(true);
+  //     navigate(`/event/${event._id}`);
+  //   }
+  // };
 
   useEffect(() => {
     const fetchEvent = async () => {
@@ -90,53 +93,33 @@ const Event = () => {
 
   //determine if the current path is child route
   const isChildRoute = location.pathname !== "/event";
-  return (
-    <>
-      {!isChildRoute && (
-        <>
-          {
-            <Container
-              fixed
-              sx={{
-                display: "flex",
-                m: 4,
-                gap: 2,
-              }}
-            >
-              <CategoryDropdown
-                setListOfEvents={setListOfEvent}
-              />
-              <SearchForm
-                setListOfEvents={setListOfEvent}
-              />
-            </Container>
-          }
-          <EventGrids listOfEvent={listOfEvent} handleOpen={handleOpen} />
-        </>
-      )}
-      <Outlet />
-    </>
-  );
+  console.log(location.pathname);
+
+  if (isChildRoute ) {
+    return <Outlet />;
+  } else {
+    return (
+      <>
+        {
+          <Container
+            fixed
+            sx={{
+              display: "flex",
+              m: 4,
+              gap: 2,
+            }}
+          >
+            <CategoryDropdown
+              setListOfEvents={setListOfEvent}
+              handleOpen={handleOpen}
+            />
+            <SearchForm setListOfEvents={setListOfEvent} />
+          </Container>
+        }
+        <EventGrids listOfEvent={listOfEvent} handleOpen={handleOpen} />
+      </>
+    );
+  }
 };
 
 export default Event;
-
-{
-  /* {!isChildRoute && (
-  <>
-    <Container
-      fixed
-      sx={{
-        display: "flex",
-        m: 4,
-        gap: 2,
-      }}
-    >
-      <CategoryDropdown />
-      <SearchForm setListOfEvents={setListOfEvent} />
-    </Container>
-
-    <EventGrids listOfEvent={listOfEvent} handleOpen={handleOpen} />
-  </>
-)} */
-}
