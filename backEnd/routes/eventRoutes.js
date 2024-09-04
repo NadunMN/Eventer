@@ -14,10 +14,10 @@ const multer = require("multer");
 const upload = require("../middleware/uploadMiddleware.js");
 
 // const upload = multer();
-const requireAuth = require("../middleware/requireAuth");
+// const requireAuth = require("../middleware/requireAuth");
 
 // Require auth for all routes
-router.use(requireAuth);
+// router.use(requireAuth);
 
 router.get("/getEvent", getEvents);
 router.get("/searchEvents", searchEvents);
@@ -26,7 +26,11 @@ router.get("/searchEvents", searchEvents);
 router.get("/getEvent/:id", getOneEvent);
 router.post("/createEvent", upload, createEventWithImage);
 router.get("/events/:id/image", getEventImage);
+
+// router.get("/events/:id", getEventById); 
+
 router.get("/events/:id", getEventById);
 router.delete("/delete/:id", deleteEvent);
+
 
 module.exports = router;

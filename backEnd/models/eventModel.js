@@ -11,10 +11,12 @@ const EventSchema = new mongoose.Schema({
   venue: { type: String, required: true },
   capacity: { type: Number },
   participants: { type: [String] },
-  cover_image: { type: Buffer }, // If image is not always required, remove `required: true`
-  participants: { type: String },
-  created_by: { type: String },
-  created_at: { type: String },
+  cover_image: { type: Buffer, required: true}, // If image is not always required, remove `required: true`
+  created_by: { type: String, required: true },
+  created_at: { type: String, required: true },
+  category: {type: String, required:true},
+  organizer: {type: String, require: true},
+
 });
 
 // Create the event model

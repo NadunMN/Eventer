@@ -4,14 +4,12 @@ const {
   countRegisteredEvent,
   countCreatedEvent,
   countFavoriteEvent,
-  getRegisteredEvents,
-  getFavoriteEvents,
+  getUserOne,
 } = require("../controllers/userProfileController");
 
 router.get("/countRegisteredEvent", countRegisteredEvent);
 router.get("/countCreatedEvent", countCreatedEvent);
 router.get("/countFavoriteEvent", countFavoriteEvent);
-router.get("/getRegisteredEvents", getRegisteredEvents);
-router.get("/getFavoriteEvents", getFavoriteEvents);
+router.get("/getUserOne/:id", getUserOne); 
 
 module.exports = router;

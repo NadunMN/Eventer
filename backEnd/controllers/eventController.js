@@ -101,6 +101,10 @@ const createEventWithImage = async (req, res) => {
       capacity,
       participants,
       cover_image,
+      created_by,
+      created_at,
+      category,
+      organizer,
     } = req.body;
     const event = new EventModel({
       title,
@@ -111,10 +115,13 @@ const createEventWithImage = async (req, res) => {
       description,
       venue,
       capacity,
+      participants,
+      cover_image: req.file.buffer,
+      created_by,
+      created_at,
+      category,
+      organizer,
     });
-    if (req.file) {
-      event.cover_image = req.file.buffer; // Save the image as a buffer
-    }
 
     await event.save();
     res.status(201).json(event);
@@ -128,9 +135,9 @@ const getEventImage = async (req, res) => {
   try {
     const event = await EventModel.findById(req.params.id);
 
-    if (event && event.image) {
+    if (event && event.caver_image) {
       res.set("Content-Type", "image/jpeg"); // Set the content type to image
-      res.send(event.image);
+      res.send(event.cover_image);
     } else {
       res.status(404).json({ error: "Image not found" });
     }
@@ -146,14 +153,18 @@ const getEventById = async (req, res) => {
 
     if (!event) {
       return res.status(404).json({ error: "Event not found" });
-    }
 
-    res.status(200).json(event);
+    }
   } catch (error) {
+    res.status(500).json({ error: "Failed to fetch image" });
+  }
+};
     res.status(500).json({ error: "Failed to fetch event" });
   }
 };
 
+
+//delete an event
 const deleteEvent = async (req, res) => {
   try {
     const { id } = req.params;
@@ -179,4 +190,5 @@ module.exports = {
   getEventImage,
   getEventById,
   deleteEvent,
+
 };
