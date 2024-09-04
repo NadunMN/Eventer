@@ -50,11 +50,12 @@ const CategoryDropdown = ({ setListOfEvents }) => {
       setListOfEvents(processedEvents);
       setError("");
 
+      if (selectedCategory == "") {
+        setListOfEvents([]);
+        navigate(`/`);
+      }
       if (selectedCategory) {
         navigate(`/${selectedCategory}`);
-      }
-      if (selectedCategory == "") {
-        navigate(`/`);
       }
     } catch (error) {
       setCategory("");

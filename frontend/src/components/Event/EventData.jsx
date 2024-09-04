@@ -4,7 +4,6 @@ import axios from "axios";
 import { Container, Typography, Box, colors, Grid } from "@mui/material";
 import EventBanner from "./EventBanner";
 import EventDetails from "./EventDetails";
-import EventDescription from "./EventDescription";
 import { Reviews } from "../Reviews";
 
 // Convert binary data to base64
