@@ -9,6 +9,19 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 export default function MediaCard() {
   const [events, setEvents] = useState([]);
+
+  // Convert binary data to base64
+  const convertBinaryToBase64 = (binaryData, contentType) => {
+    if (binaryData && binaryData instanceof Uint8Array) {
+      const binaryString = Array.from(binaryData)
+        .map((byte) => String.fromCharCode(byte))
+        .join("");
+      return `data:${contentType};base64,${btoa(binaryString)}`;
+    } else {
+      console.error("Invalid binary data provided:", binaryData);
+      return null;
+    }
+  };
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("user"));
     if (user && user.token) {
@@ -22,11 +35,23 @@ export default function MediaCard() {
         .then((res) => {
           const eventsData = res.data;
 
-          const formattedData = eventsData.map((event) => ({
-            title: event.title,
-            description: event.description,
-            participants: event.participants.length,
-          }));
+          const formattedData = eventsData.map((event) => {
+            const formattedEvent = {
+              title: event.title,
+              description: event.description,
+              participants: event.participants.length,
+            };
+
+            if (event.cover_image) {
+              const base64Image = convertBinaryToBase64(
+                new Uint8Array(event.cover_image.data),
+                event.cover_image.contentType
+              );
+              formattedEvent.cover_image = base64Image;
+            }
+
+            return formattedEvent;
+          });
 
           setEvents(formattedData);
         })
@@ -58,17 +83,17 @@ export default function MediaCard() {
         >
           <CardMedia
             sx={{ height: 140 }}
-            image="/src/asset/card.jpg"
+            image={event.cover_image}
             title={event.title}
           />
           <CardContent>
             <Typography gutterBottom variant="h5" component="div">
               {event.title}
             </Typography>
-            <Typography variant="body2" color="text.secondary">
+            <Typography variant="body1" color="text.secondary">
               {event.description}
             </Typography>
-            <Typography variant="body1" color="text.secondary">
+            <Typography variant="body2" color="text.secondary">
               Participants: {event.participants}
             </Typography>
           </CardContent>
