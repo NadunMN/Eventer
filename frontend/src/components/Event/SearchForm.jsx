@@ -4,6 +4,19 @@ import { styled } from "@mui/material/styles";
 import SearchIcon from "@mui/icons-material/Search";
 import axios from "axios";
 
+// Function to convert binary data to base64
+const convertBinaryToBase64 = (binaryData, contentType) => {
+  if (binaryData && binaryData instanceof Uint8Array) {
+    const binaryString = Array.from(binaryData)
+      .map((byte) => String.fromCharCode(byte))
+      .join("");
+    return `data:${contentType};base64,${btoa(binaryString)}`;
+  } else {
+    console.error("Invalid binary data provided:", binaryData);
+    return null;
+  }
+};
+
 // Define the base URL for API requests
 const Api_url = "http://localhost";
 
@@ -38,7 +51,7 @@ const ErrorMessage = styled(Typography)(({ theme }) => ({
 }));
 
 // Component to handle searching for events
-const SearchForm = ({ setListOfEvents }) => {
+const SearchForm = ({ setListOfEvents, setIsSearch }) => {
   const [searchString, setSearchString] = useState(""); // State for the search input
   const [error, setError] = useState(""); // State for error messages
 
@@ -53,7 +66,22 @@ const SearchForm = ({ setListOfEvents }) => {
           params: { title: searchString },
         }
       );
-      setListOfEvents(response.data); // Update event list with response data
+
+      let events = response.data;
+
+      // Process the event data
+      const processedEvents = events.map((event) => {
+        if (event.cover_image) {
+          const base64Image = convertBinaryToBase64(
+            new Uint8Array(event.cover_image.data),
+            event.cover_image.contentType
+          );
+          event.cover_image = base64Image;
+        }
+        return event;
+      });
+
+      setListOfEvents(processedEvents); // Update event list with response data
       setError(""); // Clear any existing errors
     } catch (error) {
       setListOfEvents([]); // Clear event list on error

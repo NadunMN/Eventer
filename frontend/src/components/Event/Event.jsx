@@ -14,15 +14,15 @@ import { useAuthContext } from "../../hooks/useAuthContext";
 
 // Function to convert binary data to base64
 const convertBinaryToBase64 = (binaryData, contentType) => {
-if (binaryData && binaryData instanceof Uint8Array) {
-  const binaryString = Array.from(binaryData)
-    .map((byte) => String.fromCharCode(byte))
-    .join("");
-  return `data:${contentType};base64,${btoa(binaryString)}`;
-} else {
-  console.error("Invalid binary data provided:", binaryData);
-  return null;
-}
+  if (binaryData && binaryData instanceof Uint8Array) {
+    const binaryString = Array.from(binaryData)
+      .map((byte) => String.fromCharCode(byte))
+      .join("");
+    return `data:${contentType};base64,${btoa(binaryString)}`;
+  } else {
+    console.error("Invalid binary data provided:", binaryData);
+    return null;
+  }
 };
 
 const Event = () => {
@@ -33,7 +33,6 @@ const Event = () => {
   const [error, setError] = useState(null);
   const navigate = useNavigate();
   const { user } = useAuthContext();
-  
 
   const handleOpen = (event) => {
     setSelectedEvent(event);
@@ -54,11 +53,12 @@ const Event = () => {
   useEffect(() => {
     const fetchEvent = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/event/getEvent');
+        const response = await axios.get(
+          "http://localhost:5000/api/event/getEvent"
+        );
 
         let eventData = response.data;
 
- 
         // Ensure eventData is an array
         if (!Array.isArray(eventData)) {
           eventData = [eventData];
@@ -90,10 +90,29 @@ const Event = () => {
 
   //determine if the current path is child route
   const isChildRoute = location.pathname !== "/event";
-
+  const [isSearch, setIsSearch] = useState(false);
+  const [isSelectCatagoery, setIsSelectCatagoery] = useState(false);
   return (
     <>
-      {!isChildRoute && (
+      { !isSearch && (
+        <>
+          <Container
+            fixed
+            sx={{
+              display: "flex",
+              m: 4,
+              gap: 2,
+            }}
+          >
+            <CategoryDropdown />
+            <SearchForm setListOfEvents={setListOfEvent} setIsSearch/>
+          </Container>
+
+          <EventGrids listOfEvent={listOfEvent} handleOpen={handleOpen} />
+        </>
+      )}
+      
+      {/* {!isChildRoute && (
         <>
           <Container
             fixed
@@ -109,8 +128,7 @@ const Event = () => {
 
           <EventGrids listOfEvent={listOfEvent} handleOpen={handleOpen} />
         </>
-      )}
-
+      )} */}
       <Outlet />
     </>
   );

@@ -4,7 +4,6 @@ import axios from "axios";
 import { Container, Typography, Box, colors, Grid } from "@mui/material";
 import EventBanner from "./EventBanner";
 import EventDetails from "./EventDetails";
-import EventDescription from "./EventDescription";
 
 // Convert binary data to base64
 const convertBinaryToBase64 = (binaryData, contentType) => {
@@ -110,7 +109,9 @@ export default function EventData() {
         </Grid>
 
         <Grid item xs={12} md={6}>
-          <EventDescription event={event} />
+        <Typography variant="body1">
+        {event.description}
+      </Typography>
         </Grid>
       </Grid>
     </Container>
