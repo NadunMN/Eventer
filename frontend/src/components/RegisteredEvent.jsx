@@ -29,7 +29,7 @@ export default function RegisteredEvent() {
   useEffect(() => {
     const fetchEvent = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/getEvent/66d7165528825b6785639c5e');
+        const response = await axios.get('http://localhost:5000/api/event/getEvent');
 
         let eventData = response.data;
 
