@@ -71,7 +71,7 @@ function App() {
           }
         />
       </Routes>
-      <Footer />
+      {/* <Footer /> */}
       {/* <Dashboard/> */}
     </>
   );

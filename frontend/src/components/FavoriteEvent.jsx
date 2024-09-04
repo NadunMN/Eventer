@@ -29,7 +29,7 @@ export default function FavoriteEvent() {
   useEffect(() => {
     const fetchEvent = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/getEvent');
+        const response = await axios.get('http://localhost:5000/api/event/getEvent');
 
         let eventData = response.data;
 
