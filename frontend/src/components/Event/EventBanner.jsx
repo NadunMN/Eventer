@@ -6,7 +6,7 @@ function EventBanner({ event }) {
     <Box>
       <Box
         sx={{
-          backgroundImage: `url(/${event.image})`,
+          backgroundImage: `url(/${event.cover_image})`,
           backgroundSize: "cover",
           backgroundPosition: "center",
           position: "relative",

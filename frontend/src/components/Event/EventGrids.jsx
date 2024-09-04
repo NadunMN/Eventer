@@ -17,6 +17,7 @@ import FavoriteBorder from "@mui/icons-material/FavoriteBorder";
 
 function EventGrids({ listOfEvent }) {
   const navigate = useNavigate();
+
   const handleNavigate = (event) => {
     navigate(`/event/${event._id}`);
   };
@@ -36,6 +37,7 @@ function EventGrids({ listOfEvent }) {
       gutterBottom: 2,
     },
   };
+
   return (
     <div>
       <Container maxWidth="xl" fixed sx={{ mt: 9 }}>
@@ -48,6 +50,7 @@ function EventGrids({ listOfEvent }) {
                   display: "flex",
                   flexDirection: "column",
                   textAlign: "center",
+                  position: "relative",
                   justifyContent: "space-between",
                   backgroundColor: "#f0f0f0",
                   borderRadius: 3,
@@ -61,10 +64,11 @@ function EventGrids({ listOfEvent }) {
                 }}
               >
                 <CardMedia
-                  component="img"
-                  image= {event.cover_image}
-                  alt={event.image}
-                  sx={{ width: "100%", objectFit: "cover" }}
+                  sx={{ height: 250 }}
+                  image={
+                    event.cover_image || "https://via.placeholder.com/345x140"
+                  }
+                  title={event.title}
                 />
                 <CardContent
                   sx={{
@@ -81,7 +85,9 @@ function EventGrids({ listOfEvent }) {
                   <Typography variant="subtitle1" gutterBottom>
                     {event.start_date}
                   </Typography>
-                  <Typography variant="body2">{event.description}</Typography>
+                  <Typography variant="body2">
+                    {event.description.slice(0, 200)}
+                  </Typography>
                   <Typography variant="body2">{event.venue}</Typography>
                 </CardContent>
                 <CardActions
@@ -106,7 +112,9 @@ function EventGrids({ listOfEvent }) {
                       variant="outlined"
                       color={isFavorite ? "warning" : "neutral"}
                       sx={{ mr: "auto" }}
-                      onClick={() => {setIsFavorite(!isFavorite)}}
+                      onClick={() => {
+                        setIsFavorite(!isFavorite);
+                      }}
                     >
                       <FavoriteBorder sx={{ fontSize: 30 }} />
                     </IconButton>
