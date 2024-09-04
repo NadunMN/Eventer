@@ -22,7 +22,9 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import LogoutIcon from "@mui/icons-material/Logout";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import LoginIcon from "@mui/icons-material/Login";
-import logo from "../asset/site-logo.png";
+
+import logo from "../asset/site-logo.jpg.png";
+
 import { useLogout } from "../hooks/useLogout";
 import { useAuthContext } from "../hooks/useAuthContext";
 import { jwtDecode } from "jwt-decode";
@@ -105,101 +107,118 @@ export const NavBar = ({ logout, userRole, userId }) => {
   return (
     <StyledAppBar position="static">
       <StyledToolbar>
-        <LogoTypography variant="h5">
+        <LogoTypography variant="h3">
           <Link to="/">
-            <img src={logo} alt="Logo" />
+            <img
+              src={logo}
+              style={{ width: "120px", position: "relative", top: -4 }}
+              alt="Logo"
+            />
           </Link>
         </LogoTypography>
-        <Box>
-          <NavButton component={Link} to="/">
-            Home
-          </NavButton>
-          <NavButton component={Link} to="/event">
-            Events
-          </NavButton>
-          <NavButton component={Link} to="/about">
-            About
-          </NavButton>
-          <NavButton component={Link} to="/contact">
-            Contact Us
-          </NavButton>
-          {userId ? (
-            <>
-              <Tooltip title={userId ? "Profile" : "Login"}>
-                <StyledIconButton ref={anchorRef} onClick={handleToggle}>
-                  <AccountCircleIcon />
-                </StyledIconButton>
-              </Tooltip>
 
-              <Popper
-                open={open}
-                anchorEl={anchorRef.current}
-                role={undefined}
-                placement="bottom-end"
-                transition
-                disablePortal
-              >
-                {({ TransitionProps, placement }) => (
-                  <Grow
-                    {...TransitionProps}
-                    style={{
-                      transformOrigin:
-                        placement === "bottom-end"
-                          ? "right top"
-                          : "right bottom",
-                    }}
-                  >
-                    <Paper elevation={3}>
-                      <ClickAwayListener onClickAway={handleClose}>
-                        <StyledMenuList
-                          autoFocusItem={open}
-                          id="composition-menu"
-                          aria-labelledby="composition-button"
-                          onKeyDown={handleListKeyDown}
-                        >
-                          <StyledMenuItem onClick={handleClose}>
-                            <ListItemIcon>
-                              <AccountCircleIcon />
-                            </ListItemIcon>
-                            <ListItemText primary="Profile" />
-                          </StyledMenuItem>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            width: "auto",
+            gap: 2,
+          }}
+        >
+          <Box>
+            <NavButton component={Link} to="/">
+              <Typography variant="body1">Home</Typography>
+            </NavButton>
+            <NavButton component={Link} to="/event">
+              <Typography variant="body1">Events</Typography>
+            </NavButton>
+            <NavButton component={Link} to="/about">
+              <Typography variant="body1">About</Typography>
+            </NavButton>
+            <NavButton component={Link} to="/contact">
+              <Typography variant="body1">Contact Us</Typography>
+            </NavButton>
+            {user ? (
+              <>
+                <Tooltip title={user ? "Profile" : "Login"}>
+                  <StyledIconButton ref={anchorRef} onClick={handleToggle}>
+                    <AccountCircleIcon sx={{ width: 45, height: 45 }} />
+                  </StyledIconButton>
+                </Tooltip>
 
-                          <StyledMenuItem
-                            component={Link}
-                            to="/dashboard"
-                            onClick={handleClose}
-                            divider
+                <Popper
+                  open={open}
+                  anchorEl={anchorRef.current}
+                  role={undefined}
+                  placement="bottom-end"
+                  transition
+                  disablePortal
+                >
+                  {({ TransitionProps, placement }) => (
+                    <Grow
+                      {...TransitionProps}
+                      style={{
+                        transformOrigin:
+                          placement === "bottom-end"
+                            ? "right top"
+                            : "right bottom",
+                      }}
+                    >
+                      <Paper elevation={3}>
+                        <ClickAwayListener onClickAway={handleClose}>
+                          <StyledMenuList
+                            autoFocusItem={open}
+                            id="composition-menu"
+                            aria-labelledby="composition-button"
+                            onKeyDown={handleListKeyDown}
                           >
-                            <ListItemIcon>
-                              <DashboardIcon />
-                            </ListItemIcon>
-                            <ListItemText primary="Dashboard" />
-                          </StyledMenuItem>
-                          <StyledMenuItem onClick={logout}>
-                            <ListItemIcon>
-                              <LogoutIcon />
-                            </ListItemIcon>
-                            <ListItemText primary="Logout" />
-                          </StyledMenuItem>
-                        </StyledMenuList>
-                      </ClickAwayListener>
-                    </Paper>
-                  </Grow>
-                )}
-              </Popper>
-            </>
-          ) : (
-            <Button
-              variant="contained"
-              component={Link}
-              to="/login"
-              sx={{
-                bgcolor: "#173a75",
-              }}
-            >
-              Login
-            </Button>
-          )}
+
+                            <StyledMenuItem onClick={handleClose}>
+                              <ListItemIcon>
+                                <AccountCircleIcon />
+                              </ListItemIcon>
+                              <ListItemText primary="Profile" />
+                            </StyledMenuItem>
+
+                            <StyledMenuItem
+                              component={Link}
+                              to="/dashboard"
+                              onClick={handleClose}
+                              divider
+                            >
+                              <ListItemIcon>
+                                <DashboardIcon />
+                              </ListItemIcon>
+                              <ListItemText primary="Dashboard" />
+                            </StyledMenuItem>
+                            <StyledMenuItem onClick={handleLogout}>
+                              <ListItemIcon>
+                                <LogoutIcon />
+                              </ListItemIcon>
+                              <ListItemText primary="Logout" />
+                            </StyledMenuItem>
+                          </StyledMenuList>
+                        </ClickAwayListener>
+                      </Paper>
+                    </Grow>
+                  )}
+                </Popper>
+              </>
+            ) : (
+              <Button
+                variant="contained"
+                component={Link}
+                to="/login"
+                sx={{
+                  bgcolor: "#173a75",
+                }}
+              >
+                Login
+              </Button>
+            )}
+          </Box>
+
         </Box>
       </StyledToolbar>
     </StyledAppBar>

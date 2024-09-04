@@ -3,129 +3,117 @@ import FacebookIcon from "@mui/icons-material/Facebook";
 import TwitterIcon from "@mui/icons-material/Twitter";
 import InstagramIcon from "@mui/icons-material/Instagram";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
+import '../App.css'
+import logo from '../asset/site-logo.jpg.png'
 
 export const Footer = () => {
   return (
-    <div>
-      <div className="footer-div">
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            // minHeight: '100vh',
-          }}
-        >
-          <Grid
-            container
-            sx={{
-              bgcolor: "#673ab7",
-              minHeight: "250px",
-              position: "relative",
-              bottom: 0,
-              width: "100%",
-              color: "#f5f5f5",
-              padding: "40px",
-              fontFamily: "'Roboto', 'Helvetica', 'Arial', sans-serif",
-              mt: 10,
-            }}
-          >
-            <Grid item xs={12} md={4} sx={{ mb: { xs: 4, md: 0 } }}>
-              <Typography variant="h6" sx={{ mb: 2, fontWeight: "bold" }}>
-                Eventer
-              </Typography>
-              <Typography variant="body2" sx={{ mb: 2 }}>
-                Organize your Event
-              </Typography>
-              <Box>
-                <IconButton color="inherit" aria-label="Facebook">
-                  <FacebookIcon />
-                </IconButton>
-                <IconButton color="inherit" aria-label="Twitter">
-                  <TwitterIcon />
-                </IconButton>
-                <IconButton color="inherit" aria-label="Instagram">
-                  <InstagramIcon />
-                </IconButton>
-                <IconButton color="inherit" aria-label="LinkedIn">
-                  <LinkedInIcon />
-                </IconButton>
-              </Box>
-            </Grid>
-            <Grid item xs={12} md={4} sx={{ mb: { xs: 4, md: 0 } }}>
-              <Typography variant="h6" sx={{ mb: 2, fontWeight: "bold" }}>
-                Quick Links
-              </Typography>
-              <Link
-                href="/home"
-                color="inherit"
-                sx={{
-                  display: "block",
-                  mb: 1,
-                  textDecoration: "none",
-                  "&:hover": { color: "#3f51b5" },
-                }}
-              >
-                Home
-              </Link>
-              <Link
-                href="/about"
-                color="inherit"
-                sx={{
-                  display: "block",
-                  mb: 1,
-                  textDecoration: "none",
-                  "&:hover": { color: "#3f51b5" },
-                }}
-              >
-                About Us
-              </Link>
-              <Link
-                href="/contact"
-                color="inherit"
-                sx={{
-                  display: "block",
-                  mb: 1,
-                  textDecoration: "none",
-                  "&:hover": { color: "#3f51b5" },
-                }}
-              >
-                Contact
-              </Link>
-            </Grid>
-            <Grid item xs={12} md={4}>
-              <Typography variant="h6" sx={{ mb: 2, fontWeight: "bold" }}>
-                Contact Us
-              </Typography>
-              <Typography variant="body2" sx={{ mb: 1 }}>
-                123 Reid Avenue, Suite 100
-              </Typography>
-              <Typography variant="body2" sx={{ mb: 1 }}>
-                Colombo, Sri Lanka
-              </Typography>
-              <Typography variant="body2" sx={{ mb: 1 }}>
-                Phone: (123) 456-7890
-              </Typography>
-              <Typography variant="body2" sx={{ mb: 1 }}>
-                Email: info@eventer.com
-              </Typography>
-            </Grid>
-            <Grid
-              item
-              xs={12}
-              sx={{
-                borderTop: "1px solid #333",
-                pt: 2,
-                mt: 4,
-                textAlign: "center",
-              }}
-            >
-              <Typography variant="body2">
-                © {new Date().getFullYear()} Eventer. All rights reserved.
-              </Typography>
-            </Grid>
-          </Grid>
-        </Box>
+    <footer className="footer">
+      <div className="footer-content">
+        <div className="footer-column logo-column">
+          <img
+            src={logo}
+            alt="Eventer Logo"
+            className="footer-logo"
+          />
+          <p>
+            Want To Create Something <br />
+            Great Together?
+          </p>
+          <p>Get In Touch..</p>
+          
+          <p>
+            <a href="mailto:eventer@official.com">eventer@official.com</a>
+          </p>
+          
+          <p>Our Location</p>
+          
+          <p>
+            43, Reid Avenue, <br /> Colombo 7, Sri Lanka
+          </p>
+        </div>
+        <div className="footer-column">
+          <h3>Support & Education</h3>
+          <ul>
+            <li>
+              <a href="#">Help & Support</a>
+            </li>
+            <li>
+              <a href="#">Trust & Safety</a>
+            </li>
+            <li>
+              <a href="#">Quality Guide</a>
+            </li>
+            <li>
+              <a href="#">Selling on Eventer</a>
+            </li>
+            <li>
+              <a href="#">Buying on Eventer</a>
+            </li>
+            <li>
+              <a href="#">Eventer Guides</a>
+            </li>
+          </ul>
+        </div>
+        <div className="footer-column">
+          <h3>About</h3>
+          <ul>
+            <li>
+              <a href="#">Careers</a>
+            </li>
+            <li>
+              <a href="#">Press & News</a>
+            </li>
+            <li>
+              <a href="#">Partnerships</a>
+            </li>
+            <li>
+              <a href="#">Privacy Policy</a>
+            </li>
+            <li>
+              <a href="#">Terms of Service</a>
+            </li>
+            <li>
+              <a href="#">Investor Relations</a>
+            </li>
+          </ul>
+        </div>
+        <div className="footer-column">
+          <h3>Services</h3>
+          <ul>
+            <li>
+              <a href="#">About Business Solutions</a>
+            </li>
+            <li>
+              <a href="#">Eventer Pro</a>
+            </li>
+            <li>
+              <a href="#">Eventer Certified</a>
+            </li>
+            <li>
+              <a href="#">Become an Agency</a>
+            </li>
+            <li>
+              <a href="#">ClearVoice</a>
+            </li>
+            <li>
+              <a href="#">Content Marketing</a>
+            </li>
+          </ul>
+        </div>
       </div>
-    </div>
+      <div className="footer-bottom">
+        <div className="footer-bottom-left">
+          <p>&copy; Eventer Sri Lanka (Pvt) Ltd 2024</p>
+        </div>
+        <div className="footer-bottom-right">
+          <FacebookIcon/>
+          <TwitterIcon/>
+          <InstagramIcon/>
+          <LinkedInIcon/>
+          
+        </div>
+      </div>
+    </footer>
   );
 };
