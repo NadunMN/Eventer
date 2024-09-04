@@ -35,6 +35,20 @@ const searchEvents = async (req, res) => {
   }
 };
 
+//api for get events related to specific category
+const getCategory = async (req, res) => {
+  try {
+    const categoryName = req.query.category; //get the title from the query prameters
+    const events = await EventModel.find({categoryName});
+
+    if (events.length > 0) {
+      res.status(200).json(events); //send the user data if found
+    } 
+  } catch (error) {
+    res.status(500).json({ message: " Error searching event", error });
+  }
+};
+
 //get event by id
 const getOneEvent = async (req, res) => {
   try {
@@ -202,4 +216,5 @@ module.exports = {
   getEventById,
   deleteEvent,
   editEvent,
+  getCategory,
 };
