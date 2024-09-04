@@ -51,7 +51,7 @@ const ErrorMessage = styled(Typography)(({ theme }) => ({
 }));
 
 // Component to handle searching for events
-const SearchForm = ({ setListOfEvents, setIsSearch }) => {
+const SearchForm = ({ setListOfEvents }) => {
   const [searchString, setSearchString] = useState(""); // State for the search input
   const [error, setError] = useState(""); // State for error messages
   

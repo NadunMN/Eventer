@@ -26,7 +26,7 @@ router.get("/searchEvents", searchEvents);
 // router.post("/createEvent", createEvent);
 // router.get('/getOne', getOneEvent)
 router.get("/getEvent/:id", getOneEvent);
-router.get("/getCategory/:category", getCategory);
+router.get("/getCategory", getCategory);
 router.post("/createEvent", upload, createEventWithImage);
 router.get("/events/:id/image", getEventImage);
 
