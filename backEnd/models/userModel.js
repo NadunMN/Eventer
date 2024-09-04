@@ -11,7 +11,11 @@ const userSchema = new mongoose.Schema({
   password: { type: String, required: true },
   created_at: { type: String, required: true },
   updated_at: { type: String },
-  profile_picture_url: { type: String },
+  cover_image: { type: Buffer },
+  registered_events: { type: [String] },
+  favourite_events: { type: [String] },
+  created_event: {type: [String]},
+  Bio: {type: String}
 });
 
 // // Create the user model

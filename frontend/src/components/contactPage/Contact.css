@@ -1,6 +1,7 @@
 .contact-container {
     position: relative; /* Ensure positioning of child elements */
     margin-top: 2rem;
+    margin-bottom: 20px;
   }
   
   .contact-title {

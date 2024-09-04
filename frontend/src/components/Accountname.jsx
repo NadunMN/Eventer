@@ -5,6 +5,7 @@ import erajiImage from '../asset/eraji5.jpg';
 
 function Accountname() {
   const [open, setOpen] = useState(false);
+  
 
   const handleClickOpen = () => {
     setOpen(true);

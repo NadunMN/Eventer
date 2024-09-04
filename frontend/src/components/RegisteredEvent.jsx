@@ -29,11 +29,12 @@ export default function RegisteredEvent() {
   useEffect(() => {
     const fetchEvent = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/event/getEvent');
+        const response = await axios.get(
+          "http://localhost:5000/api/event/getEvent"
+        );
 
         let eventData = response.data;
 
- 
         // Ensure eventData is an array
         if (!Array.isArray(eventData)) {
           eventData = [eventData];
@@ -72,10 +73,19 @@ export default function RegisteredEvent() {
       ) : events.length > 0 ? (
         events.map((event, index) => (
           <div key={index}>
-            <Card sx={{ width: 345, height: 450, margin: "1rem auto", position: 'relative' }}>
+            <Card
+              sx={{
+                width: 345,
+                height: 450,
+                margin: "1rem auto",
+                position: "relative",
+              }}
+            >
               <CardMedia
                 sx={{ height: 250 }}
-                image={event.cover_image || "https://via.placeholder.com/345x140"}
+                image={
+                  event.cover_image || "https://via.placeholder.com/345x140"
+                }
                 title={event.title}
               />
               <CardContent>
@@ -86,7 +96,9 @@ export default function RegisteredEvent() {
                   {event.description.slice(0, 200)}
                 </Typography>
               </CardContent>
-              <CardActions sx={{ display: 'flex', position: 'absolute', bottom: 0 }}>
+              <CardActions
+                sx={{ display: "flex", position: "absolute", bottom: 0 }}
+              >
                 <Button sx={{ color: "#311b92" }} size="small">
                   Share
                 </Button>

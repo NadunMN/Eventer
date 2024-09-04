@@ -29,12 +29,8 @@ function App() {
       const jsonString = JSON.stringify(user);
 
       const jwtToken = jwtDecode(jsonString);
-      console.log(jwtToken);
       setUserId(jwtToken._id);
       setUserRole(jwtToken.role);
-
-      console.log("Id: ", userId);
-      console.log("Role: ", userRole);
     }
   }, [userId]);
 

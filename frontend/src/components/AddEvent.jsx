@@ -109,7 +109,7 @@ export const AddEvent = () => {
       alert("Event created successfully!");
       console.log("Appended cover_image:", coverImg);
     } catch (error) {
-      console.error("Error uploading event:", error);
+      console.log("Error uploading event:", error);
     }
   };
 
