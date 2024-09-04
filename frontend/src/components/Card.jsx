@@ -1,32 +1,87 @@
-import * as React from 'react';
-import Card from '@mui/material/Card';
-import CardActions from '@mui/material/CardActions';
-import CardContent from '@mui/material/CardContent';
-import CardMedia from '@mui/material/CardMedia';
-import Button from '@mui/material/Button';
-import Typography from '@mui/material/Typography';
-
+import * as React from "react";
+import Card from "@mui/material/Card";
+import CardActions from "@mui/material/CardActions";
+import CardContent from "@mui/material/CardContent";
+import CardMedia from "@mui/material/CardMedia";
+import Button from "@mui/material/Button";
+import Typography from "@mui/material/Typography";
+import { useEffect, useState } from "react";
+import axios from "axios";
 export default function MediaCard() {
+  const [events, setEvents] = useState([]);
+  useEffect(() => {
+    const user = JSON.parse(localStorage.getItem("user"));
+    if (user && user.token) {
+      const token = user.token;
+
+      // Fetch events
+      axios
+        .get("http://localhost:5000/api/event/getEvent", {
+          headers: { Authorization: `Bearer ${token}` },
+        })
+        .then((res) => {
+          const eventsData = res.data;
+
+          const formattedData = eventsData.map((event) => ({
+            title: event.title,
+            description: event.description,
+            participants: event.participants.length,
+          }));
+
+          setEvents(formattedData);
+        })
+        .catch((error) => {
+          console.error("Error fetching events:", error);
+        });
+    } else {
+      console.error("No user token found.");
+    }
+  }, []);
+  console.log("events", events);
+
+  events.sort((a, b) => b.participants - a.participants);
+  const topEvents = events.slice(0, 4);
+  console.log(topEvents);
+
   return (
-    <Card sx={{ maxWidth: 345 }}>
-      <CardMedia
-        sx={{ height: 140 }}
-        image="/src/asset/card.jpg"
-        title="green iguana"
-      />
-      <CardContent>
-        <Typography gutterBottom variant="h5" component="div">
-          Price winning
-        </Typography>
-        <Typography variant="body2" color="text.secondary">
-          Lizards are a widespread group of squamate reptiles, with over 6,000
-          species, ranging across all continents except Antarctica
-        </Typography>
-      </CardContent>
-      <CardActions>
-        <Button sx={{color: "#311b92",}} size="small">Share</Button>
-        <Button size="small" sx={{color: "#311b92",}}>Learn More</Button>
-      </CardActions>
-    </Card>
+    <>
+      {topEvents.map((event, index) => (
+        <Card
+          key={index}
+          sx={{
+            width: 345, // Fixed width
+            height: 400, // Fixed height
+            marginBottom: 2,
+            display: "flex",
+            flexDirection: "column",
+          }}
+        >
+          <CardMedia
+            sx={{ height: 140 }}
+            image="/src/asset/card.jpg"
+            title={event.title}
+          />
+          <CardContent>
+            <Typography gutterBottom variant="h5" component="div">
+              {event.title}
+            </Typography>
+            <Typography variant="body2" color="text.secondary">
+              {event.description}
+            </Typography>
+            <Typography variant="body1" color="text.secondary">
+              Participants: {event.participants}
+            </Typography>
+          </CardContent>
+          <CardActions>
+            <Button sx={{ color: "#311b92" }} size="small">
+              Share
+            </Button>
+            <Button size="small" sx={{ color: "#311b92" }}>
+              Learn More
+            </Button>
+          </CardActions>
+        </Card>
+      ))}
+    </>
   );
 }
