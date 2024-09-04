@@ -6,6 +6,7 @@ const multer = require('multer');
 const upload = multer();
 
 
+
 //Registered Event count
 const countRegisteredEvent = async (req, res) => {
     try {
@@ -74,7 +75,29 @@ const updateUser = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
-  
+
+// update user profile
+const updatedUserImage = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    // Update the user's cover_image with the new image buffer
+    const updatedUser = await userModel.findByIdAndUpdate(
+      id,
+      { cover_image: req.file.buffer },
+      { new: true } // Return the updated document
+    );
+
+    if (!updatedUser) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    res.status(200).json(updatedUser);
+  } catch (error) {
+    res.status(500).json({ error: "Failed to update user image" });
+  }
+};
+
 
 
 module.exports={
@@ -83,4 +106,5 @@ module.exports={
     countFavoriteEvent,
     getUserById,
     updateUser,
+    updatedUserImage,
 };

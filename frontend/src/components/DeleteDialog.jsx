@@ -78,7 +78,7 @@ export default function FormDialog() {
           }} 
           onClick={handleClickOpen}
         >
-          Open form dialog
+          Delete Account
         </Button>
       </Box>
 

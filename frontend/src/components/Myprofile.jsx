@@ -2,21 +2,16 @@ import { Box, Stack, Button, Typography, TextField, Avatar, InputAdornment, Icon
 import React, { useState,useEffect } from 'react';
 import EditIcon from '@mui/icons-material/Edit';
 import SaveIcon from '@mui/icons-material/Save';
-// import Divider from '@mui/material/Divider';
 import axios from 'axios';
 import { jwtDecode } from "jwt-decode";
-import image from '../asset/commu.jpg'
 import FormDialog from "./DeleteDialog";
+import ImageUpload from './Addphoto';
 
 function Myprofile() {
-    const [anchorEl, setAnchorEl] = useState(null);
-    // const open = Boolean(anchorEl);
     const [user, setUser] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [isEditing, setIsEditing] = useState(false);
-    const [open, setOpen] = useState(false);
-  
     const [editedValues, setEditedValues] = useState({
         first_name: '',
         last_name: '',
@@ -24,44 +19,10 @@ function Myprofile() {
         bio: '',
         phone: ''
     });
-    const [file, setFile] = useState(null);
-    const [preview, setPreview] = useState(null);
-
-    const handleClickOpen = () => {
-        setOpen(true);
-      };
-
-    const handleClose = () => {
-        setAnchorEl(null);
-        setOpen(false);
-    };
-  
-
-    const handleFileChange = (event) => {
-        const newFile = event.target.files[0];
-        if (newFile) {
-            setFile(newFile);
-            setPreview(URL.createObjectURL(newFile)); // Create a preview URL for the selected file
-        }
-    };
-
-    const handleRemovePhoto = () => {
-        setFile(null);
-        setPreview(null); // Clear the preview
-        handleClose();
-    };
-
-
-
     const [userId, setUserId] = useState("");
 
-    console.log(user);
 
-    const handleClick = (event) => {
-        setAnchorEl(event.currentTarget);
-    };
-
-
+    // console.log(user);
     const user_id = JSON.parse(localStorage.getItem("user"));
 
     useEffect(() => {
@@ -241,96 +202,23 @@ function Myprofile() {
             </Box>
 
             <Stack sx={{ display: 'flex', flexDirection: 'row', gap: 4 }}>
-                <Box sx={{ width: '42%', height: 500, bgcolor: '#ede7f6', borderRadius: 3, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
-                  <Typography variant='h4' color='primary' sx={{mb:2,}}>Profile Picture</Typography>
-                  <Box sx={{ position: 'relative', display: 'inline-block' }}>
-            <Avatar
-                alt="Profile Photo"
-                src={preview} // Use preview URL or default avatar
-                sx={{ width: 200, height: 200 }}
-            />
-            <IconButton
-                aria-label="edit"
-                onClick={handleClick}
-                sx={{
-                    position: 'absolute',
-                    bottom: 10,
-                    right: 10,
-                    backgroundColor: '#311b92',
-                    color: 'white',
-                    '&:hover': {
-                        backgroundColor: '#512da8',
-                    },
-                }}
-            >
-                <EditIcon />
-            </IconButton>
-
-            <Menu
-                anchorEl={anchorEl}
-                open={open}
-                onClose={handleClose}
-                anchorOrigin={{
-                    vertical: 'top',
-                    horizontal: 'right',
-                }}
-                transformOrigin={{
-                    vertical: 'top',
-                    horizontal: 'right',
-                }}
-                sx={{
-                    '& .MuiMenuItem-root': {
-                        fontSize: '16px',
-                        padding: '8px 16px',
-                    },
-                }}
-            >
-                <MenuItem
-                    onClick={() => {
-                        handleClose();
-                        document.getElementById('upload-photo-input').click();
-                    }}
-                >
-                    Upload a photo...
-                </MenuItem>
-                <input
-                    type="file"
-                    id="upload-photo-input"
-                    style={{ display: 'none' }}
-                    onChange={handleFileChange}
-                />
-                <MenuItem onClick={handleRemovePhoto}>
-                    Remove photo
-                </MenuItem>
-            </Menu>
-        </Box>
-
-
-                    <Typography variant='body1' sx={{ml:-1, mt:1, width:400}}>Upload Photo Prompt</Typography>
-
-                    <Typography variant='body2' color='primary' sx={{ml:-1, mt:1, width:400}}>"Choose a new profile picture to represent yourself."
-                    </Typography>
-
-                    <Typography variant='body1' sx={{ml:-1, mt:1, width:400}}>Upload Button</Typography>
-                    <Typography variant='body2' color='primary' sx={{ml:-1, mt:1, width:400}}>"Upload a new photo,Change profile picture"</Typography>
-
-                    <Typography variant='body1' sx={{ml:-1, mt:1, width:400}}>Remove Photo Prompt</Typography>
-                    <Typography variant='body2' color='primary' sx={{ml:-1, mt:1, width:400}}>"Remove your current profile picture.Delete this photo and revert to the default avatar."</Typography>
+                <Box sx={{ width: '42%', height: 500, bgcolor: '#ede7f6', borderRadius: 3, display: 'flex', flexDirection: 'column',}}>
+                    {/* <Typography variant='h4' color='primary' sx={{position: 'absolute', m: 3}}>Upload a profile Photo</Typography> */}
+                   <ImageUpload/>
+                    {/* <Typography variant='body2' sx={{ m: 3}}>Upload a profile Photo</Typography> */}
+                 
                     
                 </Box>
 
-                <Box sx={{ width: '40%', height: 500, bgcolor: '#ede7f6', borderRadius: 3, display: 'flex', flexDirection: 'column', }}>
-                    <Typography variant='h4' color='error' sx={{m: 3, display: 'flex', justifyContent: 'center'}}>Danger Zone</Typography>
-                    <Typography variant='h6' sx={{ml:3}}>Delete this Account</Typography>
-                    <Typography variant='body1' sx={{ml:3, mt:1, width:400}}>Once you delete a Account, there is no going back. Please be certain.</Typography>
-                    <Typography variant='body2' color='darkred' sx={{ml:3, mt:1, width:400}}>"All your data will be permanently erased, and it cannot be recovered."</Typography>
-                    <Typography variant='body2' color='darkred' sx={{ml:3, mt:1, width:400}}>"You will lose access to all your content, subscriptions, and services."</Typography>
-                    <Typography variant='body2' color='darkred' sx={{ml:3, mt:1, width:400}}>"Any remaining balances or credits in your account will be forfeited."</Typography>
-                    <Typography variant='body2' color='darkred' sx={{ml:3, mt:1, width:400}}>"Your profile, including any saved preferences, will be deleted."</Typography>
-                    <Typography variant='body2' color='darkred' sx={{ml:3, mt:1, width:400}}>"This action is irreversible, so make sure you have saved any important information."</Typography>
-                    {/* <Button variant='contained' color='error' 
-                    onClick={handleClickOpen}
-                    sx={{width:'auto', height:35, mx:3, mt: 2}}>Delete this account</Button> */}
+                <Box sx={{ width: '40%',height:'auto',maxHeight:500, bgcolor: '#ede7f6', borderRadius: 3, display: 'flex', flexDirection: 'column', }}>
+                    <Typography variant='h4' color='error' sx={{m: 3, display: 'flex',maxWidth:400}}>Danger Zone</Typography>
+                    <Typography variant='h6' sx={{ml:3, maxWidth:400}}>Delete this Account</Typography>
+                    <Typography variant='body1' sx={{ml:3, mt:1, maxWidth:400}}>Once you delete a Account, there is no going back. Please be certain.</Typography>
+                    <Typography variant='body2' color='darkred' sx={{ml:3, mt:1, maxWidth:400}}>"All your data will be permanently erased, and it cannot be recovered."</Typography>
+                    <Typography variant='body2' color='darkred' sx={{ml:3, mt:1, maxWidth:400}}>"You will lose access to all your content, subscriptions, and services."</Typography>
+                    <Typography variant='body2' color='darkred' sx={{ml:3, mt:1, maxWidth:400}}>"Any remaining balances or credits in your account will be forfeited."</Typography>
+                    <Typography variant='body2' color='darkred' sx={{ml:3, mt:1, maxWidth:400}}>"Your profile, including any saved preferences, will be deleted."</Typography>
+                    <Typography variant='body2' color='darkred' sx={{ml:3, mt:1, maxWidth:400}}>"This action is irreversible, so make sure you have saved any important information."</Typography>
                     <FormDialog/>
                 </Box>
             </Stack>
