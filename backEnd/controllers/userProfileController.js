@@ -40,25 +40,40 @@ const countFavoriteEvent = async (req, res) => {
 
 
 
-  //get one UserDetatis 
-  const getUserOne = async (req, res) => {
-    try {
-      const { id } = req.params; //get the title from the query prameters
-  
-      if (!mongoose.Types.ObjectId.isValid(id)) {
-        return res.status(400).json({ message: "Invalid event ID !" });
-      }
-      const user = await userModel.findById(id);
-      if (user) {
-        res.status(200).json(user); //send the user data if found
-      } else {
-        res.status(404).json({ message: "user not found!" });
-      }
-    } catch (error) {
-      res.status(500).json({ message: "cannot Request !", error });
-    }
-  };
+// Controller for fetching all user data
+const getUserById = async (req, res) => {
+  try {
+    const user = await userModel.findById(req.params.id);
 
+    if (!user) {
+      return res.status(404).json({ error: "user not found" });
+
+    }else{
+      res.status(200).json(user); //send the user data if found
+
+    }
+  } catch (error) {
+    res.status(500).json({ error: "Failed to fetch image" });
+  }
+};
+
+// Update a user
+const updateUser = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const user = await userModel.findByIdAndUpdate(id, req.body, {
+      new: true,
+    });
+
+    if (!user) {
+      return res.status(404).json({ message: "User Not Found" });
+    }
+
+    res.status(200).json(user);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
   
 
 
@@ -66,5 +81,6 @@ module.exports={
     countRegisteredEvent,
     countCreatedEvent,
     countFavoriteEvent,
-    getUserOne,
+    getUserById,
+    updateUser,
 };
