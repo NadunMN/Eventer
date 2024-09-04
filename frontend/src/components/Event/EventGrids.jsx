@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Typography,
   Container,
@@ -13,16 +13,60 @@ import {
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
-import FavoriteBorder from "@mui/icons-material/FavoriteBorder";
+import FavoriteIcon from "@mui/icons-material/Favorite";
+import { jwtDecode } from "jwt-decode";
+import axios from "axios";
 
-function EventGrids({ listOfEvent }) {
+function EventGrids({ listOfEvent, handleOpen }) {
+  const [userRole, setUserRole] = useState("");
+  const [userId, setUserId] = useState("");
+  const [favorites, setFavorites] = useState([]);
+
+  useEffect(() => {
+    const user = JSON.parse(localStorage.getItem("user"));
+    if (user) {
+      const jwtToken = jwtDecode(user.token);
+      setUserId(jwtToken._id);
+      setUserRole(jwtToken.role);
+      axios
+        .get(`http://localhost:5000/api/user/${jwtToken._id}`)
+        .then((res) => {
+          setFavorites(res.data.favourite_events || []);
+        })
+        .catch((err) => {
+          console.error("Failed to fetch user data", err);
+        });
+    }
+  }, []);
+
   const navigate = useNavigate();
 
   const handleNavigate = (event) => {
+    handleOpen(true);
     navigate(`/event/${event._id}`);
   };
 
-  const [isFavorite, setIsFavorite] = useState(false);
+  const handleFav = (event_id) => {
+    console.log(event_id);
+
+    const isFav = favorites.includes(event_id);
+    const updatedFavorites = isFav
+      ? favorites.filter((id) => id !== event_id)
+      : [...favorites, event_id];
+
+    axios
+      .put(`http://localhost:5000/api/user/edit/${userId}`, {
+        favourite_events: updatedFavorites,
+      })
+      .then(() => {
+        setFavorites(updatedFavorites);
+        console.log(isFav ? "Removed from favorites" : "Added to favorites");
+      })
+      .catch((err) => {
+        alert("An error occurred. Please check the console");
+        console.error(err);
+      });
+  };
 
   const gridItemProps = {
     xs: 20,
@@ -75,7 +119,6 @@ function EventGrids({ listOfEvent }) {
                     display: "flex",
                     flexDirection: "column",
                     justifyContent: "space-between",
-                    // padding: 1.2,
                     mt: 0,
                   }}
                 >
@@ -94,7 +137,7 @@ function EventGrids({ listOfEvent }) {
                   sx={{
                     display: "flex",
                     justifyContent: "space-between",
-                    alingItems: "center",
+                    alignItems: "center",
                     mt: 0,
                     pl: 4,
                     pr: 4,
@@ -110,13 +153,17 @@ function EventGrids({ listOfEvent }) {
                   <Box>
                     <IconButton
                       variant="outlined"
-                      color={isFavorite ? "warning" : "neutral"}
+                      color={
+                        favorites.includes(event._id) ? "warning" : "neutral"
+                      }
                       sx={{ mr: "auto" }}
-                      onClick={() => {
-                        setIsFavorite(!isFavorite);
-                      }}
+                      onClick={() => handleFav(event._id)}
                     >
-                      <FavoriteBorder sx={{ fontSize: 30 }} />
+                      {favorites.includes(event._id) ? (
+                        <FavoriteIcon sx={{ fontSize: 30 }} />
+                      ) : (
+                        <FavoriteBorderIcon sx={{ fontSize: 30 }} />
+                      )}
                     </IconButton>
                   </Box>
                 </CardActions>

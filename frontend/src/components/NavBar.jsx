@@ -22,7 +22,9 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import LogoutIcon from "@mui/icons-material/Logout";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import LoginIcon from "@mui/icons-material/Login";
+
 import logo from "../asset/site-logo.jpg.png";
+
 import { useLogout } from "../hooks/useLogout";
 import { useAuthContext } from "../hooks/useAuthContext";
 import { jwtDecode } from "jwt-decode";
@@ -73,10 +75,7 @@ const StyledMenuItem = styled(MenuItem)(({ theme }) => ({
     backgroundColor: theme.palette.action.hover,
   },
 }));
-
-export const NavBar = () => {
-  const { logout } = useLogout();
-  const { user } = useAuthContext();
+export const NavBar = ({ logout, userRole, userId }) => {
   const [open, setOpen] = useState(false);
   const anchorRef = useRef(null);
   const navigate = useNavigate();
@@ -117,6 +116,7 @@ export const NavBar = () => {
             />
           </Link>
         </LogoTypography>
+
         <Box
           sx={{
             display: "flex",
@@ -173,6 +173,7 @@ export const NavBar = () => {
                             aria-labelledby="composition-button"
                             onKeyDown={handleListKeyDown}
                           >
+
                             <StyledMenuItem onClick={handleClose}>
                               <ListItemIcon>
                                 <AccountCircleIcon />
@@ -217,6 +218,7 @@ export const NavBar = () => {
               </Button>
             )}
           </Box>
+
         </Box>
       </StyledToolbar>
     </StyledAppBar>
