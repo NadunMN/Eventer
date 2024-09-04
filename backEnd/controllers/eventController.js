@@ -90,22 +90,8 @@ const createEvent = async (req, res) => {
 // creating a new event
 const createEventWithImage = async (req, res) => {
   try {
-    const {
-      title,
-      start_date,
-      start_time,
-      end_date,
-      end_time,
-      description,
-      venue,
-      capacity,
-      participants,
-      cover_image,
-      created_by,
-      created_at,
-      category,
-      organizer,
-    } = req.body;
+    const {title,start_date,start_time,end_date,end_time,description,venue,capacity,participants,
+          cover_image,created_by,created_at,category,organizer,} = req.body;
     const event = new EventModel({
       title,
       start_date,
