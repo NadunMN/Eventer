@@ -4,8 +4,8 @@ const validator = require("validator");
 const jwt = require("jsonwebtoken");
 
 //create jw token
-const createToken = (_id) => {
-  return jwt.sign({ _id }, process.env.SECRET, { expiresIn: "1d" });
+const createToken = (_id, role) => {
+  return jwt.sign({ _id, role }, process.env.SECRET, { expiresIn: "1d" });
 };
 
 // Get all user data
@@ -62,12 +62,12 @@ const signup = async (req, res) => {
     const signUser = await user.save();
 
     // Create token
-    const token = createToken(signUser._id);
+    const token = createToken(signUser._id, signUser.role);
 
     res.status(201).json({ msg: "User registered successfully", token });
   } catch (err) {
     console.log(err.message);
-    res.status(500).send("Server error");
+    res.status(500).send("Server Error");
   }
 };
 
@@ -92,10 +92,46 @@ const login = async (req, res) => {
       return res.status(401).send("Incorrect password");
     }
 
-    const token = createToken(user._id);
+    const token = createToken(user._id, user.role);
     return res.status(200).json({ message: "Login successfully", token });
   } catch {
     return res.status(500).send("Server error");
+  }
+};
+
+const editUser = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    if (req.body.password) {
+      req.body.password = await bcrypt.hash(req.body.password, 10);
+    }
+    const result = await userModel.findByIdAndUpdate(id, req.body, {
+      new: true,
+    });
+
+    if (!result) {
+      res.status(404).json({ message: "User not found" });
+    }
+    res.status(200).json({ message: "Update user successfully" });
+  } catch (err) {
+    res.status(500).send({ message: err.message });
+  }
+};
+
+const deleteUser = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const result = await userModel.findByIdAndDelete(id);
+
+    if (!result) {
+      res.status(404).json({ message: "User not found" });
+    }
+
+    res.status(200).json({ message: "user delete successfully" });
+  } catch (err) {
+    res.status(500).send({ message: err.message });
   }
 };
 
@@ -104,4 +140,6 @@ module.exports = {
   getUser,
   signup,
   login,
+  editUser,
+  deleteUser,
 };

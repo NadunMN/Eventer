@@ -14,7 +14,7 @@ export const useLogin = () => {
     setError(null);
 
     try {
-      const res = await axios.post("http://localhost:5000/api/login", {
+      const res = await axios.post("http://localhost:5000/api/user/login", {
         email,
         password,
       });
@@ -34,9 +34,7 @@ export const useLogin = () => {
       setIsLoading(false);
     } catch (error) {
       setIsLoading(false);
-      setError(
-        error.response?.data?.error || "An error occurred during login."
-      );
+      setError(error.response?.data || "An error occurred during login.");
     }
   };
 

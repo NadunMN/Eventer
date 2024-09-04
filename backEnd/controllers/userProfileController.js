@@ -1,5 +1,9 @@
 // const mongoose = require('mongoose');
 const Student = require('../models/regEventModel');
+const EventModel = require('../models/eventModel');
+const userModel = require('../models/userModel');
+const multer = require('multer');
+const upload = multer();
 
 
 //Registered Event count
@@ -34,23 +38,24 @@ const countFavoriteEvent = async (req, res) => {
 };
 
 
-//Registered Event
-const getRegisteredEvents = async (req, res) => {
-    try {
-      const events = await Student.find({"registered": true});
-      res.json(events);
-    } catch (error) {
-      res.status(500).json({ message: "Error fetching events", error });
-    }
-  };
 
-//Favorite Event
-const getFavoriteEvents = async (req, res) => {
+
+  //get one UserDetatis 
+  const getUserOne = async (req, res) => {
     try {
-      const events = await Student.find({"favorite": true});
-      res.json(events);
+      const { id } = req.params; //get the title from the query prameters
+  
+      if (!mongoose.Types.ObjectId.isValid(id)) {
+        return res.status(400).json({ message: "Invalid event ID !" });
+      }
+      const user = await userModel.findById(id);
+      if (user) {
+        res.status(200).json(user); //send the user data if found
+      } else {
+        res.status(404).json({ message: "user not found!" });
+      }
     } catch (error) {
-      res.status(500).json({ message: "Error fetching events", error });
+      res.status(500).json({ message: "cannot Request !", error });
     }
   };
 
@@ -61,6 +66,5 @@ module.exports={
     countRegisteredEvent,
     countCreatedEvent,
     countFavoriteEvent,
-    getRegisteredEvents,
-    getFavoriteEvents,
+    getUserOne,
 };

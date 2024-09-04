@@ -13,6 +13,12 @@ import axios from 'axios';
 import MediaCard from './Card';
 import RegisteredEvent from './RegisteredEvent';
 import FavoriteEvent from './FavoriteEvent';
+import TextField from '@mui/material/TextField';
+import { Avatar, Button } from "@mui/material"
+import EditIcon from '@mui/icons-material/Edit';
+import Myprofile from './Myprofile';
+
+
 
 export default function Dashboard() {
     const [countRegistered, setCountRegistered] = useState(0);
@@ -106,6 +112,12 @@ export default function Dashboard() {
                         </Box>
                     </Stack>
                 );
+
+            case 'My Profile':
+                return (
+                          <Myprofile/>
+                        
+                        );
             case 'Favorite':
                 return (
                     <Box >

@@ -26,6 +26,7 @@ import axios from "axios";
 import logo from "../asset/site-logo.png";
 import { useLogout } from "../hooks/useLogout";
 import { useAuthContext } from "../hooks/useAuthContext";
+import { jwtDecode } from "jwt-decode";
 
 const StyledAppBar = styled(AppBar)(({ theme }) => ({
   background: "linear-gradient(45deg, #673ab7 30%, #3f51b5 90%)",
@@ -77,12 +78,8 @@ const StyledMenuItem = styled(MenuItem)(({ theme }) => ({
 export const NavBar = () => {
   const { logout } = useLogout();
   const { user } = useAuthContext();
-  const [userRole, setUserRole] = useState("user");
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [open, setOpen] = useState(false);
-  const [userId, setUserId] = useState("66d3683ec827b97b07dac045");
   const anchorRef = useRef(null);
-
   const navigate = useNavigate();
 
   const handleToggle = () => {
@@ -104,27 +101,11 @@ export const NavBar = () => {
   };
 
   const handleLogout = () => {
+    setOpen(false);
     navigate("/login", { replace: true });
     logout();
     handleClose();
   };
-
-  useEffect(() => {
-    axios
-      .get(`http://localhost:5000/api/user/${userId}`)
-      .then((res) => {
-        const userData = res.data;
-        if (userData) {
-          setUser(userData);
-          setUserRole(userData.role);
-          setIsLoggedIn(true);
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-        setIsLoggedIn(false);
-      });
-  }, []);
 
   return (
     <StyledAppBar position="static">
@@ -147,89 +128,85 @@ export const NavBar = () => {
           <NavButton component={Link} to="/contact">
             Contact Us
           </NavButton>
-          <Tooltip title={isLoggedIn ? "Profile" : "Login"}>
-            <StyledIconButton ref={anchorRef} onClick={handleToggle}>
-              <AccountCircleIcon />
-            </StyledIconButton>
-          </Tooltip>
+          {user ? (
+            <>
+              <Tooltip title={user ? "Profile" : "Login"}>
+                <StyledIconButton ref={anchorRef} onClick={handleToggle}>
+                  <AccountCircleIcon />
+                </StyledIconButton>
+              </Tooltip>
+
+              <Popper
+                open={open}
+                anchorEl={anchorRef.current}
+                role={undefined}
+                placement="bottom-end"
+                transition
+                disablePortal
+              >
+                {({ TransitionProps, placement }) => (
+                  <Grow
+                    {...TransitionProps}
+                    style={{
+                      transformOrigin:
+                        placement === "bottom-end"
+                          ? "right top"
+                          : "right bottom",
+                    }}
+                  >
+                    <Paper elevation={3}>
+                      <ClickAwayListener onClickAway={handleClose}>
+                        <StyledMenuList
+                          autoFocusItem={open}
+                          id="composition-menu"
+                          aria-labelledby="composition-button"
+                          onKeyDown={handleListKeyDown}
+                        >
+                          <StyledMenuItem onClick={handleClose}>
+                            <ListItemIcon>
+                              <AccountCircleIcon />
+                            </ListItemIcon>
+                            <ListItemText primary="Profile" />
+                          </StyledMenuItem>
+
+                          <StyledMenuItem
+                            component={Link}
+                            to="/dashboard"
+                            onClick={handleClose}
+                            divider
+                          >
+                            <ListItemIcon>
+                              <DashboardIcon />
+                            </ListItemIcon>
+                            <ListItemText primary="Dashboard" />
+                          </StyledMenuItem>
+                          <StyledMenuItem onClick={handleLogout}>
+                            <ListItemIcon>
+                              <LogoutIcon />
+                            </ListItemIcon>
+                            <ListItemText primary="Logout" />
+                          </StyledMenuItem>
+                        </StyledMenuList>
+                      </ClickAwayListener>
+                    </Paper>
+                  </Grow>
+                )}
+              </Popper>
+            </>
+          ) : (
+            <Button
+              variant="contained"
+              component={Link}
+              to="/login"
+              sx={{
+                bgcolor: "#173a75",
+              }}
+            >
+              Login
+            </Button>
+          )}
         </Box>
       </StyledToolbar>
-      <Popper
-        open={open}
-        anchorEl={anchorRef.current}
-        role={undefined}
-        placement="bottom-end"
-        transition
-        disablePortal
-      >
-        {({ TransitionProps, placement }) => (
-          <Grow
-            {...TransitionProps}
-            style={{
-              transformOrigin:
-                placement === "bottom-end" ? "right top" : "right bottom",
-            }}
-          >
-            <Paper elevation={3}>
-              <ClickAwayListener onClickAway={handleClose}>
-                <StyledMenuList
-                  autoFocusItem={open}
-                  id="composition-menu"
-                  aria-labelledby="composition-button"
-                  onKeyDown={handleListKeyDown}
-                >
-                  {user ? (
-                    <>
-                      <StyledMenuItem onClick={handleClose}>
-                        <ListItemIcon>
-                          <AccountCircleIcon />
-                        </ListItemIcon>
-                        <ListItemText primary="Profile" />
-                      </StyledMenuItem>
-
-                      <StyledMenuItem
-                        component={Link}
-                        to={
-                          userRole === "admin"
-                            ? "/admin-dashboard"
-                            : "/user-dashboard"
-                        }
-                        onClick={handleClose}
-                        divider
-                      >
-                        <ListItemIcon>
-                          <DashboardIcon />
-                        </ListItemIcon>
-                        <ListItemText primary="Dashboard" />
-                      </StyledMenuItem>
-                      <StyledMenuItem onClick={handleLogout}>
-                        <ListItemIcon>
-                          <LogoutIcon />
-                        </ListItemIcon>
-                        <ListItemText primary="Logout" />
-                      </StyledMenuItem>
-                    </>
-                  ) : (
-                    <StyledMenuItem
-                      onClick={() => {
-                        logout();
-                        handleClose();
-                      }}
-                      component={Link}
-                      to="/login"
-                    >
-                      <ListItemIcon>
-                        <LoginIcon />
-                      </ListItemIcon>
-                      <ListItemText primary="Login" />
-                    </StyledMenuItem>
-                  )}
-                </StyledMenuList>
-              </ClickAwayListener>
-            </Paper>
-          </Grow>
-        )}
-      </Popper>
     </StyledAppBar>
   );
 };
