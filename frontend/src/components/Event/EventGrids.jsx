@@ -62,7 +62,7 @@ function EventGrids({ listOfEvent }) {
               >
                 <CardMedia
                   component="img"
-                  image={event.image}
+                  image= {event.cover_image}
                   alt={event.image}
                   sx={{ width: "100%", objectFit: "cover" }}
                 />
