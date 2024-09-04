@@ -22,7 +22,6 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import LogoutIcon from "@mui/icons-material/Logout";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import LoginIcon from "@mui/icons-material/Login";
-import axios from "axios";
 import logo from "../asset/site-logo.png";
 import { useLogout } from "../hooks/useLogout";
 import { useAuthContext } from "../hooks/useAuthContext";
@@ -75,9 +74,9 @@ const StyledMenuItem = styled(MenuItem)(({ theme }) => ({
   },
 }));
 
-export const NavBar = () => {
-  const { logout } = useLogout();
-  const { user } = useAuthContext();
+export const NavBar = ({ logout, userRole, userId }) => {
+  // const { logout } = useLogout();
+  // const { user } = useAuthContext();
   const [open, setOpen] = useState(false);
   const anchorRef = useRef(null);
   const navigate = useNavigate();
@@ -127,9 +126,9 @@ export const NavBar = () => {
           <NavButton component={Link} to="/contact">
             Contact Us
           </NavButton>
-          {user ? (
+          {userId ? (
             <>
-              <Tooltip title={user ? "Profile" : "Login"}>
+              <Tooltip title={userId ? "Profile" : "Login"}>
                 <StyledIconButton ref={anchorRef} onClick={handleToggle}>
                   <AccountCircleIcon />
                 </StyledIconButton>
@@ -179,7 +178,7 @@ export const NavBar = () => {
                             </ListItemIcon>
                             <ListItemText primary="Dashboard" />
                           </StyledMenuItem>
-                          <StyledMenuItem onClick={handleLogout}>
+                          <StyledMenuItem onClick={logout}>
                             <ListItemIcon>
                               <LogoutIcon />
                             </ListItemIcon>
