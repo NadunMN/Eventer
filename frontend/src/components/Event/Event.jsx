@@ -4,25 +4,21 @@ import axios from "axios";
 import SearchForm from "./SearchForm";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import EventGrids from "./EventGrids";
-import EventData from "./EventData";
-import RegisteredeEvent from "../RegisteredEvent";
-
-import MediaCard from "../Card";
 import { Container, Box } from "@mui/material";
 import CategoryDropdown from "./CategoryDropdown";
 import { useAuthContext } from "../../hooks/useAuthContext";
 
 // Function to convert binary data to base64
 const convertBinaryToBase64 = (binaryData, contentType) => {
-if (binaryData && binaryData instanceof Uint8Array) {
-  const binaryString = Array.from(binaryData)
-    .map((byte) => String.fromCharCode(byte))
-    .join("");
-  return `data:${contentType};base64,${btoa(binaryString)}`;
-} else {
-  console.error("Invalid binary data provided:", binaryData);
-  return null;
-}
+  if (binaryData && binaryData instanceof Uint8Array) {
+    const binaryString = Array.from(binaryData)
+      .map((byte) => String.fromCharCode(byte))
+      .join("");
+    return `data:${contentType};base64,${btoa(binaryString)}`;
+  } else {
+    console.error("Invalid binary data provided:", binaryData);
+    return null;
+  }
 };
 
 const Event = () => {
@@ -33,7 +29,6 @@ const Event = () => {
   const [error, setError] = useState(null);
   const navigate = useNavigate();
   const { user } = useAuthContext();
-  
 
   const handleOpen = (event) => {
     setSelectedEvent(event);
@@ -54,11 +49,12 @@ const Event = () => {
   useEffect(() => {
     const fetchEvent = async () => {
       try {
-        const response = await axios.get('http://localhost:5000/api/event/getEvent');
+        const response = await axios.get(
+          "http://localhost:5000/api/event/getEvent"
+        );
 
         let eventData = response.data;
 
- 
         // Ensure eventData is an array
         if (!Array.isArray(eventData)) {
           eventData = [eventData];
@@ -112,6 +108,7 @@ const Event = () => {
       )}
 
       <Outlet />
+      {/* <Reviews /> */}
     </>
   );
 };

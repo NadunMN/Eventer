@@ -5,6 +5,7 @@ import { Container, Typography, Box, colors, Grid } from "@mui/material";
 import EventBanner from "./EventBanner";
 import EventDetails from "./EventDetails";
 import EventDescription from "./EventDescription";
+import { Reviews } from "../Reviews";
 
 // Convert binary data to base64
 const convertBinaryToBase64 = (binaryData, contentType) => {
@@ -100,19 +101,22 @@ export default function EventData() {
   }
 
   return (
-    <Container maxWidth="lg">
-      <Box>
-        <EventBanner event={event} />
-      </Box>
-      <Grid container spacing={4}>
-        <Grid item xs={12} md={6}>
-          <EventDetails event={event} />
-        </Grid>
+    <>
+      <Container maxWidth="lg">
+        <Box>
+          <EventBanner event={event} />
+        </Box>
+        <Grid container spacing={4}>
+          <Grid item xs={12} md={6}>
+            <EventDetails event={event} />
+          </Grid>
 
-        <Grid item xs={12} md={6}>
-          <EventDescription event={event} />
+          <Grid item xs={12} md={6}>
+            <EventDescription event={event} />
+          </Grid>
         </Grid>
-      </Grid>
-    </Container>
+      </Container>
+      <Reviews />
+    </>
   );
 }
