@@ -73,10 +73,7 @@ const StyledMenuItem = styled(MenuItem)(({ theme }) => ({
     backgroundColor: theme.palette.action.hover,
   },
 }));
-
 export const NavBar = ({ logout, userRole, userId }) => {
-  // const { logout } = useLogout();
-  // const { user } = useAuthContext();
   const [open, setOpen] = useState(false);
   const anchorRef = useRef(null);
   const navigate = useNavigate();

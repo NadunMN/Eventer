@@ -119,7 +119,7 @@ export const Login = () => {
               </Link>
               <Typography variant="body2" align="center">
                 Don't have an account?{" "}
-                <Link href="/register" variant="body2">
+                <Link href="/signup" variant="body2">
                   Sign up
                 </Link>
               </Typography>
