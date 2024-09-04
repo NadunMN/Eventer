@@ -34,9 +34,7 @@ export const useLogin = () => {
       setIsLoading(false);
     } catch (error) {
       setIsLoading(false);
-      setError(
-        error.response?.data?.error || "An error occurred during login."
-      );
+      setError(error.response?.data || "An error occurred during login.");
     }
   };
 

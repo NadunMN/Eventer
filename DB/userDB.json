@@ -1,0 +1,90 @@
+[
+    {
+        "fname": "Dinuka",
+        "lname": "Dulanjana",
+        "role": "admin",
+        "email": "dinuka@gmail.com",
+        "username": "dinuka",
+        "password": "dinuka2001"
+    },
+    {
+        "fname": "Kavindu",
+        "lname": "Perera",
+        "role": "user",
+        "email": "kavindu@gmail.com",
+        "username": "kavindu",
+        "password": "kavindu1998"
+    },
+    {
+        "fname": "Ayesha",
+        "lname": "Fernando",
+        "role": "user",
+        "email": "ayesha@gmail.com",
+        "username": "ayesha",
+        "password": "ayesha2000"
+    },
+    {
+        "fname": "Sahan",
+        "lname": "Silva",
+        "role": "moderator",
+        "email": "sahan@gmail.com",
+        "username": "sahan",
+        "password": "sahan1997"
+    },
+    {
+        "fname": "Thilini",
+        "lname": "Jayasinghe",
+        "role": "admin",
+        "email": "thilini@gmail.com",
+        "username": "thilini",
+        "password": "thilini1999"
+    },
+    {
+        "fname": "Nuwan",
+        "lname": "Bandara",
+        "role": "user",
+        "email": "nuwan@gmail.com",
+        "username": "nuwan",
+        "password": "nuwan2002"
+    },
+    {
+        "fname": "Isuru",
+        "lname": "Samarasinghe",
+        "role": "user",
+        "email": "isuru@gmail.com",
+        "username": "isuru",
+        "password": "isuru1995"
+    },
+    {
+        "fname": "Tharushi",
+        "lname": "Weerakoon",
+        "role": "moderator",
+        "email": "tharushi@gmail.com",
+        "username": "tharushi",
+        "password": "tharushi2001"
+    },
+    {
+        "fname": "Nadeeka",
+        "lname": "Karunaratne",
+        "role": "user",
+        "email": "nadeeka@gmail.com",
+        "username": "nadeeka",
+        "password": "nadeeka1996"
+    },
+    {
+        "fname": "Harsha",
+        "lname": "De Silva",
+        "role": "admin",
+        "email": "harsha@gmail.com",
+        "username": "harsha",
+        "password": "harsha1990"
+    },
+    {
+        "fname": "Chamika",
+        "lname": "Wickramasinghe",
+        "role": "user",
+        "email": "chamika@gmail.com",
+        "username": "chamika",
+        "password": "chamika1998"
+    }
+]

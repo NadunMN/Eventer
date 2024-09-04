@@ -146,6 +146,41 @@ const getEventImage = async (req, res) => {
   }
 };
 
+// Controller for fetching all event data
+const getEventById = async (req, res) => {
+  try {
+    const event = await EventModel.findById(req.params.id);
+
+    if (!event) {
+      return res.status(404).json({ error: "Event not found" });
+
+    }
+  } catch (error) {
+    res.status(500).json({ error: "Failed to fetch image" });
+  }
+};
+    res.status(500).json({ error: "Failed to fetch event" });
+  }
+};
+
+
+//delete an event
+const deleteEvent = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const result = await EventModel.findByIdAndDelete(id);
+
+    if (!result) {
+      res.status(404).json({ message: "Event not found" });
+    }
+
+    res.status(200).json({ message: "Event delete successfully" });
+  } catch (err) {
+    res.status(500).send({ message: err.message });
+  }
+};
+
 module.exports = {
   getEvents,
   searchEvents,
@@ -153,4 +188,7 @@ module.exports = {
   getOneEvent,
   createEventWithImage,
   getEventImage,
+  getEventById,
+  deleteEvent,
+
 };
