@@ -101,6 +101,7 @@ export const NavBar = () => {
   };
 
   const handleLogout = () => {
+    setOpen(false);
     navigate("/login", { replace: true });
     logout();
     handleClose();
@@ -161,48 +162,30 @@ export const NavBar = () => {
                           aria-labelledby="composition-button"
                           onKeyDown={handleListKeyDown}
                         >
-                          {user ? (
-                            <>
-                              <StyledMenuItem onClick={handleClose}>
-                                <ListItemIcon>
-                                  <AccountCircleIcon />
-                                </ListItemIcon>
-                                <ListItemText primary="Profile" />
-                              </StyledMenuItem>
+                          <StyledMenuItem onClick={handleClose}>
+                            <ListItemIcon>
+                              <AccountCircleIcon />
+                            </ListItemIcon>
+                            <ListItemText primary="Profile" />
+                          </StyledMenuItem>
 
-                              <StyledMenuItem
-                                component={Link}
-                                to="/dashboard"
-                                onClick={handleClose}
-                                divider
-                              >
-                                <ListItemIcon>
-                                  <DashboardIcon />
-                                </ListItemIcon>
-                                <ListItemText primary="Dashboard" />
-                              </StyledMenuItem>
-                              <StyledMenuItem onClick={handleLogout}>
-                                <ListItemIcon>
-                                  <LogoutIcon />
-                                </ListItemIcon>
-                                <ListItemText primary="Logout" />
-                              </StyledMenuItem>
-                            </>
-                          ) : (
-                            <StyledMenuItem
-                              onClick={() => {
-                                logout();
-                                handleClose();
-                              }}
-                              component={Link}
-                              to="/login"
-                            >
-                              <ListItemIcon>
-                                <LoginIcon />
-                              </ListItemIcon>
-                              <ListItemText primary="Login" />
-                            </StyledMenuItem>
-                          )}
+                          <StyledMenuItem
+                            component={Link}
+                            to="/dashboard"
+                            onClick={handleClose}
+                            divider
+                          >
+                            <ListItemIcon>
+                              <DashboardIcon />
+                            </ListItemIcon>
+                            <ListItemText primary="Dashboard" />
+                          </StyledMenuItem>
+                          <StyledMenuItem onClick={handleLogout}>
+                            <ListItemIcon>
+                              <LogoutIcon />
+                            </ListItemIcon>
+                            <ListItemText primary="Logout" />
+                          </StyledMenuItem>
                         </StyledMenuList>
                       </ClickAwayListener>
                     </Paper>
