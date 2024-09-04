@@ -21,25 +21,28 @@ function App() {
   const [userId, setUserId] = useState("");
   const navigate = useNavigate();
 
-  const user = JSON.parse(localStorage.getItem("user"));
+  const [loading, setLoading] = useState(true);
+
   useEffect(() => {
+    const user = JSON.parse(localStorage.getItem("user"));
     if (user) {
-      const jsonString = JSON.stringify(user);
-      const jwtToken = jwtDecode(jsonString);
+      const jwtToken = jwtDecode(user.token);
       setUserId(jwtToken._id);
       setUserRole(jwtToken.role);
     } else {
-      setUserId("");
-      setUserRole("");
+      navigate("/login");
     }
-  }, [user]);
+    setLoading(false);
+  }, [navigate]);
+
+  if (loading) return <div>Loading...</div>;
+
   const logout = () => {
     localStorage.removeItem("user");
     setUserId("");
     setUserRole("");
     navigate("/login");
   };
-
   return (
     <>
       <NavBar logout={logout} userId={userId} userRole={userRole} />

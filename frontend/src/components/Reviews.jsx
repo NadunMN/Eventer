@@ -36,7 +36,6 @@ export const Reviews = () => {
   }, []);
 
   useEffect(() => {
-    console.log("Event ID:", eventId);
     axios
       .get(`http://localhost:5000/api/review/getReview/${eventId}`)
       .then((res) => {
