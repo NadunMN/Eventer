@@ -127,85 +127,103 @@ export const NavBar = () => {
           <NavButton component={Link} to="/contact">
             Contact Us
           </NavButton>
-          <Tooltip title={user ? "Profile" : "Login"}>
-            <StyledIconButton ref={anchorRef} onClick={handleToggle}>
-              <AccountCircleIcon />
-            </StyledIconButton>
-          </Tooltip>
+          {user ? (
+            <>
+              <Tooltip title={user ? "Profile" : "Login"}>
+                <StyledIconButton ref={anchorRef} onClick={handleToggle}>
+                  <AccountCircleIcon />
+                </StyledIconButton>
+              </Tooltip>
+
+              <Popper
+                open={open}
+                anchorEl={anchorRef.current}
+                role={undefined}
+                placement="bottom-end"
+                transition
+                disablePortal
+              >
+                {({ TransitionProps, placement }) => (
+                  <Grow
+                    {...TransitionProps}
+                    style={{
+                      transformOrigin:
+                        placement === "bottom-end"
+                          ? "right top"
+                          : "right bottom",
+                    }}
+                  >
+                    <Paper elevation={3}>
+                      <ClickAwayListener onClickAway={handleClose}>
+                        <StyledMenuList
+                          autoFocusItem={open}
+                          id="composition-menu"
+                          aria-labelledby="composition-button"
+                          onKeyDown={handleListKeyDown}
+                        >
+                          {user ? (
+                            <>
+                              <StyledMenuItem onClick={handleClose}>
+                                <ListItemIcon>
+                                  <AccountCircleIcon />
+                                </ListItemIcon>
+                                <ListItemText primary="Profile" />
+                              </StyledMenuItem>
+
+                              <StyledMenuItem
+                                component={Link}
+                                to="/dashboard"
+                                onClick={handleClose}
+                                divider
+                              >
+                                <ListItemIcon>
+                                  <DashboardIcon />
+                                </ListItemIcon>
+                                <ListItemText primary="Dashboard" />
+                              </StyledMenuItem>
+                              <StyledMenuItem onClick={handleLogout}>
+                                <ListItemIcon>
+                                  <LogoutIcon />
+                                </ListItemIcon>
+                                <ListItemText primary="Logout" />
+                              </StyledMenuItem>
+                            </>
+                          ) : (
+                            <StyledMenuItem
+                              onClick={() => {
+                                logout();
+                                handleClose();
+                              }}
+                              component={Link}
+                              to="/login"
+                            >
+                              <ListItemIcon>
+                                <LoginIcon />
+                              </ListItemIcon>
+                              <ListItemText primary="Login" />
+                            </StyledMenuItem>
+                          )}
+                        </StyledMenuList>
+                      </ClickAwayListener>
+                    </Paper>
+                  </Grow>
+                )}
+              </Popper>
+            </>
+          ) : (
+            <Button
+              variant="contained"
+              component={Link}
+              to="/login"
+              sx={{
+                bgcolor: "#173a75",
+              }}
+            >
+              Login
+            </Button>
+          )}
         </Box>
       </StyledToolbar>
-      <Popper
-        open={open}
-        anchorEl={anchorRef.current}
-        role={undefined}
-        placement="bottom-end"
-        transition
-        disablePortal
-      >
-        {({ TransitionProps, placement }) => (
-          <Grow
-            {...TransitionProps}
-            style={{
-              transformOrigin:
-                placement === "bottom-end" ? "right top" : "right bottom",
-            }}
-          >
-            <Paper elevation={3}>
-              <ClickAwayListener onClickAway={handleClose}>
-                <StyledMenuList
-                  autoFocusItem={open}
-                  id="composition-menu"
-                  aria-labelledby="composition-button"
-                  onKeyDown={handleListKeyDown}
-                >
-                  {user ? (
-                    <>
-                      <StyledMenuItem onClick={handleClose}>
-                        <ListItemIcon>
-                          <AccountCircleIcon />
-                        </ListItemIcon>
-                        <ListItemText primary="Profile" />
-                      </StyledMenuItem>
-
-                      <StyledMenuItem
-                        component={Link}
-                        to="/dashboard"
-                        onClick={handleClose}
-                        divider
-                      >
-                        <ListItemIcon>
-                          <DashboardIcon />
-                        </ListItemIcon>
-                        <ListItemText primary="Dashboard" />
-                      </StyledMenuItem>
-                      <StyledMenuItem onClick={handleLogout}>
-                        <ListItemIcon>
-                          <LogoutIcon />
-                        </ListItemIcon>
-                        <ListItemText primary="Logout" />
-                      </StyledMenuItem>
-                    </>
-                  ) : (
-                    <StyledMenuItem
-                      onClick={() => {
-                        logout();
-                        handleClose();
-                      }}
-                      component={Link}
-                      to="/login"
-                    >
-                      <ListItemIcon>
-                        <LoginIcon />
-                      </ListItemIcon>
-                      <ListItemText primary="Login" />
-                    </StyledMenuItem>
-                  )}
-                </StyledMenuList>
-              </ClickAwayListener>
-            </Paper>
-          </Grow>
-        )}
-      </Popper>
     </StyledAppBar>
   );
 };
