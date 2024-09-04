@@ -50,7 +50,7 @@ const getOneEvent = async (req, res) => {
       res.status(404).json({ message: "Event not found!" });
     }
   } catch (error) {
-    res.status(500).json({ message: "cannot Request !", error });
+    res.status(500).json({ message: " Request failed!", error });
   }
 };
 

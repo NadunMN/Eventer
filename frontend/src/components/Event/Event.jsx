@@ -105,12 +105,11 @@ const Event = () => {
 
           <EventGrids listOfEvent={listOfEvent} handleOpen={handleOpen} />
         </>
-      )}
-
+      )} 
       <Outlet />
-      {/* <Reviews /> */}
-    </>
+    </> 
+
   );
-};
+}
 
 export default Event;
