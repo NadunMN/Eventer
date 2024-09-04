@@ -1,9 +1,23 @@
 import React, { useState } from "react";
 import { FormControl, InputLabel, MenuItem, Select } from "@mui/material";
-import { useNavigate } from "react-router-dom";
+
+// Function to convert binary data to base64
+const convertBinaryToBase64 = (binaryData, contentType) => {
+  if (binaryData && binaryData instanceof Uint8Array) {
+    const binaryString = Array.from(binaryData)
+      .map((byte) => String.fromCharCode(byte))
+      .join("");
+    return `data:${contentType};base64,${btoa(binaryString)}`;
+  } else {
+    console.error("Invalid binary data provided:", binaryData);
+    return null;
+  }
+};
 
 const CategoryDropdown = () => {
   const [category, setCategory] = useState("");
+  const [error, setError] = useState(""); // State for error messages
+
 
   const handleChange = (event) => {
     const selectedCategory = event.target.value;
@@ -34,6 +48,7 @@ const CategoryDropdown = () => {
         <MenuItem value="">
           <em>None</em>
         </MenuItem>
+        <MenuItem value="event">event</MenuItem>
         <MenuItem value="sports">sports</MenuItem>
         <MenuItem value="parties">parties</MenuItem>
         <MenuItem value="communitie">communitie</MenuItem>

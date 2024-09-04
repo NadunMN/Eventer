@@ -54,7 +54,7 @@ const ErrorMessage = styled(Typography)(({ theme }) => ({
 const SearchForm = ({ setListOfEvents, setIsSearch }) => {
   const [searchString, setSearchString] = useState(""); // State for the search input
   const [error, setError] = useState(""); // State for error messages
-
+  
   // Function to handle searching events
   const handleSearchEvent = async (event) => {
     event.preventDefault(); // Prevent default form submission
@@ -66,9 +66,9 @@ const SearchForm = ({ setListOfEvents, setIsSearch }) => {
           params: { title: searchString },
         }
       );
-
+      
       let events = response.data;
-
+      
       // Process the event data
       const processedEvents = events.map((event) => {
         if (event.cover_image) {
@@ -80,8 +80,9 @@ const SearchForm = ({ setListOfEvents, setIsSearch }) => {
         }
         return event;
       });
-
+      
       setListOfEvents(processedEvents); // Update event list with response data
+      // setIsSearch(true);
       setError(""); // Clear any existing errors
     } catch (error) {
       setListOfEvents([]); // Clear event list on error

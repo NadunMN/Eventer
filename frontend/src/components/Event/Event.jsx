@@ -90,48 +90,53 @@ const Event = () => {
 
   //determine if the current path is child route
   const isChildRoute = location.pathname !== "/event";
-  const [isSearch, setIsSearch] = useState(false);
-  const [isSelectCatagoery, setIsSelectCatagoery] = useState(false);
   return (
     <>
-      { !isSearch && (
+      {!isChildRoute && (
         <>
-          <Container
-            fixed
-            sx={{
-              display: "flex",
-              m: 4,
-              gap: 2,
-            }}
-          >
-            <CategoryDropdown />
-            <SearchForm setListOfEvents={setListOfEvent} setIsSearch/>
-          </Container>
-
+          {
+            <Container
+              fixed
+              sx={{
+                display: "flex",
+                m: 4,
+                gap: 2,
+              }}
+            >
+              <CategoryDropdown
+                setListOfEvents={setListOfEvent}
+              />
+              <SearchForm
+                setListOfEvents={setListOfEvent}
+              />
+            </Container>
+          }
           <EventGrids listOfEvent={listOfEvent} handleOpen={handleOpen} />
         </>
       )}
-      
-      {/* {!isChildRoute && (
-        <>
-          <Container
-            fixed
-            sx={{
-              display: "flex",
-              m: 4,
-              gap: 2,
-            }}
-          >
-            <CategoryDropdown />
-            <SearchForm setListOfEvents={setListOfEvent} />
-          </Container>
-
-          <EventGrids listOfEvent={listOfEvent} handleOpen={handleOpen} />
-        </>
-      )} */}
       <Outlet />
     </>
   );
 };
 
 export default Event;
+
+{
+  /* {!isChildRoute && (
+  <>
+    <Container
+      fixed
+      sx={{
+        display: "flex",
+        m: 4,
+        gap: 2,
+      }}
+    >
+      <CategoryDropdown />
+      <SearchForm setListOfEvents={setListOfEvent} />
+    </Container>
+
+    <EventGrids listOfEvent={listOfEvent} handleOpen={handleOpen} />
+  </>
+)} */
+}
