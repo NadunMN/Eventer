@@ -1,6 +1,10 @@
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
+import { Container, Typography, Box, colors, Grid } from "@mui/material";
+import EventBanner from "./EventBanner";
+import EventDetails from "./EventDetails";
+import EventDescription from "./EventDescription";
 
 export default function EventData() {
   const { eventId } = useParams(); //get the event ID from the route params
@@ -26,7 +30,9 @@ export default function EventData() {
           error.response?.data?.message || "cannot fetching the event Data!"
         );
       } finally {
-        setLoading(false);
+        const timer = setTimeout(() => {
+          setLoading(false);
+        }, 1200);
       }
     };
     fetchEvent();
@@ -40,11 +46,22 @@ export default function EventData() {
     return <>{error}</>;
   }
 
+  const image = `/${event.image}`;
+
   return (
-    <>
-      <h1>{event.title}</h1>
-      {eventId}
-      <div>hi</div>
-    </>
+    <Container maxWidth="lg">
+      <Box>
+        <EventBanner event={event}/>
+      </Box>
+      <Grid container spacing={4}>
+        <Grid item xs={12} md={6}>
+          <EventDetails event={event}/>
+        </Grid>
+
+        <Grid item xs={12} md={6}>
+          <EventDescription event={event}/>
+        </Grid>
+      </Grid>
+    </Container>
   );
 }

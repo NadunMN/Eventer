@@ -8,6 +8,8 @@ import EventGrids from "./EventGrids";
 import EventData from "./EventData";
 
 import MediaCard from "../Card";
+import { Container, Box } from "@mui/material";
+import CategoryDropdown from "./CategoryDropdown";
 import { useAuthContext } from "../../hooks/useAuthContext";
 
 const Event = () => {
@@ -16,7 +18,7 @@ const Event = () => {
   const [selectedEvent, setSelectedEvent] = useState(null);
   const navigate = useNavigate();
   const { user } = useAuthContext();
-
+  
   //get all events
   useEffect(() => {
     axios
@@ -53,7 +55,18 @@ const Event = () => {
     <>
       {!isChildRoute && (
         <>
-          <SearchForm setListOfEvents={setListOfEvent} />
+          <Container
+            fixed
+            sx={{
+              display: "flex",
+              m: 4,
+              gap: 2,
+            }}
+          >
+            <CategoryDropdown />
+            <SearchForm setListOfEvents={setListOfEvent} />
+          </Container>
+
           <EventGrids listOfEvent={listOfEvent} handleOpen={handleOpen} />
           <EventDialogBox
             selectedEvent={selectedEvent}
