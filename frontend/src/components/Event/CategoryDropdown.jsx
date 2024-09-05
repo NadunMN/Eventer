@@ -53,6 +53,7 @@ const CategoryDropdown = ({ setListOfEvents }) => {
       if (selectedCategory == "") {
         setListOfEvents([]);
         navigate(`/`);
+        console.log("selectede category is empty");
       }
       if (selectedCategory) {
         navigate(`/${selectedCategory}`);
