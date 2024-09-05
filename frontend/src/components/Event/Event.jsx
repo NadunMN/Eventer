@@ -88,7 +88,7 @@ const Event = () => {
   }, [user]);
 
   //determine if the current path is child route
-  const isChildRoute = location.pathname !== "/event";
+  const isChildRoute = location.pathname !== "/event" ;
   console.log(location.pathname);
 
   if (isChildRoute ) {

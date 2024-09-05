@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FormControl, InputLabel, MenuItem, Select } from "@mui/material";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
@@ -23,7 +23,7 @@ const CategoryDropdown = ({ setListOfEvents }) => {
   const navigate = useNavigate();
 
   const handleChange = async (event) => {
-    const selectedCategory = event.target.value;
+    const selectedCategory = event;
     setCategory(selectedCategory);
     setSelectedCategory(selectedCategory);
 
@@ -82,7 +82,10 @@ const CategoryDropdown = ({ setListOfEvents }) => {
         labelId="category-select-label"
         id="category-select"
         value={category}
-        onChange={handleChange}
+        onChange={(e) => {
+          handleChange(e.target.value)
+          console.log(e.target.value)
+        }}
         label="Category"
       >
         <MenuItem value="">
