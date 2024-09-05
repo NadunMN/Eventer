@@ -15,7 +15,6 @@ const {
 const multer = require("multer");
 const upload = require("../middleware/uploadMiddleware.js");
 
-// const upload = multer();
 // const requireAuth = require("../middleware/requireAuth");
 
 // Require auth for all routes
@@ -30,11 +29,10 @@ router.get("/getCategory", getCategory);
 router.post("/createEvent", upload, createEventWithImage);
 router.get("/events/:id/image", getEventImage);
 
-// router.get("/events/:id", getEventById); 
+// router.get("/events/:id", getEventById);
 
 router.get("/events/:id", getEventById);
 router.delete("/delete/:id", deleteEvent);
 router.put("/edit/:id", editEvent);
-
 
 module.exports = router;
