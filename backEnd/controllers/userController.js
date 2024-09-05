@@ -99,6 +99,11 @@ const login = async (req, res) => {
   }
 };
 
+
+
+
+
+
 const editUser = async (req, res) => {
   try {
     const { id } = req.params;
@@ -134,6 +139,7 @@ const deleteUser = async (req, res) => {
     res.status(500).send({ message: err.message });
   }
 };
+
 
 module.exports = {
   getAllUser,
