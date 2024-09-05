@@ -41,7 +41,7 @@ const getCategory = async (req, res) => {
     const category = req.query.category; // Get the category from the query parameters
 
     if (!category) {
-      return res.status(400).json({ message: 'Category is required' });
+      return res.status(400).json({ message: "Category is required" });
     }
 
     // Find events by category
@@ -50,10 +50,10 @@ const getCategory = async (req, res) => {
     if (events.length > 0) {
       res.status(200).json(events); // Send the events if found
     } else {
-      res.status(404).json({ message: 'No events found for this category' });
+      res.status(404).json({ message: "No events found for this category" });
     }
   } catch (error) {
-    res.status(500).json({ message: 'Error retrieving events', error });
+    res.status(500).json({ message: "Error retrieving events", error });
   }
 };
 
@@ -92,18 +92,6 @@ const getOneEvent = async (req, res) => {
 
 const createEvent = async (req, res) => {
   try {
-    if (
-      !req.body.name ||
-      !req.body.start_time ||
-      !req.body.start_date ||
-      !req.body.end_time ||
-      !req.body.end_date
-    ) {
-      return res.status(400).send({
-        message:
-          "Send all required fields: name, start_time, start_date, end_time, end_date",
-      });
-    }
     const newEvent = {
       title: req.body.name,
       description: req.body.description,
@@ -112,7 +100,7 @@ const createEvent = async (req, res) => {
       end_time: req.body.end_time,
       end_date: req.body.end_date,
       capacity: req.body.capacity,
-      created_by: req.user._id,
+      // created_by: req.user._id,
     };
 
     const event = await EventModel.create(newEvent);
@@ -126,8 +114,21 @@ const createEvent = async (req, res) => {
 // creating a new event
 const createEventWithImage = async (req, res) => {
   try {
-    const {title,start_date,start_time,end_date,end_time,description,venue,capacity,participants,
-          cover_image,created_by,created_at,category,organizer,} = req.body;
+    const {
+      title,
+      start_date,
+      start_time,
+      end_date,
+      end_time,
+      description,
+      venue,
+      capacity,
+      participants,
+      created_by,
+      created_at,
+      category,
+      organizer,
+    } = req.body;
     const event = new EventModel({
       title,
       start_date,
@@ -138,11 +139,11 @@ const createEventWithImage = async (req, res) => {
       venue,
       capacity,
       participants,
-      cover_image: req.file.buffer,
       created_by,
       created_at,
       category,
       organizer,
+      cover_image: req.file.buffer,
     });
 
     await event.save();
@@ -157,7 +158,7 @@ const getEventImage = async (req, res) => {
   try {
     const event = await EventModel.findById(req.params.id);
 
-    if (event && event.caver_image) {
+    if (event && event.cover_image) {
       res.set("Content-Type", "image/jpeg"); // Set the content type to image
       res.send(event.cover_image);
     } else {
@@ -167,7 +168,6 @@ const getEventImage = async (req, res) => {
     res.status(500).json({ error: "Failed to fetch image" });
   }
 };
-
 
 //delete an event
 const deleteEvent = async (req, res) => {

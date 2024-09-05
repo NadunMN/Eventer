@@ -29,6 +29,7 @@ const Input = styled("input")({
 export const AddEvent = () => {
   const user = JSON.parse(localStorage.getItem("user"));
   const token = user.token;
+  console.log(token);
 
   const [coverImg, setCoverImg] = useState(null); // Initialize with null
   const [formData, setFormData] = useState({
@@ -60,6 +61,7 @@ export const AddEvent = () => {
     const file = e.target.files[0];
     if (file) {
       setCoverImg(file); // Store the file object
+      console.log("File:", file);
     }
   };
 
@@ -80,12 +82,18 @@ export const AddEvent = () => {
       return;
     }
 
+    console.log(formData);
+
     const formDataToSend = new FormData();
     Object.keys(formData).forEach((key) => {
       formDataToSend.append(key, formData[key]);
     });
 
-    formDataToSend.append("cover_image", coverImg, coverImg.name);
+    if (coverImg) {
+      formDataToSend.append("cover_image", coverImg, coverImg.name);
+    }
+    console.log(formDataToSend);
+    console.log("Appended cover_image:", coverImg);
 
     try {
       await axios.post(
@@ -99,6 +107,7 @@ export const AddEvent = () => {
         }
       );
       alert("Event created successfully!");
+      console.log("Appended cover_image:", coverImg);
     } catch (error) {
       console.log("Error uploading event:", error);
     }

@@ -139,9 +139,9 @@ export const NavBar = ({ logout, userRole, userId }) => {
             <NavButton component={Link} to="/contact">
               <Typography variant="body1">Contact Us</Typography>
             </NavButton>
-            {user ? (
+            {userId ? (
               <>
-                <Tooltip title={user ? "Profile" : "Login"}>
+                <Tooltip title={userId ? "Profile" : "Login"}>
                   <StyledIconButton ref={anchorRef} onClick={handleToggle}>
                     <AccountCircleIcon sx={{ width: 45, height: 45 }} />
                   </StyledIconButton>
@@ -173,7 +173,6 @@ export const NavBar = ({ logout, userRole, userId }) => {
                             aria-labelledby="composition-button"
                             onKeyDown={handleListKeyDown}
                           >
-
                             <StyledMenuItem onClick={handleClose}>
                               <ListItemIcon>
                                 <AccountCircleIcon />
@@ -218,7 +217,6 @@ export const NavBar = ({ logout, userRole, userId }) => {
               </Button>
             )}
           </Box>
-
         </Box>
       </StyledToolbar>
     </StyledAppBar>
