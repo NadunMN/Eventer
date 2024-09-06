@@ -105,12 +105,13 @@ function Myprofile() {
                     endIcon={isEditing ? <SaveIcon /> : <EditIcon />}
                     size="large"
                     sx={{
-                        bgcolor: isEditing ? 'red' : '#311b92',
+                        bgcolor: isEditing ? 'darkred' : '#311b92',
                         width: 130,
                         fontSize: '15px',
                         height: 40,
+                        borderRadius: 20   ,
                         '&:hover': {
-                            bgcolor: isEditing ? 'darkred' : '#512da8',
+                            bgcolor: isEditing ? 'red' : '#512da8',
                             cursor: 'pointer',
                         },
                     }}
@@ -212,7 +213,7 @@ function Myprofile() {
 
                 <Box sx={{ width: '40%',height:'auto',maxHeight:500, bgcolor: '#ede7f6', borderRadius: 3, display: 'flex', flexDirection: 'column', }}>
                     <Typography variant='h4' color='error' sx={{m: 3, display: 'flex',maxWidth:400}}>Danger Zone</Typography>
-                    <Typography variant='h6' sx={{ml:3, maxWidth:400}}>Delete this Account</Typography>
+                    <Typography variant='h6' sx={{ml:3, maxWidth:400,}}>Delete this Account</Typography>
                     <Typography variant='body1' sx={{ml:3, mt:1, maxWidth:400}}>Once you delete a Account, there is no going back. Please be certain.</Typography>
                     <Typography variant='body2' color='darkred' sx={{ml:3, mt:1, maxWidth:400}}>"All your data will be permanently erased, and it cannot be recovered."</Typography>
                     <Typography variant='body2' color='darkred' sx={{ml:3, mt:1, maxWidth:400}}>"You will lose access to all your content, subscriptions, and services."</Typography>

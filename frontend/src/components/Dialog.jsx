@@ -32,6 +32,7 @@ export default function CustomizedDialogs() {
     <React.Fragment>
       <Button variant="outlined" onClick={handleClickOpen} 
             sx={{
+              borderRadius:10,
                 mt: 2,
                 bgcolor: '#311b92',
                 color: 'white',

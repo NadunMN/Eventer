@@ -30,7 +30,7 @@ export default function FavoriteEvent() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  console.log(user.favourite_events);
+ 
   const user_id = JSON.parse(localStorage.getItem("user"));
 
   useEffect(() => {
@@ -49,12 +49,9 @@ export default function FavoriteEvent() {
     if (userId) {
         const fetchUser = async () => {
             try {
-              
                 const response = await axios.get(`http://localhost:5000/api/getUserById/${userId}`);
                 let userData = response.data;
-                setUser(userData);
-                
-                
+                setUser(userData);    
             } catch (error) {
                 console.error("Failed to fetch the user:", error);
                 setError("Failed to fetch the user");

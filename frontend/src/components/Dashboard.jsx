@@ -17,6 +17,8 @@ import TextField from '@mui/material/TextField';
 import { Avatar, Button } from "@mui/material"
 import EditIcon from '@mui/icons-material/Edit';
 import Myprofile from './Myprofile';
+import { jwtDecode } from "jwt-decode";
+
 
 
 
@@ -24,9 +26,55 @@ export default function Dashboard() {
     const [countRegistered, setCountRegistered] = useState(0);
     const [countCreated, setCountCreated] = useState(0);
     const [countFavorite, setCountFavorite] = useState(0);
-
-
     const [activeItem, setActiveItem] = useState('DashBoard');
+    const [userId, setUserId] = useState("");
+    const [user, setUser] = useState([]);
+    const [loading, setLoading] = useState(true);
+    
+
+    
+    const user_id = JSON.parse(localStorage.getItem("user"));
+    
+    
+    
+    
+    useEffect(() => {
+        if (user && user.favourite_events) {
+            let favoriteEventLength = user.favourite_events.length;
+          setCountFavorite(favoriteEventLength);
+          setLoading(false);
+        }
+      }, [user]);
+
+  useEffect(() => {
+      if (user_id) {
+          const jsonString = JSON.stringify(user_id);
+          const jwtToken = jwtDecode(jsonString);
+          // console.log(jwtToken);
+          setUserId(jwtToken._id); // This will trigger the second useEffect
+      }
+  }, [user_id]);
+
+  useEffect(() => {
+    if (userId) {
+        const fetchUser = async () => {
+            try {
+                const response = await axios.get(`http://localhost:5000/api/getUserById/${userId}`);
+                let userData = response.data;
+                setUser(userData);    
+            } catch (error) {
+                console.error("Failed to fetch the user:", error);
+                setError("Failed to fetch the user");
+                
+            }
+        };
+
+        fetchUser();
+    }
+}, [userId]);
+
+
+
 
     useEffect(() => {
         const storedItem = localStorage.getItem('activeItem');
@@ -175,6 +223,10 @@ export default function Dashboard() {
                 return null;
         }
     };
+
+    if (loading) {
+        return <div>Loading...</div>;
+      }
 
     return (
         <div className='div-main-user'>
