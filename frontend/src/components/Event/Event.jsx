@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import axios from "axios";
 import SearchForm from "./SearchForm";
-import { Outlet, useNavigate } from "react-router-dom";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import EventGrids from "./EventGrids";
 import { Container, Box } from "@mui/material";
 import CategoryDropdown from "./CategoryDropdown";
@@ -24,24 +24,10 @@ const convertBinaryToBase64 = (binaryData, contentType) => {
 const Event = () => {
   const [listOfEvent, setListOfEvent] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [category, setCategory] = useState("sports");
   const navigate = useNavigate();
+  const location = useLocation();
   const { user } = useAuthContext();
-
-  const handleOpen = (event) => {
-    // setIsOpen(true);
-  };
-
-  // const handleClose = () => {
-  //   setSelectedEvent(null);
-  //   setIsOpen(false);
-  // };
-
-  // const handleNavigate = (event) => {
-  //   if (event) {
-  //     setIsOpen(true);
-  //     navigate(`/event/${event._id}`);
-  //   }
-  // };
 
   useEffect(() => {
     const fetchEvent = async () => {
@@ -72,45 +58,36 @@ const Event = () => {
         setLoading(false);
       }
     };
-    console.log("useEfect")
     fetchEvent();
   }, [user]);
-
-  // determine if the current path is child route
-  // const isChildRoute = true ;
-  var isChildRoute = location.pathname !== "/event";
-
-  console.log(location.pathname);
 
   if (loading) {
     return "Loading ...";
   }
-  if (isChildRoute) {
-    // navigate("/event");
-    return <Outlet />;
-  } else {
-    return (
-      <>
-        {
-          <Container
-            fixed
-            sx={{
-              display: "flex",
-              m: 4,
-              gap: 2,
-            }}
-          >
-            <CategoryDropdown
-              setListOfEvents={setListOfEvent}
-              handleOpen={handleOpen}
-            />
-            <SearchForm setListOfEvents={setListOfEvent} />
-          </Container>
-        }
-        <EventGrids listOfEvent={listOfEvent} handleOpen={handleOpen} />
-      </>
-    );
-  }
+
+  return (
+    <Box>
+      <Container
+        fixed
+        sx={{
+          display: "flex",
+          m: 4,
+          gap: 2,
+        }}
+      >
+        <CategoryDropdown
+          setListOfEvents={setListOfEvent}
+          setCategory={setCategory}
+        />
+        <SearchForm setListOfEvents={setListOfEvent} />
+      </Container>
+      <EventGrids
+        listOfEvent={listOfEvent}
+        setListOfEvent={setListOfEvent}
+        category={category}
+      />
+    </Box>
+  );
 };
 
 export default Event;
