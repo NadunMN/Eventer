@@ -20,10 +20,12 @@ import MoreVertIcon from "@mui/icons-material/MoreVert";
 
 export const Reviews = () => {
   const [eventId, setEventId] = useState("");
+  const [eventTitle, setEventTitle] = useState("");
   const [reviews, setReviews] = useState([]);
   const [value, setValue] = useState(0);
   const [userReview, setUserReview] = useState("");
   const [userId, setUserId] = useState("");
+  const [userName, setUserName] = useState("");
   const [anchorEl, setAnchorEl] = useState(null);
   const [selectedReview, setSelectedReview] = useState(null);
   const [snackbarOpen, setSnackbarOpen] = useState(false); // Alert visibility state
@@ -58,9 +60,38 @@ export const Reviews = () => {
       });
   }, [eventId]);
 
+  // Get userName and eventTitle
+  useEffect(() => {
+    if (eventId) {
+      axios
+        .get(`http://localhost:5000/api/event/getEvent/${eventId}`)
+        .then((res) => {
+          setEventTitle(res.data.title);
+        })
+        .catch((err) => {
+          console.log("Error fetching event title:", err);
+        });
+    }
+  }, [eventId]);
+
+  useEffect(() => {
+    if (userId) {
+      axios
+        .get(`http://localhost:5000/api/user/${userId}`)
+        .then((res) => {
+          setUserName(`${res.data.first_name} ${res.data.last_name}`);
+        })
+        .catch((err) => {
+          console.log("Error fetching user name:", err);
+        });
+    }
+  }, [userId]);
+
   const handleReview = (event) => {
     setUserReview(event.target.value);
   };
+  console.log(eventTitle);
+  console.log(userName);
 
   // Handler for add new review
   const handleClick = async () => {
@@ -69,10 +100,17 @@ export const Reviews = () => {
       event_id: eventId,
       review: userReview,
       rating: value,
+      user_name: userName,
+      event_title: eventTitle,
     };
+    console.log(rev);
+
     try {
-      await axios.post("http://localhost:5000/api/review/addReview", rev);
-      setReviews([...reviews, rev]);
+      const respons = await axios.post(
+        "http://localhost:5000/api/review/addReview",
+        rev
+      );
+      setReviews([respons.data.data, ...reviews]);
       setUserReview("");
       setValue(0);
       setAlert("post");
@@ -138,7 +176,6 @@ export const Reviews = () => {
     }
     handleMenuClose();
   };
-
   const handleSnackbarClose = (event, reason) => {
     if (reason === "clickaway") {
       return;

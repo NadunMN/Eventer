@@ -29,6 +29,7 @@ import {
   People as PeopleIcon,
   Assessment as AssessmentIcon,
 } from "@mui/icons-material";
+import CommentIcon from "@mui/icons-material/Comment";
 import {
   BarChart,
   Bar,
@@ -41,6 +42,8 @@ import {
 } from "recharts";
 import axios from "axios";
 import { AddUser } from "./AddUser";
+import { jwtDecode } from "jwt-decode";
+import { ReviewPannel } from "./ReviewPannel";
 
 export const AdminDashboard = () => {
   const [chartData, setChartData] = useState([]);
@@ -69,8 +72,8 @@ export const AdminDashboard = () => {
   // Fetch data
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("user"));
-    if (user && user.token) {
-      const token = user.token;
+    if (user) {
+      const token = jwtDecode(user.token);
 
       // Fetch events
       axios
@@ -144,9 +147,7 @@ export const AdminDashboard = () => {
           : `http://localhost:5000/api/user/delete/${selectedItemId}`;
 
       axios
-        .delete(endpoint, {
-          headers: { Authorization: `Bearer ${token}` },
-        })
+        .delete(endpoint)
         .then((res) => {
           if (deleteType === "event") {
             setEvents((prevEvents) =>
@@ -332,6 +333,8 @@ export const AdminDashboard = () => {
             </Box>
           </Paper>
         );
+      case "review":
+        return <ReviewPannel />;
       default:
         return null;
     }
@@ -376,6 +379,14 @@ export const AdminDashboard = () => {
               >
                 <AssessmentIcon sx={{ mr: 2 }} />
                 <ListItemText primary="Analytics" />
+              </ListItem>
+              <ListItem
+                button
+                selected={activeTab === "review"}
+                onClick={() => setActiveTab("review")}
+              >
+                <CommentIcon sx={{ mr: 2 }} />
+                <ListItemText primary="review" />
               </ListItem>
             </List>
           </Paper>
