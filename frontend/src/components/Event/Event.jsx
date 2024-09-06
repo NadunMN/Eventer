@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import axios from "axios";
 import SearchForm from "./SearchForm";
-import { Outlet, useLocation, useNavigate } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 import EventGrids from "./EventGrids";
 import { Container, Box } from "@mui/material";
 import CategoryDropdown from "./CategoryDropdown";
@@ -23,18 +23,12 @@ const convertBinaryToBase64 = (binaryData, contentType) => {
 
 const Event = () => {
   const [listOfEvent, setListOfEvent] = useState([]);
-  const [open, setOpen] = useState(false);
-  const [selectedEvent, setSelectedEvent] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [isSelect, setIsSelect] = useState(false);
-  const [isOpen, setIsOpen] = useState(false);
   const navigate = useNavigate();
   const { user } = useAuthContext();
 
   const handleOpen = (event) => {
-    // setOpen(true);
-    setIsOpen(true);
+    // setIsOpen(true);
   };
 
   // const handleClose = () => {
@@ -42,12 +36,12 @@ const Event = () => {
   //   setIsOpen(false);
   // };
 
-  const handleNavigate = (event) => {
-    if (event) {
-      setIsOpen(true);
-      navigate(`/event/${event._id}`);
-    }
-  };
+  // const handleNavigate = (event) => {
+  //   if (event) {
+  //     setIsOpen(true);
+  //     navigate(`/event/${event._id}`);
+  //   }
+  // };
 
   useEffect(() => {
     const fetchEvent = async () => {
@@ -56,15 +50,10 @@ const Event = () => {
           "http://localhost:5000/api/event/getEvent"
         );
 
-        let eventData = response.data;
-
-        // Ensure eventData is an array
-        if (!Array.isArray(eventData)) {
-          eventData = [eventData];
-        }
+        let res_data = response.data;
 
         // Process the event data
-        const processedEvents = eventData.map((event) => {
+        const listOfEvents = res_data.map((event) => {
           if (event.cover_image) {
             const base64Image = convertBinaryToBase64(
               new Uint8Array(event.cover_image.data),
@@ -75,15 +64,15 @@ const Event = () => {
           return event;
         });
 
-        setListOfEvent(processedEvents);
-        setLoading(false);
+        setListOfEvent(listOfEvents);
       } catch (error) {
-        console.error("Failed to fetch the event:", error);
+        console.error("Failed to fetch data:", error);
         setError("Failed to fetch the event");
+      } finally {
         setLoading(false);
       }
     };
-
+    console.log("useEfect")
     fetchEvent();
   }, [user]);
 
@@ -93,6 +82,9 @@ const Event = () => {
 
   console.log(location.pathname);
 
+  if (loading) {
+    return "Loading ...";
+  }
   if (isChildRoute) {
     // navigate("/event");
     return <Outlet />;
