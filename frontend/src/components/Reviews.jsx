@@ -27,6 +27,7 @@ export const Reviews = () => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [selectedReview, setSelectedReview] = useState(null);
   const [snackbarOpen, setSnackbarOpen] = useState(false); // Alert visibility state
+  const [alert, setAlert] = useState("");
 
   useEffect(() => {
     const url = window.location.href;
@@ -68,6 +69,7 @@ export const Reviews = () => {
       setReviews([...reviews, rev]);
       setUserReview("");
       setValue(0);
+      setAlert("post");
       setSnackbarOpen(true); // Show alert when review is added successfully
     } catch (err) {
       console.log("Error adding review:", err);
@@ -96,6 +98,8 @@ export const Reviews = () => {
         `http://localhost:5000/api/review/deleteReview/${selectedReview._id}`
       );
       setReviews(reviews.filter((r) => r._id !== selectedReview._id));
+      setAlert("delete");
+      setSnackbarOpen(true);
     } catch (err) {
       console.log("Error deleting review:", err);
     }
@@ -249,22 +253,30 @@ export const Reviews = () => {
                           value={review.rating}
                           readOnly
                         />
-                        <IconButton
-                          aria-label="more"
-                          onClick={(event) => handleMenuClick(event, review)}
-                        >
-                          <MoreVertIcon />
-                        </IconButton>
-                        <Menu
-                          anchorEl={anchorEl}
-                          open={Boolean(anchorEl)}
-                          onClose={handleMenuClose}
-                        >
-                          <MenuItem onClick={handleEditClick}>Edit</MenuItem>
-                          <MenuItem onClick={handleDeleteClick}>
-                            Delete
-                          </MenuItem>
-                        </Menu>
+                        {userId === review.user_id && (
+                          <>
+                            <IconButton
+                              aria-label="more"
+                              onClick={(event) =>
+                                handleMenuClick(event, review)
+                              }
+                            >
+                              <MoreVertIcon />
+                            </IconButton>
+                            <Menu
+                              anchorEl={anchorEl}
+                              open={Boolean(anchorEl)}
+                              onClose={handleMenuClose}
+                            >
+                              <MenuItem onClick={handleEditClick}>
+                                Edit
+                              </MenuItem>
+                              <MenuItem onClick={handleDeleteClick}>
+                                Delete
+                              </MenuItem>
+                            </Menu>
+                          </>
+                        )}
                       </div>
                       <Typography variant="h6" component="div" gutterBottom>
                         {review.review}
@@ -299,7 +311,9 @@ export const Reviews = () => {
           severity="success"
           sx={{ width: "100%" }}
         >
-          Review added successfully!
+          {alert === "post"
+            ? "Review added successfully!"
+            : "Review deleted successfully!"}
         </Alert>
       </Snackbar>
     </div>
