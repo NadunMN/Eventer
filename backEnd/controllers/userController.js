@@ -83,13 +83,13 @@ const login = async (req, res) => {
     const user = await userModel.findOne({ email });
 
     if (!user) {
-      return res.status(401).send("Invalid email or user does not exist");
+      return res.status(401).send("Invalid email or password");
     }
 
     const match = await bcrypt.compare(password, user.password);
 
     if (!match) {
-      return res.status(401).send("Incorrect password");
+      return res.status(401).send("Invalid email or password");
     }
 
     const token = createToken(user._id, user.role);
@@ -99,9 +99,53 @@ const login = async (req, res) => {
   }
 };
 
+
+
+
+
+
+const editUser = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    if (req.body.password) {
+      req.body.password = await bcrypt.hash(req.body.password, 10);
+    }
+    const result = await userModel.findByIdAndUpdate(id, req.body, {
+      new: true,
+    });
+
+    if (!result) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    res.status(200).json({ message: "Update user successfully" });
+  } catch (err) {
+    res.status(500).send({ message: err.message });
+  }
+};
+
+const deleteUser = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const result = await userModel.findByIdAndDelete(id);
+
+    if (!result) {
+      res.status(404).json({ message: "User not found" });
+    }
+
+    res.status(200).json({ message: "user delete successfully" });
+  } catch (err) {
+    res.status(500).send({ message: err.message });
+  }
+};
+
+
 module.exports = {
   getAllUser,
   getUser,
   signup,
   login,
+  editUser,
+  deleteUser,
 };

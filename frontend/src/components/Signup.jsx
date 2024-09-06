@@ -84,18 +84,6 @@ export const Signup = () => {
     console.log(res);
 
     console.log("Sucssess");
-
-    // try {
-    //   const response = await axios.post(
-    //     "http://localhost:5000/api/register",
-    //     userData
-    //   );
-    //   console.log(response);
-    //   console.log("Sucssess");
-    // } catch (err) {
-    //   console.log(err);
-    //   alert("Registration Failed");
-    // }
   };
 
   const getHelperText = () => {

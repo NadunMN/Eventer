@@ -32,8 +32,7 @@ export const Login = () => {
     e.preventDefault();
 
     const res = await login(email, password);
-    console.log(res);
-    console.log("Login successfully");
+    console.log(error);
   };
 
   return (
@@ -67,6 +66,11 @@ export const Login = () => {
             <Typography component="h1" variant="h5" sx={{ mb: 3 }}>
               Log In
             </Typography>
+            {error && (
+              <Typography color="error" sx={{ mb: 2 }}>
+                {error}
+              </Typography>
+            )}
             <Stack spacing={3} sx={{ width: "100%" }}>
               <TextField
                 label="Email"
@@ -115,7 +119,7 @@ export const Login = () => {
               </Link>
               <Typography variant="body2" align="center">
                 Don't have an account?{" "}
-                <Link href="/register" variant="body2">
+                <Link href="/signup" variant="body2">
                   Sign up
                 </Link>
               </Typography>
