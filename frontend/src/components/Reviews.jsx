@@ -6,11 +6,17 @@ import {
   Grid,
   Card,
   CardContent,
+  IconButton,
+  Menu,
+  MenuItem,
+  Snackbar,
+  Alert,
 } from "@mui/material";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import Rating from "@mui/material/Rating";
 import { jwtDecode } from "jwt-decode";
+import MoreVertIcon from "@mui/icons-material/MoreVert";
 
 export const Reviews = () => {
   const [eventId, setEventId] = useState("");
@@ -18,6 +24,9 @@ export const Reviews = () => {
   const [value, setValue] = useState(0);
   const [userReview, setUserReview] = useState("");
   const [userId, setUserId] = useState("");
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [selectedReview, setSelectedReview] = useState(null);
+  const [snackbarOpen, setSnackbarOpen] = useState(false); // Alert visibility state
 
   useEffect(() => {
     const url = window.location.href;
@@ -47,7 +56,7 @@ export const Reviews = () => {
     setUserReview(event.target.value);
   };
 
-  const handleClick = () => {
+  const handleClick = async () => {
     const rev = {
       user_id: userId,
       event_id: eventId,
@@ -55,14 +64,49 @@ export const Reviews = () => {
       rating: value,
     };
     try {
-      axios.post("http://localhost:5000/api/review/addReview", rev);
-      alert("Review added successfully");
+      await axios.post("http://localhost:5000/api/review/addReview", rev);
       setReviews([...reviews, rev]);
       setUserReview("");
       setValue(0);
+      setSnackbarOpen(true); // Show alert when review is added successfully
     } catch (err) {
       console.log("Error adding review:", err);
     }
+  };
+
+  const handleMenuClick = (event, review) => {
+    setAnchorEl(event.currentTarget);
+    setSelectedReview(review);
+  };
+
+  const handleMenuClose = () => {
+    setAnchorEl(null);
+    setSelectedReview(null);
+  };
+
+  const handleEditClick = () => {
+    setUserReview(selectedReview.review);
+    setValue(selectedReview.rating);
+    handleMenuClose();
+  };
+
+  const handleDeleteClick = async () => {
+    try {
+      await axios.delete(
+        `http://localhost:5000/api/review/deleteReview/${selectedReview._id}`
+      );
+      setReviews(reviews.filter((r) => r._id !== selectedReview._id));
+    } catch (err) {
+      console.log("Error deleting review:", err);
+    }
+    handleMenuClose();
+  };
+
+  const handleSnackbarClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setSnackbarOpen(false); // Close the snackbar
   };
 
   return (
@@ -79,7 +123,7 @@ export const Reviews = () => {
           width: "75%",
           minHeight: 550,
           padding: 4,
-          backgroundColor: "#f9f9f9", // Light grey background for better contrast
+          backgroundColor: "#f9f9f9",
         }}
       >
         <div
@@ -173,10 +217,16 @@ export const Reviews = () => {
           </Button>
         </div>
 
-        <Grid container spacing={3}>
+        <Grid
+          container
+          spacing={3}
+          sx={{
+            position: "relative",
+          }}
+        >
           {reviews
             ? reviews.map((review) => (
-                <Grid item xs={12} sm={6} md={4} key={review._id}>
+                <Grid item xs={9} sm={6} md={4} key={review._id}>
                   <Card
                     sx={{
                       height: "100%",
@@ -188,7 +238,34 @@ export const Reviews = () => {
                     }}
                   >
                     <CardContent>
-                      <Rating name="read-only" value={review.rating} readOnly />
+                      <div
+                        style={{
+                          display: "flex",
+                          justifyContent: "space-between",
+                        }}
+                      >
+                        <Rating
+                          name="read-only"
+                          value={review.rating}
+                          readOnly
+                        />
+                        <IconButton
+                          aria-label="more"
+                          onClick={(event) => handleMenuClick(event, review)}
+                        >
+                          <MoreVertIcon />
+                        </IconButton>
+                        <Menu
+                          anchorEl={anchorEl}
+                          open={Boolean(anchorEl)}
+                          onClose={handleMenuClose}
+                        >
+                          <MenuItem onClick={handleEditClick}>Edit</MenuItem>
+                          <MenuItem onClick={handleDeleteClick}>
+                            Delete
+                          </MenuItem>
+                        </Menu>
+                      </div>
                       <Typography variant="h6" component="div" gutterBottom>
                         {review.review}
                       </Typography>
@@ -209,6 +286,22 @@ export const Reviews = () => {
             : null}
         </Grid>
       </Paper>
+
+      {/* Alert for Successfull review */}
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={3000}
+        onClose={handleSnackbarClose}
+        anchorOrigin={{ vertical: "top", horizontal: "right" }}
+      >
+        <Alert
+          onClose={handleSnackbarClose}
+          severity="success"
+          sx={{ width: "100%" }}
+        >
+          Review added successfully!
+        </Alert>
+      </Snackbar>
     </div>
   );
 };

@@ -34,6 +34,7 @@ function App() {
     }
     setLoading(false);
   }, [navigate]);
+  console.log("Userrrrrrrrr", userId);
 
   if (loading) return <div>Loading...</div>;
 
@@ -80,7 +81,6 @@ function App() {
         />
       </Routes>
       <Footer />
-      {/* <Dashboard/> */}
     </>
   );
 }
