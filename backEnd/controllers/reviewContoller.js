@@ -63,10 +63,25 @@ const editReview = async (req, res) => {
   }
 };
 
+const deleteReview = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const result = await reviewModel.findByIdAndDelete(id);
+
+    if (!result) {
+      res.status(404).json({ message: "Review not found" });
+    }
+    res.status(200).json({ message: "Review delete successfully" });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
 module.exports = {
   getReviewById,
   getReviews,
   addReview,
   editReview,
   getReviewByEvent,
+  deleteReview,
 };
