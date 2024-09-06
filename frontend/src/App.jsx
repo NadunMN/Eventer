@@ -15,7 +15,6 @@ import EventData from "./components/Event/EventData";
 import { Navigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { jwtDecode } from "jwt-decode";
-import RegisterForEvent from "./components/Event/RegisterForEvent";
 
 function App() {
   const [userRole, setUserRole] = useState("");
@@ -63,7 +62,6 @@ function App() {
         <Route path="Event" element={<Event />} />
         <Route path="event/:eventId" element={<EventData />} />
         <Route path="event/:category" element={<Event />} />
-        <Route path="/event/register/:eventId" element={<RegisterForEvent />} />
         <Route path="About" element={<About />} />
         <Route path="Contact" element={<Contact />} />
         <Route
