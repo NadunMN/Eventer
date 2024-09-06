@@ -50,7 +50,7 @@ const CategoryDropdown = ({ setListOfEvents , setCategory} ) => {
       setError("");
 
       if (selectedCategory == "") {
-        setListOfEvents([]);
+        // setListOfEvents([]);
         navigate(`/`);
         console.log("selectede category is empty");
       }
@@ -81,10 +81,7 @@ const CategoryDropdown = ({ setListOfEvents , setCategory} ) => {
       <Select
         labelId="category-select-label"
         id="category-select"
-        // value={category}
         onChange={(e) => {
-          // handleChange(e.target.value);
-          // navigate(`/event/${selectedCategory}`);
           setCategory(e.target.value);
         }}
         label="Category"

@@ -24,7 +24,7 @@ const convertBinaryToBase64 = (binaryData, contentType) => {
 const Event = () => {
   const [listOfEvent, setListOfEvent] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [category, setCategory] = useState("sports");
+  const [category, setCategory] = useState("");
   const navigate = useNavigate();
   const location = useLocation();
   const { user } = useAuthContext();

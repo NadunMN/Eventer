@@ -60,8 +60,13 @@ function EventGrids({ listOfEvent, setListOfEvent, category }) {
         );
 
         let res_data = response.data;
-
-        // Process the event data
+        
+        if (response.status === 404) {
+          setListOfEvent([]);
+          console.log("No events found (404)");
+          return;
+        }
+        // Process the event dataa
         const listOfEvents = res_data.map((event) => {
           if (event.cover_image) {
             const base64Image = convertBinaryToBase64(
@@ -73,7 +78,15 @@ function EventGrids({ listOfEvent, setListOfEvent, category }) {
           return event;
         });
 
-        setListOfEvent(listOfEvents);
+
+        if (listOfEvents.length === 0) {
+          setListOfEvent([]);
+          console.log("No events found");
+          console.log(listOfEvents);
+
+        } else {
+          setListOfEvent(listOfEvents);
+        }
       } catch (error) {
         console.error("Failed to fetch data:", error);
         setError("Failed to fetch the event");
@@ -82,7 +95,7 @@ function EventGrids({ listOfEvent, setListOfEvent, category }) {
       }
     };
     fetchEvent();
-  }, [category]);
+  }, [category], []);
 
   const navigate = useNavigate();
 
@@ -187,8 +200,8 @@ function EventGrids({ listOfEvent, setListOfEvent, category }) {
                     justifyContent: "space-between",
                     alignItems: "center",
                     mt: 0,
-                    pl: 4,
-                    pr: 4,
+                    pl: 1,
+                    pr: 1,
                   }}
                 >
                   <Button
@@ -197,6 +210,13 @@ function EventGrids({ listOfEvent, setListOfEvent, category }) {
                     onClick={() => handleNavigate(event)}
                   >
                     More info
+                  </Button>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={() => handleNavigate(event)}
+                  >
+                    Register
                   </Button>
                   <Box>
                     <IconButton
