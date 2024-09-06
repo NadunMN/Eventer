@@ -28,7 +28,11 @@ export const Reviews = () => {
   const [selectedReview, setSelectedReview] = useState(null);
   const [snackbarOpen, setSnackbarOpen] = useState(false); // Alert visibility state
   const [alert, setAlert] = useState("");
+  const [editReviewId, setEditReviewId] = useState(null); // To track which review is being edited
+  const [editReviewText, setEditReviewText] = useState(""); // For review editing
+  const [editReviewRating, setEditReviewRating] = useState(0); // For rating editing
 
+  // Get event ID from url and user ID from local storage
   useEffect(() => {
     const url = window.location.href;
 
@@ -45,6 +49,7 @@ export const Reviews = () => {
     }
   }, []);
 
+  // Get reviews from DB
   useEffect(() => {
     axios
       .get(`http://localhost:5000/api/review/getReview/${eventId}`)
@@ -57,6 +62,7 @@ export const Reviews = () => {
     setUserReview(event.target.value);
   };
 
+  // Handler for add new review
   const handleClick = async () => {
     const rev = {
       user_id: userId,
@@ -86,10 +92,37 @@ export const Reviews = () => {
     setSelectedReview(null);
   };
 
-  const handleEditClick = () => {
-    setUserReview(selectedReview.review);
-    setValue(selectedReview.rating);
+  const handleEditClick = (review) => {
+    setEditReviewId(review._id);
+    setEditReviewText(review.review);
+    setEditReviewRating(review.rating);
     handleMenuClose();
+  };
+
+  // Handle editing review
+  const handleSaveEdit = async (reviewId) => {
+    try {
+      await axios.put(
+        `http://localhost:5000/api/review/updateReview/${reviewId}`,
+        {
+          review: editReviewText,
+          rating: editReviewRating,
+        }
+      );
+      // Update the review in the local state
+      setReviews(
+        reviews.map((review) =>
+          review._id === reviewId
+            ? { ...review, review: editReviewText, rating: editReviewRating }
+            : review
+        )
+      );
+      setEditReviewId(null); // Exit edit mode
+      setAlert("edit");
+      setSnackbarOpen(true);
+    } catch (err) {
+      console.log("Error updating review:", err);
+    }
   };
 
   const handleDeleteClick = async () => {
@@ -242,55 +275,93 @@ export const Reviews = () => {
                     }}
                   >
                     <CardContent>
-                      <div
-                        style={{
-                          display: "flex",
-                          justifyContent: "space-between",
-                        }}
-                      >
-                        <Rating
-                          name="read-only"
-                          value={review.rating}
-                          readOnly
-                        />
-                        {userId === review.user_id && (
-                          <>
-                            <IconButton
-                              aria-label="more"
-                              onClick={(event) =>
-                                handleMenuClick(event, review)
-                              }
-                            >
-                              <MoreVertIcon />
-                            </IconButton>
-                            <Menu
-                              anchorEl={anchorEl}
-                              open={Boolean(anchorEl)}
-                              onClose={handleMenuClose}
-                            >
-                              <MenuItem onClick={handleEditClick}>
-                                Edit
-                              </MenuItem>
-                              <MenuItem onClick={handleDeleteClick}>
-                                Delete
-                              </MenuItem>
-                            </Menu>
-                          </>
-                        )}
-                      </div>
-                      <Typography variant="h6" component="div" gutterBottom>
-                        {review.review}
-                      </Typography>
-                      <Typography variant="body2" color="text.secondary">
-                        Event ID: {review.event_id}
-                      </Typography>
-                      <Typography
-                        variant="caption"
-                        display="block"
-                        gutterBottom
-                      >
-                        {`By User: ${review.user_id}`}
-                      </Typography>
+                      {editReviewId === review._id ? (
+                        <>
+                          {/* Editable Fields for review in the card */}
+                          <TextField
+                            value={editReviewText}
+                            onChange={(e) => setEditReviewText(e.target.value)}
+                            variant="standard"
+                            margin="normal"
+                            fullWidth
+                          />
+                          <Rating
+                            name="edit-rating"
+                            value={editReviewRating}
+                            onChange={(event, newValue) => {
+                              setEditReviewRating(newValue);
+                            }}
+                          />
+                          <Button
+                            variant="text"
+                            onClick={() => handleSaveEdit(review._id)}
+                            sx={{ mt: 2 }}
+                          >
+                            Save
+                          </Button>
+                          <Button
+                            onClick={() => setEditReviewId(null)}
+                            sx={{ mt: 2 }}
+                          >
+                            Cancel
+                          </Button>
+                        </>
+                      ) : (
+                        <>
+                          {/* Display the Review normally */}
+                          <div
+                            style={{
+                              display: "flex",
+                              justifyContent: "space-between",
+                            }}
+                          >
+                            <Rating
+                              name="read-only"
+                              value={review.rating}
+                              readOnly
+                            />
+                            {userId === review.user_id && (
+                              <>
+                                <IconButton
+                                  aria-label="more"
+                                  onClick={(event) =>
+                                    handleMenuClick(event, review)
+                                  }
+                                >
+                                  <MoreVertIcon />
+                                </IconButton>
+                                <Menu
+                                  anchorEl={anchorEl}
+                                  open={Boolean(anchorEl)}
+                                  onClose={handleMenuClose}
+                                >
+                                  <MenuItem
+                                    onClick={() => handleEditClick(review)}
+                                  >
+                                    Edit
+                                  </MenuItem>
+                                  <MenuItem onClick={handleDeleteClick}>
+                                    Delete
+                                  </MenuItem>
+                                </Menu>
+                              </>
+                            )}
+                          </div>
+                          <Typography variant="h6" component="div" gutterBottom>
+                            {review.review}
+                          </Typography>
+                          <Typography variant="body2" color="text.secondary">
+                            Event ID: {review.event_id}
+                          </Typography>
+                          <Typography
+                            variant="caption"
+                            display="block"
+                            gutterBottom
+                          >
+                            {`By User: ${review.user_id}`}
+                          </Typography>
+                        </>
+                      )}
                     </CardContent>
                   </Card>
                 </Grid>
@@ -313,6 +384,8 @@ export const Reviews = () => {
         >
           {alert === "post"
             ? "Review added successfully!"
+            : alert === "edit"
+            ? "Review updated successfully!"
             : "Review deleted successfully!"}
         </Alert>
       </Snackbar>
