@@ -42,12 +42,12 @@ const Event = () => {
   //   setIsOpen(false);
   // };
 
-  // const handleNavigate = (event) => {
-  //   if (event) {
-  //     setIsOpen(true);
-  //     navigate(`/event/${event._id}`);
-  //   }
-  // };
+  const handleNavigate = (event) => {
+    if (event) {
+      setIsOpen(true);
+      navigate(`/event/${event._id}`);
+    }
+  };
 
   useEffect(() => {
     const fetchEvent = async () => {
@@ -87,11 +87,14 @@ const Event = () => {
     fetchEvent();
   }, [user]);
 
-  //determine if the current path is child route
-  const isChildRoute = location.pathname !== "/event";
+  // determine if the current path is child route
+  // const isChildRoute = true ;
+  var isChildRoute = location.pathname !== "/event";
+
   console.log(location.pathname);
 
-  if (isChildRoute ) {
+  if (isChildRoute) {
+    // navigate("/event");
     return <Outlet />;
   } else {
     return (
