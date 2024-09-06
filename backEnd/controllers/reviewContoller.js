@@ -29,16 +29,12 @@ const getReviewByEvent = async (req, res) => {
 };
 
 const addReview = async (req, res) => {
-  const { user_id, event_id, review, rating } = req.body;
+  const { user_id, event_id, review, rating, user_name, event_title } =
+    req.body;
   try {
-    const addReview = new reviewModel({
-      user_id,
-      event_id,
-      review,
-      rating,
-    });
+    const addReview = new reviewModel(req.body);
     const result = await addReview.save();
-    res.status(201).json({ message: "Add review successfully", addReview });
+    res.status(201).json({ message: "Add review successfully", data: result });
   } catch (error) {
     res.status(500).json({ message: "Server erros", error });
   }
