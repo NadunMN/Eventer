@@ -35,7 +35,7 @@ function Accountname() {
 }, [user_id]);
 
 
-console.log("PAVSDPV",userId);
+
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -78,7 +78,7 @@ console.log("PAVSDPV",userId);
   return (
     <div>
       <Stack direction="row" spacing={5} sx={{ display: 'flex', justifyContent: 'flex-start', mt: 3 }}>
-        <Avatar alt={`${user.first_name} ${user.last_name}`} src={user.cover_image} title="Nadun Madusanka" sx={{ width: 220, height: 220 }} />
+        <Avatar alt={`${user.first_name} ${user.last_name}`} src={user.cover_image} title={`${user.first_name} ${user.last_name}`} sx={{ width: 220, height: 220 }} />
         <Stack
           sx={{
             display: 'flex',

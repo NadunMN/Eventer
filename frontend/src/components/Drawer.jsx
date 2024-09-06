@@ -40,12 +40,10 @@ export default function TemporaryDrawer({ activeItem, setActiveItem }) {
   return (
     <div className="div-main-user">
       <Box sx={{ width: 260, display: 'flex', flexDirection: 'column', pl: 4 }} role="presentation">
-        <List>
-          <div className="logo-drawer">
-            <div className="eventer-logo">
-              <img src="/src/asset/Icon/logo.png" alt="logo"></img>
-            </div>
-          </div>
+
+        <List sx={{mt: 4}}>
+
+          
           {firstListItems.map((item) => (
             <ListItem key={item.text} disablePadding>
               <ListItemButton

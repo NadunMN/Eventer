@@ -5,6 +5,11 @@ import { AddPhotoAlternate } from "@mui/icons-material";
 import addImg from "../asset/addImage.jpg";
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
+import Alert from '@mui/material/Alert';
+import Grid from '@mui/material/Grid';
+// import Snackbar from "@mui/material";
+import Snackbar from '@mui/material/Snackbar';
+
 
 
 const Input = styled("input")({
@@ -14,6 +19,11 @@ const Input = styled("input")({
 const ImageUpload = ({ onImageChange }) => {
   const [coverImg, setCoverImg] = useState(null);
   const [userId, setUserId] = useState("");
+
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [alertMessage, setAlertMessage] = useState("");
+
+
 
   console.log(userId);
 
@@ -32,8 +42,6 @@ const ImageUpload = ({ onImageChange }) => {
       }
   }, [user_id]);
 
-
-
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -46,7 +54,8 @@ const ImageUpload = ({ onImageChange }) => {
     e.preventDefault();
 
     if (!coverImg) {
-      alert("No image selected.");
+      setAlertMessage("No image selected. Please choose an image to upload.");
+      setSnackbarOpen(true);
       return;
     }
 
@@ -64,7 +73,11 @@ const ImageUpload = ({ onImageChange }) => {
           },
         }
       );
-      {alert("Profile image updated successfully!")};
+      {
+        setAlertMessage("Profile image updated successfully!");
+        setSnackbarOpen(true);
+        
+      };
         
       console.log("Response data:", response.data);
       // Handle success (e.g., update state/UI with the new image)
@@ -73,6 +86,15 @@ const ImageUpload = ({ onImageChange }) => {
       // Handle error (e.g., display an error message)
     }
   };
+
+
+  const handleSnackbarClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setSnackbarOpen(false); // Close the snackbar
+  };
+
 
   return (
     <Box
@@ -121,19 +143,33 @@ const ImageUpload = ({ onImageChange }) => {
       </label>
       <Button
         onClick={handleSubmit}
+        
         variant="contained"
         color="primary"
         sx={{
           mt: 2,
-          borderRadius: 1,
+          borderRadius: 10,
           padding: "10px 20px",
           textTransform: "none",
           fontWeight: "bold",
         }}
       >
         Upload a Profile Image
-      </Button>
+      </Button> 
+
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={3000}
+        onClose={handleSnackbarClose}
+        anchorOrigin={{ vertical: "top", horizontal: "right" }}
+      >
+        <Alert onClose={handleSnackbarClose} severity={alertMessage==="Profile image updated successfully!"? "success": "error" } sx={{ width: "100%" }}>
+          {alertMessage}
+        </Alert>
+      </Snackbar>
+
     </Box>
+
   );
 };
 

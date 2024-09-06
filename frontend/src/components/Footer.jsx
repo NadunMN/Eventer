@@ -4,7 +4,7 @@ import TwitterIcon from "@mui/icons-material/Twitter";
 import InstagramIcon from "@mui/icons-material/Instagram";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import '../App.css'
-import logo from '../asset/site-logo.jpg.png'
+import logo from '../asset/logoOriginal.png'
 
 export const Footer = () => {
   return (

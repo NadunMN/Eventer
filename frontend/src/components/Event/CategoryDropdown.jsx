@@ -16,8 +16,7 @@ const convertBinaryToBase64 = (binaryData, contentType) => {
   }
 };
 
-const CategoryDropdown = ({ setListOfEvents }) => {
-  const [category, setCategory] = useState("");
+const CategoryDropdown = ({ setListOfEvents , setCategory} ) => {
   const [error, setError] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("");
   const navigate = useNavigate();
@@ -51,12 +50,12 @@ const CategoryDropdown = ({ setListOfEvents }) => {
       setError("");
 
       if (selectedCategory == "") {
-        setListOfEvents([]);
+        // setListOfEvents([]);
         navigate(`/`);
         console.log("selectede category is empty");
       }
       if (selectedCategory) {
-        navigate(`/${selectedCategory}`);
+        navigate(`event/category/${selectedCategory}`);
       }
     } catch (error) {
       setCategory("");
@@ -82,10 +81,8 @@ const CategoryDropdown = ({ setListOfEvents }) => {
       <Select
         labelId="category-select-label"
         id="category-select"
-        value={category}
         onChange={(e) => {
-          handleChange(e.target.value)
-          console.log(e.target.value)
+          setCategory(e.target.value);
         }}
         label="Category"
       >

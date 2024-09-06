@@ -11,16 +11,29 @@ import {
   IconButton,
   CardActions,
 } from "@mui/material";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import { jwtDecode } from "jwt-decode";
 import axios from "axios";
 
-function EventGrids({ listOfEvent, handleOpen }) {
+const convertBinaryToBase64 = (binaryData, contentType) => {
+  if (binaryData && binaryData instanceof Uint8Array) {
+    const binaryString = Array.from(binaryData)
+      .map((byte) => String.fromCharCode(byte))
+      .join("");
+    return `data:${contentType};base64,${btoa(binaryString)}`;
+  } else {
+    console.error("Invalid binary data provided:", binaryData);
+    return null;
+  }
+};
+
+function EventGrids({ listOfEvent, setListOfEvent, category }) {
   const [userRole, setUserRole] = useState("");
   const [userId, setUserId] = useState("");
   const [favorites, setFavorites] = useState([]);
+  const location = useLocation();
 
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("user"));
@@ -39,10 +52,54 @@ function EventGrids({ listOfEvent, handleOpen }) {
     }
   }, []);
 
+  useEffect(() => {
+    const fetchEvent = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:5000/api/event/getCategory/?category=${category}`
+        );
+
+        let res_data = response.data;
+        
+        if (response.status === 404) {
+          setListOfEvent([]);
+          console.log("No events found (404)");
+          return;
+        }
+        // Process the event dataa
+        const listOfEvents = res_data.map((event) => {
+          if (event.cover_image) {
+            const base64Image = convertBinaryToBase64(
+              new Uint8Array(event.cover_image.data),
+              event.cover_image.contentType
+            );
+            event.cover_image = base64Image;
+          }
+          return event;
+        });
+
+
+        if (listOfEvents.length === 0) {
+          setListOfEvent([]);
+          console.log("No events found");
+          console.log(listOfEvents);
+
+        } else {
+          setListOfEvent(listOfEvents);
+        }
+      } catch (error) {
+        console.error("Failed to fetch data:", error);
+        setError("Failed to fetch the event");
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchEvent();
+  }, [category], []);
+
   const navigate = useNavigate();
 
   const handleNavigate = (event) => {
-    handleOpen(true);
     navigate(`/event/${event._id}`);
   };
 
@@ -143,8 +200,8 @@ function EventGrids({ listOfEvent, handleOpen }) {
                     justifyContent: "space-between",
                     alignItems: "center",
                     mt: 0,
-                    pl: 4,
-                    pr: 4,
+                    pl: 1,
+                    pr: 1,
                   }}
                 >
                   <Button
@@ -153,6 +210,13 @@ function EventGrids({ listOfEvent, handleOpen }) {
                     onClick={() => handleNavigate(event)}
                   >
                     More info
+                  </Button>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={() => handleNavigate(event)}
+                  >
+                    Register
                   </Button>
                   <Box>
                     <IconButton
