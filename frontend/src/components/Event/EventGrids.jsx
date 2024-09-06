@@ -108,7 +108,9 @@ function EventGrids({ listOfEvent, handleOpen }) {
                 }}
               >
                 <CardMedia
-                  sx={{ height: 250 }}
+                  sx={{
+                    minHeight: 150,
+                  }}
                   image={
                     event.cover_image || "https://via.placeholder.com/345x140"
                   }
@@ -116,9 +118,10 @@ function EventGrids({ listOfEvent, handleOpen }) {
                 />
                 <CardContent
                   sx={{
+                    minHeight: 150,
                     display: "flex",
                     flexDirection: "column",
-                    justifyContent: "space-between",
+                    textAlign: "left",
                     mt: 0,
                   }}
                 >
@@ -135,6 +138,7 @@ function EventGrids({ listOfEvent, handleOpen }) {
                 </CardContent>
                 <CardActions
                   sx={{
+                    minHeight: 50,
                     display: "flex",
                     justifyContent: "space-between",
                     alignItems: "center",
