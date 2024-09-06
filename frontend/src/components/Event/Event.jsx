@@ -23,31 +23,11 @@ const convertBinaryToBase64 = (binaryData, contentType) => {
 
 const Event = () => {
   const [listOfEvent, setListOfEvent] = useState([]);
-  const [open, setOpen] = useState(false);
-  const [selectedEvent, setSelectedEvent] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [isSelect, setIsSelect] = useState(false);
-  const [isOpen, setIsOpen] = useState(false);
+  const [category, setCategory] = useState("");
   const navigate = useNavigate();
+  const location = useLocation();
   const { user } = useAuthContext();
-
-  const handleOpen = (event) => {
-    // setOpen(true);
-    setIsOpen(true);
-  };
-
-  // const handleClose = () => {
-  //   setSelectedEvent(null);
-  //   setIsOpen(false);
-  // };
-
-  const handleNavigate = (event) => {
-    if (event) {
-      setIsOpen(true);
-      navigate(`/event/${event._id}`);
-    }
-  };
 
   useEffect(() => {
     const fetchEvent = async () => {
@@ -56,15 +36,10 @@ const Event = () => {
           "http://localhost:5000/api/event/getEvent"
         );
 
-        let eventData = response.data;
-
-        // Ensure eventData is an array
-        if (!Array.isArray(eventData)) {
-          eventData = [eventData];
-        }
+        let res_data = response.data;
 
         // Process the event data
-        const processedEvents = eventData.map((event) => {
+        const listOfEvents = res_data.map((event) => {
           if (event.cover_image) {
             const base64Image = convertBinaryToBase64(
               new Uint8Array(event.cover_image.data),
@@ -75,50 +50,44 @@ const Event = () => {
           return event;
         });
 
-        setListOfEvent(processedEvents);
-        setLoading(false);
+        setListOfEvent(listOfEvents);
       } catch (error) {
-        console.error("Failed to fetch the event:", error);
+        console.error("Failed to fetch data:", error);
         setError("Failed to fetch the event");
+      } finally {
         setLoading(false);
       }
     };
-
     fetchEvent();
   }, [user]);
 
-  // determine if the current path is child route
-  // const isChildRoute = true ;
-  var isChildRoute = location.pathname !== "/event";
-
-  console.log(location.pathname);
-
-  if (isChildRoute) {
-    // navigate("/event");
-    return <Outlet />;
-  } else {
-    return (
-      <>
-        {
-          <Container
-            fixed
-            sx={{
-              display: "flex",
-              m: 4,
-              gap: 2,
-            }}
-          >
-            <CategoryDropdown
-              setListOfEvents={setListOfEvent}
-              handleOpen={handleOpen}
-            />
-            <SearchForm setListOfEvents={setListOfEvent} />
-          </Container>
-        }
-        <EventGrids listOfEvent={listOfEvent} handleOpen={handleOpen} />
-      </>
-    );
+  if (loading) {
+    return "Loading ...";
   }
+
+  return (
+    <Box>
+      <Container
+        fixed
+        sx={{
+          display: "flex",
+          m: 4,
+          gap: 2,
+        }}
+      >
+        <CategoryDropdown
+          setListOfEvents={setListOfEvent}
+          setCategory={setCategory}
+        />
+        <SearchForm setListOfEvents={setListOfEvent} />
+      </Container>
+      <EventGrids
+        listOfEvent={listOfEvent}
+        setListOfEvent={setListOfEvent}
+        category={category}
+      />
+    </Box>
+  );
 };
 
 export default Event;

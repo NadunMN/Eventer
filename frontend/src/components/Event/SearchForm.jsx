@@ -61,10 +61,7 @@ const SearchForm = ({ setListOfEvents }) => {
     try {
       // Make a GET request to search events
       const response = await axios.get(
-        `${Api_url}:5000/api/event/searchEvents`,
-        {
-          params: { title: searchString },
-        }
+        `${Api_url}:5000/api/event/searchEvents?title=${searchString}`
       );
       
       let events = response.data;
