@@ -22,7 +22,7 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import LogoutIcon from "@mui/icons-material/Logout";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import LoginIcon from "@mui/icons-material/Login";
-import logo from "../asset/site-logo.jpg.png";
+import logo from "../asset/logoOriginal.png";
 import { useLogout } from "../hooks/useLogout";
 import { useAuthContext } from "../hooks/useAuthContext";
 import { jwtDecode } from "jwt-decode";
@@ -74,7 +74,7 @@ const StyledMenuItem = styled(MenuItem)(({ theme }) => ({
   },
 }));
 
-export const NavBar = ({userId , logout }) => {
+export const NavBar = ({logout, userId, userRole}) => {
   const { user } = useAuthContext();
   const [open, setOpen] = useState(false);
   const anchorRef = useRef(null);

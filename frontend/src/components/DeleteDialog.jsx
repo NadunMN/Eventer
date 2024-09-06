@@ -75,6 +75,7 @@ export default function FormDialog() {
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
+            borderRadius: 10,
           }} 
           onClick={handleClickOpen}
         >
