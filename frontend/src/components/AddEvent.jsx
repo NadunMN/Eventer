@@ -40,6 +40,7 @@ export const AddEvent = () => {
   const [category, setCategory] = useState(""); // For event category
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
+  const [createdEvent, setCreatedEvent] = useState({});
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -87,6 +88,21 @@ export const AddEvent = () => {
     setCategory(e.target.value);
   };
 
+  // Update event Id in user collection
+  const updateUser = async (eventData) => {
+    try {
+      const userData = await axios.get(
+        `http://localhost:5000/api/user/${userId}`
+      );
+      const currentEvents = userData.data.created_event || [];
+
+      await axios.put(`http://localhost:5000/api/user/edit/${userId}`, {
+        created_event: [...currentEvents, eventData._id],
+      });
+    } catch (err) {
+      console.log("Error: ", err);
+    }
+  };
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -123,7 +139,7 @@ export const AddEvent = () => {
     formDataToSend.append("category", category);
 
     try {
-      await axios.post(
+      const result = await axios.post(
         "http://localhost:5000/api/event/createEvent",
         formDataToSend,
         {
@@ -132,16 +148,18 @@ export const AddEvent = () => {
           },
         }
       );
+      setCreatedEvent(result.data);
+      updateUser(result.data);
       setAlertMessage("Event created successfully!");
       setSnackbarOpen(true);
       setTimeout(() => {
         navigate("/event");
       }, 3000);
-      set;
     } catch (error) {
       console.log("Error uploading event:", error);
     }
   };
+
   const handleSnackbarClose = (event, reason) => {
     if (reason === "clickaway") {
       return;
