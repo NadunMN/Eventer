@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
-import { Container, Typography, Box, colors, Grid } from "@mui/material";
+import { Container, Typography, Box, colors, Grid, CircularProgress } from "@mui/material";
 import EventBanner from "./EventBanner";
 import EventDetails from "./EventDetails";
 import { Reviews } from "../Reviews";
@@ -24,7 +24,6 @@ export default function EventData() {
   const [event, setEvent] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
 
   useEffect(() => {
     const fetchEvent = async () => {
@@ -62,7 +61,18 @@ export default function EventData() {
   }, [eventId]);
 
   if (loading) {
-    return <>loading....</>;
+    return (
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100%",
+        }}
+      >
+        <CircularProgress />
+      </Box>
+    );
   }
 
   if (error) {
@@ -76,9 +86,9 @@ export default function EventData() {
           <EventBanner event={event} />
         </Box>
         <Grid container spacing={4}></Grid>
-          <Grid item xs={12} md={6}>
-            <EventDetails event={event} />
-          </Grid>
+        <Grid item xs={12} md={6}>
+          <EventDetails event={event} />
+        </Grid>
 
         <Grid item xs={12} md={6}>
           <Typography variant="body1">{event.description}</Typography>
@@ -88,5 +98,3 @@ export default function EventData() {
     </>
   );
 }
-
-

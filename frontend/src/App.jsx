@@ -3,7 +3,7 @@ import { Contact } from "./components/contactPage/Contact";
 import { Home } from "./components/Home";
 import { Login } from "./components/Login";
 import { NavBar } from "./components/NavBar";
-import { Route, Routes, useNavigate } from "react-router-dom";
+import { Route, Routes, useNavigate, useLocation } from "react-router-dom";
 import { Signup } from "./components/Signup";
 import { AddEvent } from "./components/AddEvent";
 import { AdminDashboard } from "./components/AdminDashboard";
@@ -21,6 +21,7 @@ function App() {
   const [userRole, setUserRole] = useState("");
   const [userId, setUserId] = useState("");
   const navigate = useNavigate();
+  const location = useLocation();
 
   const [loading, setLoading] = useState(true);
 
@@ -30,8 +31,6 @@ function App() {
       const jwtToken = jwtDecode(user.token);
       setUserId(jwtToken._id);
       setUserRole(jwtToken.role);
-    } else {
-      navigate("/login");
     }
     setLoading(false);
   }, [navigate]);
@@ -44,10 +43,15 @@ function App() {
     setUserRole("");
     navigate("/login");
   };
+  const showNavBarAndFooter = !["/signup", "/login"].includes(
+    location.pathname
+  );
   return (
     <>
-      <NavBar logout={logout} userId={userId} userRole={userRole} />
-
+      {/* <NavBar logout={logout} userId={userId} userRole={userRole} /> */}
+      {showNavBarAndFooter && (
+        <NavBar logout={logout} userId={userId} userRole={userRole} />
+      )}
       <Routes>
         <Route path="/" element={<Home />} />
         <Route
@@ -81,7 +85,7 @@ function App() {
           }
         />
       </Routes>
-      <Footer />
+      {showNavBarAndFooter && <Footer />}
     </>
   );
 }
