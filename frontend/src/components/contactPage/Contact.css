@@ -100,9 +100,9 @@
 }
 
 .circle-image {
-    width: 200px; /* Adjust the size as needed */
+    width: 400px; /* Adjust the size as needed */
     height: 200px; /* Keep it equal to width for a perfect circle */
-    border-radius: 50%;
+    border-radius: 0%;
     object-fit: cover; /* Ensures the image fits the circle */
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); /* Optional shadow for a nice effect */
 }

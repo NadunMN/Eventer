@@ -29,6 +29,7 @@ import {
 
 import { Reviews } from "../Reviews";
 import { EventParticipant } from "./EventParticipant";
+import FormDialogDelete from "./EventDeleteDialog";
 
 // Convert binary data to base64
 const convertBinaryToBase64 = (binaryData, contentType) => {
@@ -46,6 +47,7 @@ const convertBinaryToBase64 = (binaryData, contentType) => {
 export default function EventData(handleNavigate) {
   const { eventId } = useParams(); //get the event ID from the route params
   const [event, setEvent] = useState(null);
+  const [eventCreatedId, setEventCreatedId] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [userId, setUserId] = useState("");
@@ -63,6 +65,15 @@ export default function EventData(handleNavigate) {
     }
     setSnackbarOpen(false); // Close the snackbar
   };
+  console.log(userId);
+  console.log(eventCreatedId);
+
+  useEffect(() => {
+    if (event && event.created_by) {
+      console.log(event.created_by);
+      setEventCreatedId(event.created_by);
+    }
+  }, [event]);
 
   //get user data from local storage
   useEffect(() => {
@@ -143,7 +154,7 @@ export default function EventData(handleNavigate) {
       setRegister(updatedRegister);
       isReg
         ? setMessage("Unegistered for event successfully")
-        : setMessage("Registered for event successfully")
+        : setMessage("Registered for event successfully");
       isReg ? setAlert("info") : setAlert("success");
       setSnackbarOpen(true);
       console.log(isReg ? "Removed from Register" : "Added to Register");
@@ -211,7 +222,7 @@ export default function EventData(handleNavigate) {
           height: "100%",
         }}
       >
-        <CircularProgress />
+        {/* <CircularProgress /> */}
       </Box>
     );
   }
@@ -330,15 +341,41 @@ export default function EventData(handleNavigate) {
             </List>
           </Box>
           {/* right */}
-          <Container sx={{ display: "flex", flexDirection: "column", mt: 3 }}>
+          <Container
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "center",
+              mt: 3,
+              gap: 2,
+            }}
+          >
             <Button
-              sx={{ px: 5, py: 2 }}
+              sx={{
+                px: 5,
+                py: 2,
+                width: "500px",
+                height: 55,
+                borderRadius: 10,
+              }}
               variant="contained"
               color="primary"
               onClick={() => handleRegister(event._id)}
             >
               {register.includes(event._id) ? "Unregister" : "Register"}
             </Button>
+
+            <Button
+              sx={{px: 5, py: 2,width: '500px', borderRadius:10}}
+              variant="contained"
+              color="error"
+>
+              Delete this event
+            </Button>
+
+            {userId === eventCreatedId ? <FormDialogDelete /> : null}
+            {/* <FormDialogDelete/> */}
 
             <Typography variant="body1" sx={{ mt: 2 }}>
               {" "}

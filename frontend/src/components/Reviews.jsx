@@ -26,6 +26,7 @@ export const Reviews = () => {
   const [value, setValue] = useState(0);
   const [userReview, setUserReview] = useState("");
   const [userId, setUserId] = useState("");
+  const [userRole, setUserRole] = useState("");
   const [userName, setUserName] = useState("");
   const [anchorEl, setAnchorEl] = useState(null);
   const [selectedReview, setSelectedReview] = useState(null);
@@ -313,7 +314,7 @@ export const Reviews = () => {
                     }}
                   >
                     <CardContent>
-                      {editReviewId === review._id ? (
+                      {editReviewId === review._id || userRole === "admin" ? (
                         <>
                           {/* Editable Fields for review in the card */}
                           <TextField

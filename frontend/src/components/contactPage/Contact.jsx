@@ -2,7 +2,7 @@ import React from 'react';
 import { Container, Grid, Box, Typography } from '@mui/material';
 import ContactForm from './contactForm';
 import './Contact.css';
-import image from '../../asset/contactImage.jpg';
+import image from '../../asset/contactImage2.jpg';
 
 export const Contact = () => {
   return (

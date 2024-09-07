@@ -51,7 +51,7 @@ export const About = () => {
           </div>
           <div className="team-member">
             <img src={teamMember4} alt="Team Member 4" />
-            <h3>Sachith</h3>
+            <h3>Mahesh</h3>
             <p>Event Coordinator</p>
           </div>
           {/* Add more team members as needed */}
