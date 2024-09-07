@@ -23,6 +23,7 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
+  CircularProgress,
 } from "@mui/material";
 import {
   Event as EventIcon,
@@ -41,7 +42,6 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import axios from "axios";
-import { AddUser } from "./AddUser";
 import { jwtDecode } from "jwt-decode";
 import { ReviewPannel } from "./ReviewPannel";
 
@@ -54,6 +54,10 @@ export const AdminDashboard = () => {
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   const [selectedItemId, setSelectedItemId] = useState(null);
   const [deleteType, setDeleteType] = useState(null);
+  const [loading, setLoading] = useState(false); // Overall loading state
+  const [eventsLoading, setEventsLoading] = useState(false); // Loading state for events
+  const [deleting, setDeleting] = useState(false); // Deleting state
+
   const monthlyData = {
     Jan: { events: 0, attendees: 0 },
     Feb: { events: 0, attendees: 0 },
@@ -71,6 +75,8 @@ export const AdminDashboard = () => {
 
   // Fetch data
   useEffect(() => {
+    setLoading(true); // Start overall loading
+    setEventsLoading(true); // Start loading for events
     const user = JSON.parse(localStorage.getItem("user"));
     if (user) {
       const token = jwtDecode(user.token);
@@ -83,8 +89,6 @@ export const AdminDashboard = () => {
         .then((res) => {
           const eventsData = res.data;
           setEvents(eventsData);
-          console.log("Events data:", eventsData);
-          console.log("Parti", events.participants);
 
           // Process monthly data
           const monthlyDataCopy = { ...monthlyData }; // Copy to avoid mutating the original object
@@ -108,10 +112,13 @@ export const AdminDashboard = () => {
           }));
 
           setChartData(formattedData);
-          console.log(formattedData);
+          setEventsLoading(false);
+          setLoading(false);
         })
         .catch((error) => {
           console.error("Error fetching events:", error);
+          setEventsLoading(false);
+          setLoading(false);
         });
 
       // Fetch users
@@ -121,13 +128,15 @@ export const AdminDashboard = () => {
         })
         .then((res) => {
           setUserData(res.data);
-          console.log("User data:", res.data);
+          setLoading(false);
         })
         .catch((error) => {
           console.error("Error fetching users:", error);
+          setLoading(false);
         });
     } else {
       console.error("No user token found.");
+      setLoading(false); // End overall loading
     }
   }, []);
 
@@ -140,6 +149,7 @@ export const AdminDashboard = () => {
   const handleConfirmDelete = () => {
     const user = JSON.parse(localStorage.getItem("user"));
     if (user && user.token) {
+      setDeleting(true); // Start deleting
       const token = user.token;
       const endpoint =
         deleteType === "event"
@@ -161,12 +171,12 @@ export const AdminDashboard = () => {
           setOpenDeleteDialog(false);
           setSelectedItemId(null);
           setDeleteType(null);
+          setDeleting(false); // End deleting
           console.log(`${deleteType} deleted:`, res.data);
         })
-
         .catch((error) => {
           console.error(`Error deleting ${deleteType}:`, error);
-          // Initialize an object to store monthly event counts and attendees
+          setDeleting(false); // End deleting
         });
     }
   };
@@ -192,6 +202,36 @@ export const AdminDashboard = () => {
   });
 
   const renderContent = () => {
+    if (loading) {
+      return (
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            height: "100%",
+          }}
+        >
+          <CircularProgress />
+        </Box>
+      );
+    }
+
+    if (eventsLoading && activeTab === "events") {
+      return (
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            height: "100%",
+          }}
+        >
+          <CircularProgress />
+        </Box>
+      );
+    }
+
     switch (activeTab) {
       case "events":
         return (
@@ -301,7 +341,6 @@ export const AdminDashboard = () => {
           </TableContainer>
         );
       case "analytics":
-        // Analytics content remains unchanged
         return (
           <Paper elevation={3} sx={{ p: 3 }}>
             <Typography variant="h6" gutterBottom>
@@ -418,7 +457,8 @@ export const AdminDashboard = () => {
             Cancel
           </Button>
           <Button onClick={handleConfirmDelete} color="secondary" autoFocus>
-            Delete
+            {deleting ? <CircularProgress size={24} /> : "Delete"}{" "}
+            {/* Show loading animation if deleting */}
           </Button>
         </DialogActions>
       </Dialog>
