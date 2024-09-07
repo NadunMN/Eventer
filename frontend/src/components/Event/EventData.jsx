@@ -1,7 +1,14 @@
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
-import { Container, Typography, Box, colors, Grid, CircularProgress } from "@mui/material";
+import {
+  Container,
+  Typography,
+  Box,
+  colors,
+  Grid,
+  CircularProgress,
+} from "@mui/material";
 import EventBanner from "./EventBanner";
 import EventDetails from "./EventDetails";
 import { Reviews } from "../Reviews";
