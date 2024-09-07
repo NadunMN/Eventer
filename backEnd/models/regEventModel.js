@@ -17,6 +17,11 @@ const studentSchema = new mongoose.Schema({
     courses_enrolled: {
         type: [String],
         required: true,
+    },
+
+    registered: {
+        type: Boolean,
+        required: false,
     }
     // Add other fields as needed
 });

@@ -1,24 +1,115 @@
-/* General Styling */
-body {
-  font-family: 'Arial', sans-serif;
-  line-height: 1.6;
-  color: #333;
-  margin: 0;
-  padding: 0;
-  /* background-color: #f4f4f4; */
-}
-
 .about-container {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 20px;
+  padding: 50px 20px;
 }
 
-/* Header Section */
-.about-header {
+.about-intro, .about-mission, .about-team {
+  margin: 50px 0;
+  padding: 40px 20px;
+  background-color: rgb(234, 234, 246);
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(3, 7, 16, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.about-intro:hover, .about-mission:hover, .about-team:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 6px 20px rgba(21, 10, 230, 0.15);
+}
+
+.about-intro h2, .about-mission h2, .about-team h2 {
+  color: #251d10;
+  font-size: 2.5em;
+  margin-bottom: 20px;
+}
+
+.about-intro p, .about-mission p, .about-team p {
+  font-size: 1.2em;
+  line-height: 1.8;
+  color: #706c6c;
+}
+
+.about-team .team-members {
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+}
+
+.about-team .team-member {
   text-align: center;
-  background-color: #007BFF;
-  color: white;
-  padding: 50px 0;
- 
+  margin: 20px;
+  flex-basis: calc(100% / 4 - 40px); /* Adjusts the width of each team member to fit four in one row */
+  background-color: #bce2ec;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(10, 10, 10, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+  
+.about-team .team-member img {
+  width: 100%;
+  max-width: 150px;
+  border-radius: 15%;
+  margin-top: 15px;
+}
+
+.about-team .team-member h3 {
+  margin: 15px 0 5px;
+  font-size: 1.5em;
+  color: #161718;
+}
+
+@media (max-width: 768px) {
+  .about-team .team-members {
+    flex-wrap: wrap; /* Allow wrapping on smaller screens */
+  }
+
+  .about-team .team-member {
+    flex-basis: 100%; /* Make each team member full-width on small screens */
+    margin: 20px 0;
+  }
+  
+  .about-intro .intro-image,
+  .about-mission .intro-image {
+    max-width: 60%; /* Increase the image size on smaller screens */
+    margin: 0 auto; /* Center the image */
+  }
+
+  .about-intro .intro-text,
+  .about-mission .intro-text {
+    text-align: center;
+    margin: 0;
+  }
+}
+
+.about-intro .intro-content {
+  display: flex;
+  align-items: center;
+  margin-bottom: 40px;
+}
+
+.about-intro .intro-image {
+  flex: 1;
+  max-width: 40%;
+  margin-right: 20px;
+}
+
+.about-mission .intro-content {
+  display: flex;
+  align-items: center;
+  flex-direction: row-reverse; /* This line makes the image on the right side */
+  margin-bottom: 40px;
+}
+
+.about-mission .intro-image {
+  flex: 1;
+  max-width: 40%;
+  margin-left: 20px; /* Adjusts spacing to the left of the image */
+}
+
+.about-intro .intro-text,
+.about-mission .intro-text {
+  flex: 1;
+  margin-left: 50px;
 }

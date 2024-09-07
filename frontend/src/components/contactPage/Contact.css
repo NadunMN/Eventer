@@ -1,0 +1,111 @@
+.contact-container {
+    position: relative; /* Ensure positioning of child elements */
+    margin-top: 2rem;
+    margin-bottom: 20px;
+  }
+  
+  .contact-title {
+    color: #333;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 1rem;
+  }
+  
+  .contact-subtitle {
+    color: #555;
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+  
+  .contact-grid {
+    margin-top: 2rem;
+  }
+  
+  .contact-box {
+    padding: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    text-align: center;
+    height: 150px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    color: #333;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    transition: background 0.3s ease, transform 0.3s ease;
+  }
+  
+  .contact-box:hover {
+    cursor: pointer;
+    transform: scale(1.03);
+  }
+  
+  .talk-to-team {
+    background: #e1bee7; /* Light lavender */
+  }
+  
+  .contact-support {
+    background: #b3e5fc; /* Light sky blue */
+  }
+  
+  .visit-us {
+    background: #c8e6c9; /* Light mint green */
+  }
+  
+  .contact-box.talk-to-team:hover {
+    background: #d89ac5; /* Slightly darker lavender */
+  }
+  
+  .contact-box.contact-support:hover {
+    background: #83c5e6; /* Slightly darker sky blue */
+  }
+  
+  .contact-box.visit-us:hover {
+    background: #a6d0a7; /* Slightly darker mint green */
+  }
+  
+  .contact-box h5 {
+    margin-bottom: 0.5rem;
+    font-weight: bold;
+  }
+  
+  .contact-box p {
+    margin: 0;
+  }
+  
+  .contact-box .contact-number, 
+  .contact-box .contact-email, 
+  .contact-box .contact-address {
+    font-weight: bold;
+    color: #000; /* Default text color for better visibility */
+  }
+  
+  .contact-box .contact-number {
+    color: #260fbc; /* Bright purple for phone number */
+  }
+  
+  .contact-box .contact-email {
+    color: #2711b1; /* Green for email */
+  }
+  
+  .contact-box .contact-address {
+    color: #270acf; /* Blue for address */
+  }
+
+.circle-image-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 20px 0; /* Adjust margin as needed */
+}
+
+.circle-image {
+    width: 200px; /* Adjust the size as needed */
+    height: 200px; /* Keep it equal to width for a perfect circle */
+    border-radius: 50%;
+    object-fit: cover; /* Ensures the image fits the circle */
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); /* Optional shadow for a nice effect */
+}
+
+    
+  

@@ -1,31 +1,92 @@
-import { Container, Typography } from '@mui/material'
-import axios from 'axios'
-import React, { useEffect } from 'react'
-import { useParams } from 'react-router-dom'
+import { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
+import axios from "axios";
+import { Container, Typography, Box, colors, Grid } from "@mui/material";
+import EventBanner from "./EventBanner";
+import EventDetails from "./EventDetails";
+import { Reviews } from "../Reviews";
+
+// Convert binary data to base64
+const convertBinaryToBase64 = (binaryData, contentType) => {
+  if (binaryData && binaryData instanceof Uint8Array) {
+    const binaryString = Array.from(binaryData)
+      .map((byte) => String.fromCharCode(byte))
+      .join("");
+    return `data:${contentType};base64,${btoa(binaryString)}`;
+  } else {
+    console.error("Invalid binary data provided:", binaryData);
+    return null;
+  }
+};
 
 export default function EventData() {
-    const { id } = useParams()
-    const [eventDetails, setEventDetails] = useState(null)
+  const { eventId } = useParams(); //get the event ID from the route params
+  const [event, setEvent] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-    useEffect(() => {
-        if (id) {
-            axios
-                .get(`http://localhost:5000/api/getEvent/${id}`)
-                .then((response) => setEventDetails(response.data))
-                .catch((error) => console.error("Error fetching event details:" , error))
+
+  useEffect(() => {
+    const fetchEvent = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:5000/api/event/getEvent/${eventId}`
+        );
+
+        let eventData = response.data;
+        console.log(eventData);
+
+        // Process the event data
+        if (eventData.cover_image) {
+          const base64Image = convertBinaryToBase64(
+            new Uint8Array(eventData.cover_image.data),
+            eventData.cover_image.contentType
+          );
+          eventData.cover_image = base64Image;
         }
-    },[id])
-    
-    if (!eventDetails) return <div>Loading...</div>;
+
+        setEvent(eventData);
+        setLoading(false);
+      } catch (error) {
+        console.error("Failed to fetch the event:", error);
+        setError("Failed to fetch the event");
+        setLoading(false);
+      } finally {
+        const timer = setTimeout(() => {
+          setLoading(false);
+        }, 1200);
+      }
+    };
+
+    fetchEvent();
+  }, [eventId]);
+
+  if (loading) {
+    return <>loading....</>;
+  }
+
+  if (error) {
+    return <>{error}</>;
+  }
 
   return (
-    // <Container>
-    //     <Typography variant='h4'>{eventDetails.title}</Typography>
-    //     <Typography variant='h4'>{eventDetails.start_date}</Typography>
-    //     <Typography variant='h4'>{eventDetails.venue}</Typography>
-    // </Container>
     <>
-    event data
+      <Container maxWidth="lg">
+        <Box>
+          <EventBanner event={event} />
+        </Box>
+        <Grid container spacing={4}></Grid>
+          <Grid item xs={12} md={6}>
+            <EventDetails event={event} />
+          </Grid>
+
+        <Grid item xs={12} md={6}>
+          <Typography variant="body1">{event.description}</Typography>
+        </Grid>
+      </Container>
+      <Reviews />
     </>
-  )
+  );
 }
+
+

@@ -2,58 +2,91 @@ import { useState, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import axios from "axios";
 import SearchForm from "./SearchForm";
-import { Navigate, useNavigate } from "react-router-dom";
-import EventDialogBox from "./EventDialogBox";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import EventGrids from "./EventGrids";
+import { Container, Box } from "@mui/material";
+import CategoryDropdown from "./CategoryDropdown";
+import { useAuthContext } from "../../hooks/useAuthContext";
+
+// Function to convert binary data to base64
+const convertBinaryToBase64 = (binaryData, contentType) => {
+  if (binaryData && binaryData instanceof Uint8Array) {
+    const binaryString = Array.from(binaryData)
+      .map((byte) => String.fromCharCode(byte))
+      .join("");
+    return `data:${contentType};base64,${btoa(binaryString)}`;
+  } else {
+    console.error("Invalid binary data provided:", binaryData);
+    return null;
+  }
+};
 
 const Event = () => {
   const [listOfEvent, setListOfEvent] = useState([]);
-  const [open, setOpen] = useState(false);
-  const [selectedEvent, setSelectedEvent] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [category, setCategory] = useState("");
   const navigate = useNavigate();
+  const location = useLocation();
+  const { user } = useAuthContext();
 
-  //get all events
   useEffect(() => {
-    axios
-      .get("http://localhost:5000/api/getEvent")
-      .then((response) => {
-        setListOfEvent(response.data);
-      })
-      .catch((error) => {
-        console.error("there was an error fetching ta data! ", error);
-      });
-  }, []);
+    const fetchEvent = async () => {
+      try {
+        const response = await axios.get(
+          "http://localhost:5000/api/event/getEvent"
+        );
 
-  const handleOpen = (event) => {
-    setSelectedEvent(event);
-    setOpen(true);
-  };
+        let res_data = response.data;
 
-  const handleClose = () => {
-    setOpen(false);
-    setSelectedEvent(null);
-  };
+        // Process the event data
+        const listOfEvents = res_data.map((event) => {
+          if (event.cover_image) {
+            const base64Image = convertBinaryToBase64(
+              new Uint8Array(event.cover_image.data),
+              event.cover_image.contentType
+            );
+            event.cover_image = base64Image;
+          }
+          return event;
+        });
 
-  const handleNavigate = (event) => {
-    if (event) {
-      navigate(`/event/${event._id}`);
-    }
-  };
+        setListOfEvent(listOfEvents);
+      } catch (error) {
+        console.error("Failed to fetch data:", error);
+        setError("Failed to fetch the event");
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchEvent();
+  }, [user]);
+
+  if (loading) {
+    return "Loading ...";
+  }
 
   return (
-    <>
-      <SearchForm setListOfEvents={setListOfEvent} />
+    <Box>
+      <Container
+        fixed
+        sx={{
+          display: "flex",
+          m: 4,
+          gap: 2,
+        }}
+      >
+        <CategoryDropdown
+          setListOfEvents={setListOfEvent}
+          setCategory={setCategory}
+        />
+        <SearchForm setListOfEvents={setListOfEvent} />
+      </Container>
       <EventGrids
         listOfEvent={listOfEvent}
-        handleOpen={handleOpen}
-        handleNavigate={handleNavigate}
+        setListOfEvent={setListOfEvent}
+        category={category}
       />
-      <EventDialogBox
-        selectedEvent={selectedEvent}
-        open={open}
-        onClose={handleClose}
-      />
-    </>
+    </Box>
   );
 };
 
