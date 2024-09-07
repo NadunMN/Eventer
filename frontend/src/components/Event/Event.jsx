@@ -153,7 +153,7 @@ export const Event = () => {
       .then(() => {
         setFavorites(updatedFavorites);
         isFav
-          ? setMessage("Event removed from favorites")
+          ? setMessage("Event removed from your favorites")
           : setMessage("Event added to favorites");
         isFav ? setAlert("info") : setAlert("success");
         console.log(isFav ? "Removed from favorites" : "Added to favorites");
@@ -198,8 +198,8 @@ export const Event = () => {
       // Update the local state after both requests succeed
       setRegister(updatedRegister);
       isReg
-        ? setMessage("Event removed from register")
-        : setMessage("Event added to register");
+        ? setMessage("Unegistered for event successfully")
+        : setMessage("Registered for event successfully");
       isReg ? setAlert("info") : setAlert("success");
       setSnackbarOpen(true);
       console.log(isReg ? "Removed from Register" : "Added to Register");
@@ -249,7 +249,6 @@ export const Event = () => {
                 boxShadow: "0 5px 15px 5px rgba(0, 0, 0, .2)",
               },
             }}
-            
           >
             <InputLabel id="category-select-label">Category</InputLabel>
             <Select
