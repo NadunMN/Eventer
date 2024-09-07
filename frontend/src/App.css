@@ -4,6 +4,11 @@
     margin: 0;
     padding: 0;
     font-family: sans-serif;
+    
+}
+
+body{
+        overflow-x: hidden;    
 }
 
 
@@ -22,25 +27,33 @@
 
 
 .main-topic-para {
-    font-size: 6rem; /* Size for "Make Your." */
+    font-size: 5rem; /* Size for "Make Your." */
     font-weight: bold; /* Normal weight for "Make Your." */
     text-align: left; /* Center the text */
     color: #000; /* Default color for text */
     margin-left: 50px;
     padding: 0;
-    line-height: 0.5; /* Adjust line-height for spacing */
+    line-height: 1; /* Adjust line-height for spacing */
   }
 
 .Topic-div .main-topic-para span{
-    color: #311b92;
+    background: linear-gradient(45deg, #673ab7, #3f51b5); /* Define the gradient */
+    -webkit-background-clip: text; /* Clip the background to the text */
+    -webkit-text-fill-color: transparent; 
     font-weight: bold;
     /* margin-top: 7px; */
     /* column-gap: 100px; */
     
-    display: block; /* Forces "Dream Come True." to start on a new line */
-    font-size: 6rem; /* Increase size for the highlighted text */
-    font-weight: 700; /* Make "Dream Come True." bold */
-    color: #6f42c1; /* Give it a standout color */
+    /* display: block;  */
+    line-height: 1;
+    font-size: 6rem; 
+    font-weight: 700; 
+    /* color: #6f42c1;  */
+}
+.main-topic-para span::before{
+    background: linear-gradient(45deg, #673ab7 10%, #3f51b5 90%);
+    /* mix-blend-mode: ; */
+   
 }
 
 .sub-heading1{
@@ -203,10 +216,12 @@
 
 .brandcarousel-container{
     margin-top: 100px;
-    padding-left: 50px;
-    margin-bottom: 100px;
-    justify-content: space-evenly;
+    display: flex;
     align-items: center;
+    margin-bottom: 100px;
+    justify-content: flex-end;
+    align-items: center;
+    /* background-color: #311b92; */
 }
 
 .card-container {
