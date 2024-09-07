@@ -2,7 +2,6 @@
 
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { useNavigate, useLocation } from "react-router-dom";
 import {
   FormControl,
   InputLabel,
@@ -18,6 +17,7 @@ import {
   CardMedia,
   IconButton,
   CardActions,
+  CircularProgress,
 } from "@mui/material";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FavoriteIcon from "@mui/icons-material/Favorite";
@@ -26,10 +26,8 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import SearchForm from "./SearchForm";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import EventGrids from "./EventGrids";
-import { Container, Box } from "@mui/material";
 import CategoryDropdown from "./CategoryDropdown";
 import { useAuthContext } from "../../hooks/useAuthContext";
-import { CircularProgress } from "@mui/material";
 
 // Function to convert binary data to base64
 const convertBinaryToBase64 = (binaryData, contentType) => {
