@@ -14,6 +14,7 @@ import { jwtDecode } from "jwt-decode";
 import EventBanner from "./EventBanner";
 import EventDetails from "./EventDetails";
 import { Reviews } from "../Reviews";
+import { EventParticipant } from "./EventParticipant";
 
 // Convert binary data to base64
 const convertBinaryToBase64 = (binaryData, contentType) => {
@@ -175,6 +176,7 @@ export default function EventData(handleNavigate) {
           </Button>
         </Grid>
       </Container>
+      <EventParticipant />
       <Reviews />
     </>
   );
