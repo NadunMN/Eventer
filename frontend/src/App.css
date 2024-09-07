@@ -1,8 +1,11 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+
 *{
     margin: 0;
     padding: 0;
     font-family: sans-serif;
 }
+
 
 .Main-part{
     background-image: url('./asset/group-people-enjoying-holi-color.jpg');
@@ -11,28 +14,37 @@
     background-repeat: no-repeat; /* Prevent the image from repeating */
     height: 100vh;
     display: flex;
-    align-items: center;
+    /* align-items: center; */
     justify-content: center;
     flex-direction: column;
 }
 
-.Topic-div{
-    text-align: center;
-    /* background-color: aqua; */
-    display: inline;
-    padding: auto;
-    margin-top: -60px;
-}
 
-.Topic-div .main-topic-para{
 
-    text-align: center;
-    font-size: 5em;
-}
+.main-topic-para {
+    font-size: 6rem; /* Size for "Make Your." */
+    font-weight: bold; /* Normal weight for "Make Your." */
+    text-align: left; /* Center the text */
+    color: #000; /* Default color for text */
+    margin-left: 50px;
+    padding: 0;
+    line-height: 0.5; /* Adjust line-height for spacing */
+  }
 
 .Topic-div .main-topic-para span{
     color: #311b92;
     font-weight: bold;
+    /* margin-top: 7px; */
+    /* column-gap: 100px; */
+    
+    display: block; /* Forces "Dream Come True." to start on a new line */
+    font-size: 6rem; /* Increase size for the highlighted text */
+    font-weight: 700; /* Make "Dream Come True." bold */
+    color: #6f42c1; /* Give it a standout color */
+}
+
+.sub-heading1{
+    font-family:"Playwrite CU", cursive;;
 }
 
 

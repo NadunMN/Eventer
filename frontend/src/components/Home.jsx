@@ -10,19 +10,40 @@ export const Home = () => {
   return (
     <>
       <div className="Main-part">
+        <Box sx={{
+          position: 'absolute',
+          // top:300,
+          alignItems: 'center'
+          // bottom:'50px'
+        }}>
         <div className="Topic-div">
           <p className="main-topic-para">
-            Make Your. <span>Dream Come True.</span>
-          </p>
+            Make Your. <span><br/>Dream Come True.</span>
+          </p>  
+
         </div>
-        <Stack direction="row" spacing={2} sx={{ mt: "50px" }}>
+        
+        <Box sx={{mt:5}}>
+        <Typography variant="h6" className="sub-heading1" sx={{ml: '55px', mt: '5px',
+          // fontFamily: 'Brush Script MT'
+        }}>
+          <b>Eventer</b> is the best University Event planner  
+        </Typography>
+        <Typography variant="h6"  sx={{ml: '55px', mt: '5px',
+          fontFamily: 'Brush Script MT'
+        }}>
+        Where Campus Life Comes Alive: Discover, Plan, and Celebrate Every Moment  
+        </Typography>
+
+        </Box>
+        <Stack direction="row" spacing={2} sx={{ mt: 5, display: 'flex', justifyContent: "flex-statrt", ml: '50px' }}>
           <Button
             variant="contained"
             //  className ={classes.button}
             size="large"
             sx={{
               bgcolor: "#311b92",
-              width: 220,
+              width: 200,
               fontSize: "20px",
 
               "&:hover": {
@@ -41,7 +62,7 @@ export const Home = () => {
             //  className ={classes.button}
             size="large"
             sx={{
-              width: 220,
+              width: 200,
               fontSize: "20px",
               color: "#311b92",
               border: 2,
@@ -54,13 +75,13 @@ export const Home = () => {
             }}
             disableElevation
           >
-            GET STARTED
+            SIGN IN
           </Button>
         </Stack>
 
-        <Typography variant="h5" mt={2}>
-          <b>Eventer</b> is the best University Event planner
-        </Typography>
+        </Box>
+
+        
       </div>
 
       <Brandcarousel />

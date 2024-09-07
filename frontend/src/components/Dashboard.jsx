@@ -33,6 +33,16 @@ export default function Dashboard() {
   useEffect(() => {
     if (user && user.favourite_events) {
       let favoriteEventLength = user.favourite_events.length;
+      let registeredEventLength = user.registered_events.length;
+      setCountFavorite(favoriteEventLength);
+      setCountRegistered(registeredEventLength);
+      setLoading(false);
+    }
+  }, [user]);
+
+  useEffect(() => {
+    if (user && user.favourite_events) {
+      let favoriteEventLength = user.favourite_events.length;
       setCountFavorite(favoriteEventLength);
       setLoading(false);
     }
@@ -78,48 +88,10 @@ export default function Dashboard() {
   }, [activeItem]);
 
   useEffect(() => {
-    const registeredEventCount = async () => {
-      try {
-        const response = await axios.get(
-          "http://localhost:5000/api/countRegisteredEvent"
-        );
-        setCountRegistered(response.data.countRegisteredEvent);
-      } catch (err) {
-        console.error("Error fetching countRegistered:", err);
-      }
-    };
-
-    registeredEventCount();
-  }, []);
-
-  useEffect(() => {
-    const createdEventCount = async () => {
-      try {
-        const response = await axios.get(
-          "http://localhost:5000/api/countCreatedEvent"
-        );
-        setCountCreated(response.data.countCreatedEvent);
-      } catch (err) {
-        console.error("Error fetching countRegistered:", err);
-      }
-    };
-
-    createdEventCount();
-  }, []);
-
-  useEffect(() => {
-    const favoriteEventCount = async () => {
-      try {
-        const response = await axios.get(
-          "http://localhost:5000/api/countFavoriteEvent"
-        );
-        setCountFavorite(response.data.countFavoriteEvent);
-      } catch (err) {
-        console.error("Error fetching countRegistered:", err);
-      }
-    };
-
-    favoriteEventCount();
+    const storedItem = localStorage.getItem("activeItem");
+    if (storedItem) {
+      setActiveItem(storedItem);
+    }
   }, []);
 
   const renderContent = () => {

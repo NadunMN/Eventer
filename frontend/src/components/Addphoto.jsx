@@ -1,5 +1,5 @@
 import React, { useState,useEffect } from "react";
-import { IconButton, Box, Button } from "@mui/material";
+import { Box, Stack, Button, Typography, TextField, Avatar, InputAdornment, IconButton, Menu, MenuItem, Divider } from '@mui/material';
 import { styled } from "@mui/material/styles";
 import { AddPhotoAlternate } from "@mui/icons-material";
 import addImg from "../asset/addImage.jpg";
@@ -99,13 +99,15 @@ const ImageUpload = ({ onImageChange }) => {
   return (
     <Box
       sx={{
-        position: "relative",
+        // position: "relative",
         mb: 2,
-        mt: 15,
+        mt: 5,
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
         justifyContent: "center",
+        height: 'auto',
+        // bgcolor:'black'
       }}
     >
       <img
@@ -156,6 +158,8 @@ const ImageUpload = ({ onImageChange }) => {
       >
         Upload a Profile Image
       </Button> 
+
+
 
       <Snackbar
         open={snackbarOpen}
