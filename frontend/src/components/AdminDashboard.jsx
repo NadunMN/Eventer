@@ -425,7 +425,7 @@ export const AdminDashboard = () => {
                 onClick={() => setActiveTab("review")}
               >
                 <CommentIcon sx={{ mr: 2 }} />
-                <ListItemText primary="review" />
+                <ListItemText primary="Review" />
               </ListItem>
             </List>
           </Paper>

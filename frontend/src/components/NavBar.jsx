@@ -154,7 +154,7 @@ export const NavBar = ({ logout, userId, userRole }) => {
                   placement="bottom-end"
                   transition
                   disablePortal
-                  sx={{zIndex:999}}
+                  sx={{ zIndex: 99 }}
                 >
                   {({ TransitionProps, placement }) => (
                     <Grow
