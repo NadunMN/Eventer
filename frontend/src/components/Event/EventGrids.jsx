@@ -33,8 +33,11 @@ function EventGrids({ listOfEvent, setListOfEvent, category }) {
   const [userRole, setUserRole] = useState("");
   const [userId, setUserId] = useState("");
   const [favorites, setFavorites] = useState([]);
-  const location = useLocation();
+  const [responseData, setResponseData] = useState([]);
+  const [registeredList, setRegisteredList] = useState([]);
+  console.log(category);
 
+  // Fetch user data from local storage
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("user"));
     if (user) {
@@ -52,20 +55,29 @@ function EventGrids({ listOfEvent, setListOfEvent, category }) {
     }
   }, []);
 
+  //useEffect to fetch events based on category
   useEffect(() => {
     const fetchEvent = async () => {
       try {
-        const response = await axios.get(
-          `http://localhost:5000/api/event/getCategory/?category=${category}`
-        );
+        // if (category) {
+          const response = await axios.get(
+            `http://localhost:5000/api/event/getCategory/?category=${category}`
+          );
+          setResponseData(response.data);
+        // } else {
+        //   const response = await axios.get(
+        //     "http://localhost:5000/api/event/getEvent"
+        //   );
+        //   setResponseData(response.data);
+        //   console.log(responseData);
+        // }
 
-        let res_data = response.data;
-        
-        if (response.status === 404) {
-          setListOfEvent([]);
-          console.log("No events found (404)");
-          return;
-        }
+        // if (response.state === 404) {
+        //   console.log("No events found");
+        //   return;
+        // }
+
+        let res_data = responseData;
         // Process the event dataa
         const listOfEvents = res_data.map((event) => {
           if (event.cover_image) {
@@ -78,34 +90,49 @@ function EventGrids({ listOfEvent, setListOfEvent, category }) {
           return event;
         });
 
-
         if (listOfEvents.length === 0) {
           setListOfEvent([]);
           console.log("No events found");
           console.log(listOfEvents);
-
         } else {
           setListOfEvent(listOfEvents);
         }
       } catch (error) {
         console.error("Failed to fetch data:", error);
         setError("Failed to fetch the event");
-      } finally {
-        setLoading(false);
       }
     };
     fetchEvent();
-  }, [category], []);
+  }, [category]);
 
   const navigate = useNavigate();
+
+  const handleCloseSnackbar = () => {
+    setSnackbarOpen(false);
+  };
 
   const handleNavigate = (event) => {
     navigate(`/event/${event._id}`);
   };
 
-  const handleFav = (event_id) => {
+  const handleRegister = (event_id) => {
     console.log(event_id);
 
+    axios
+      .put(`http://localhost:5000/api/user/edit/${userId}`, {
+        registered_events: [...registeredList, event_id],
+      })
+      .then(() => {
+        setRegisteredList([...registeredList, event_id]);
+        console.log("Event registered successfully");
+      })
+      .catch((err) => {
+        alert("An error occurred. Please check the console");
+        console.error(err);
+      });
+  };
+
+  const handleFav = (event_id) => {
     const isFav = favorites.includes(event_id);
     const updatedFavorites = isFav
       ? favorites.filter((id) => id !== event_id)
@@ -118,6 +145,7 @@ function EventGrids({ listOfEvent, setListOfEvent, category }) {
       .then(() => {
         setFavorites(updatedFavorites);
         console.log(isFav ? "Removed from favorites" : "Added to favorites");
+        setSnackbarOpen(true);
       })
       .catch((err) => {
         alert("An error occurred. Please check the console");
@@ -214,7 +242,7 @@ function EventGrids({ listOfEvent, setListOfEvent, category }) {
                   <Button
                     variant="contained"
                     color="primary"
-                    onClick={() => handleNavigate(event)}
+                    onClick={() => handleRegister(event._id)}
                   >
                     Register
                   </Button>

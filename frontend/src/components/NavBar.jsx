@@ -74,7 +74,7 @@ const StyledMenuItem = styled(MenuItem)(({ theme }) => ({
   },
 }));
 
-export const NavBar = ({logout, userId, userRole}) => {
+export const NavBar = ({ logout, userId, userRole }) => {
   const { user } = useAuthContext();
   const [open, setOpen] = useState(false);
   const anchorRef = useRef(null);
