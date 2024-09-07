@@ -230,42 +230,49 @@ export const Event = () => {
     <Box>
       {/* Search form and category dropdown */}
       <Container maxWidth="lg">
-        <Box sx={{
-          display: "flex",
-        }}>
-        <SearchForm setListOfEvents={setListOfEvent} />
-        <FormControl
-          fullWidth
-          variant="outlined"
+        <Box
           sx={{
-            m: "auto",
-            boxShadow: 4,
-            transition: "box-shadow 0.3s ease-in-out",
-            "&:hover": {
-              boxShadow: "0 5px 15px 5px rgba(0, 0, 0, .2)",
-            },
-            maxWidth: 300,
+            mt: 4,
+            display: "flex",
+            gap: 40,
+            justifyContent: "center",
           }}
         >
-          <InputLabel id="category-select-label">Category</InputLabel>
-          <Select
-            labelId="category-select-label"
-            id="category-select"
-            value={category}
-            onChange={handleCategoryChange}
-            label="Category"
+          <FormControl
+            fullWidth
+            sx={{
+              boxShadow: 4,
+              maxWidth: 600,
+              m: 1,
+              transition: "box-shadow 0.3s ease-in-out",
+              "&:hover": {
+                boxShadow: "0 5px 15px 5px rgba(0, 0, 0, .2)",
+              },
+            }}
+            
           >
-            <MenuItem value="">
-              <em>None</em>
-            </MenuItem>
-            <MenuItem value="event">Event</MenuItem>
-            <MenuItem value="sports">Sports</MenuItem>
-            <MenuItem value="parties">Parties</MenuItem>
-            <MenuItem value="communities">Communities</MenuItem>
-            <MenuItem value="theaters">Theaters</MenuItem>
-            <MenuItem value="concerts">Concerts</MenuItem>
-          </Select>
-        </FormControl>
+            <InputLabel id="category-select-label">Category</InputLabel>
+            <Select
+              labelId="category-select-label"
+              id="category-select"
+              value={category}
+              onChange={handleCategoryChange}
+              label="Category"
+            >
+              <MenuItem value="">
+                <em>None</em>
+              </MenuItem>
+              <MenuItem value="event">Event</MenuItem>
+              <MenuItem value="sports">Sports</MenuItem>
+              <MenuItem value="parties">Parties</MenuItem>
+              <MenuItem value="communities">Communities</MenuItem>
+              <MenuItem value="theaters">Theaters</MenuItem>
+              <MenuItem value="concerts">Concerts</MenuItem>
+            </Select>
+          </FormControl>
+          <Box sx={{ ml: 2, width: "100%", maxWidth: 500 }}>
+            <SearchForm setListOfEvents={setListOfEvent} />
+          </Box>
         </Box>
       </Container>
 
