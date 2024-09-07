@@ -24,6 +24,12 @@ import FavoriteIcon from "@mui/icons-material/Favorite";
 import { jwtDecode } from "jwt-decode";
 import "bootstrap/dist/css/bootstrap.min.css";
 import SearchForm from "./SearchForm";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
+import EventGrids from "./EventGrids";
+import { Container, Box } from "@mui/material";
+import CategoryDropdown from "./CategoryDropdown";
+import { useAuthContext } from "../../hooks/useAuthContext";
+import { CircularProgress } from "@mui/material";
 
 // Function to convert binary data to base64
 const convertBinaryToBase64 = (binaryData, contentType) => {
@@ -167,7 +173,18 @@ export const Event = () => {
   };
 
   if (loading) {
-    return "Loading ...";
+    return (
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100%",
+        }}
+      >
+        <CircularProgress />
+      </Box>
+    );
   }
 
   return (
