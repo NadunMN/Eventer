@@ -31,14 +31,22 @@ export default function Dashboard() {
   const user_id = JSON.parse(localStorage.getItem("user"));
 
   useEffect(() => {
-    if (user && user.favourite_events) {
-      let favoriteEventLength = user.favourite_events.length;
+    if (user && user.registered_events) {
       let registeredEventLength = user.registered_events.length;
-      setCountFavorite(favoriteEventLength);
       setCountRegistered(registeredEventLength);
       setLoading(false);
     }
   }, [user]);
+
+
+  useEffect(() => {
+    if (user && user.created_event) {
+      let createdEventLength = user.created_event.length;
+      setCountCreated(createdEventLength);
+      setLoading(false);
+    }
+  }, [user]);
+
 
   useEffect(() => {
     if (user && user.favourite_events) {
