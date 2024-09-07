@@ -90,7 +90,6 @@ export const Event = () => {
         }
 
         let res_data = response.data;
-        console.log(res_data);
 
         // Process the event data
         const listOfEvents = res_data.map((event) => {
@@ -149,25 +148,43 @@ export const Event = () => {
       });
   };
 
-  //Hadle evet registere
-  const handleRegister = (event_id) => {
-    const isReg = register.includes(event_id);
-    const updatedRegister = isReg
-      ? register.filter((id) => id !== event_id)
-      : [...register, event_id];
+  //Handle evet registere
+  // In Event.jsx
 
-    axios
-      .put(`http://localhost:5000/api/user/edit/${userId}`, {
+  const handleRegister = async (event_id) => {
+    try {
+      // Fetch the latest participants for the event
+      const eventResponse = await axios.get(
+        `http://localhost:5000/api/event/getEvent/${event_id}`
+      );
+      const currentParticipants = eventResponse.data.participants;
+
+      const isReg = register.includes(event_id);
+      const updatedRegister = isReg
+        ? register.filter((id) => id !== event_id)
+        : [...register, event_id];
+
+      const updatedParticipants = isReg
+        ? currentParticipants.filter((id) => id !== userId)
+        : [...currentParticipants, userId];
+
+      // First, update the user's registered events
+      await axios.put(`http://localhost:5000/api/user/edit/${userId}`, {
         registered_events: updatedRegister,
-      })
-      .then(() => {
-        setRegister(updatedRegister);
-        console.log(isReg ? "Removed from Register" : "Added to Register");
-      })
-      .catch((err) => {
-        alert("An error occurred. Please check the console");
-        console.error(err);
       });
+
+      // Then, update the event's participants
+      await axios.put(`http://localhost:5000/api/event/edit/${event_id}`, {
+        participants: updatedParticipants,
+      });
+
+      // Update the local state after both requests succeed
+      setRegister(updatedRegister);
+      console.log(isReg ? "Removed from Register" : "Added to Register");
+    } catch (err) {
+      console.error("Error while registering/unregistering", err);
+      alert("An error occurred. Please check the console");
+    }
   };
 
   if (loading) {
@@ -304,7 +321,9 @@ export const Event = () => {
                   <Button
                     variant="contained"
                     color="primary"
-                    onClick={() => handleRegister(event._id)}
+                    onClick={() =>
+                      handleRegister(event._id, event.participants)
+                    }
                   >
                     {register.includes(event._id) ? "Unregister" : "Register"}
                   </Button>
