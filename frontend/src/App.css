@@ -1,8 +1,16 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+
 *{
     margin: 0;
     padding: 0;
     font-family: sans-serif;
+    
 }
+
+body{
+        overflow-x: hidden;    
+}
+
 
 .Main-part{
     background-image: url('./asset/group-people-enjoying-holi-color.jpg');
@@ -11,28 +19,45 @@
     background-repeat: no-repeat; /* Prevent the image from repeating */
     height: 100vh;
     display: flex;
-    align-items: center;
+    /* align-items: center; */
     justify-content: center;
     flex-direction: column;
 }
 
-.Topic-div{
-    text-align: center;
-    /* background-color: aqua; */
-    display: inline;
-    padding: auto;
-    margin-top: -60px;
-}
 
-.Topic-div .main-topic-para{
 
-    text-align: center;
-    font-size: 5em;
-}
+.main-topic-para {
+    font-size: 5rem; /* Size for "Make Your." */
+    font-weight: bold; /* Normal weight for "Make Your." */
+    text-align: left; /* Center the text */
+    color: #000; /* Default color for text */
+    margin-left: 50px;
+    padding: 0;
+    line-height: 1; /* Adjust line-height for spacing */
+  }
 
 .Topic-div .main-topic-para span{
-    color: #311b92;
+    background: linear-gradient(45deg, #673ab7, #3f51b5); /* Define the gradient */
+    -webkit-background-clip: text; /* Clip the background to the text */
+    -webkit-text-fill-color: transparent; 
     font-weight: bold;
+    /* margin-top: 7px; */
+    /* column-gap: 100px; */
+    
+    /* display: block;  */
+    line-height: 1;
+    font-size: 6rem; 
+    font-weight: 700; 
+    /* color: #6f42c1;  */
+}
+.main-topic-para span::before{
+    background: linear-gradient(45deg, #673ab7 10%, #3f51b5 90%);
+    /* mix-blend-mode: ; */
+   
+}
+
+.sub-heading1{
+    font-family:"Playwrite CU", cursive;;
 }
 
 
@@ -191,10 +216,12 @@
 
 .brandcarousel-container{
     margin-top: 100px;
-    padding-left: 50px;
-    margin-bottom: 100px;
-    justify-content: space-evenly;
+    display: flex;
     align-items: center;
+    margin-bottom: 100px;
+    justify-content: flex-end;
+    align-items: center;
+    /* background-color: #311b92; */
 }
 
 .card-container {

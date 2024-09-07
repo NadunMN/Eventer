@@ -7,10 +7,10 @@ import {
   Box,
   colors,
   Grid,
+  CircularProgress,
   Button,
 } from "@mui/material";
 import { jwtDecode } from "jwt-decode";
-
 import EventBanner from "./EventBanner";
 import EventDetails from "./EventDetails";
 import { Reviews } from "../Reviews";
@@ -38,9 +38,8 @@ export default function EventData(handleNavigate) {
   const [userRole, setUserRole] = useState("");
   const [favorites, setFavorites] = useState([]);
 
-
-   //get user data from local storage
-   useEffect(() => {
+  //get user data from local storage
+  useEffect(() => {
     const user = JSON.parse(localStorage.getItem("user"));
     if (user) {
       const jwtToken = jwtDecode(user.token);

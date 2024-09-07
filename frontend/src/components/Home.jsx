@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Stack, Typography, Button } from "@mui/material";
+import { Stack, Typography, Button, TextField } from "@mui/material";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import Box from "@mui/material/Box";
 import ButtonBaseDemo from "./Category";
@@ -10,19 +10,66 @@ export const Home = () => {
   return (
     <>
       <div className="Main-part">
+
+        <Box sx={{position: 'absolute', top: 80, right: -40, display: 'flex', flexDirection: 'column'}}>
+            <img src="/c824283db398f272024c80e9e33a9ab4.jpg-01.png" style={{
+              width: '800px',
+              transform: 'rotate(-10deg)'
+            }}></img>
+        </Box>
+        <Box sx={{position: 'absolute', top: 34, left: 50, display: 'flex', flexDirection: 'column'}}>
+        <img src="/rocket2-01.png" style={{
+              width: '500px',
+              transform: 'scaleX(-1)',
+              zIndex: '1'
+
+            }}></img>
+        </Box>
+
+        
+
+        <Box sx={{position: 'absolute', top: 150, right: 0, display: 'flex', flexDirection: 'column', 
+            mr:5, p:5
+        }}>
+            <Typography sx={{width: 220, fontFamily: 'monospace', mb:2 }}>Create your favorite event with our eventer</Typography>
+            <Button variant="contained"  sx={{height:50,  bgcolor: '"linear-gradient(45deg, #673ab7 30%, #3f51b5 90%)"',fontSize: '15px', }}>Create Your own Event</Button>
+        </Box>
+        <Box sx={{
+          position: 'absolute',
+          // top:300,
+          alignItems: 'center'
+          // bottom:'50px'
+        }}>
         <div className="Topic-div">
           <p className="main-topic-para">
-            Make Your. <span>Dream Come True.</span>
-          </p>
+          Effortless <br/>  <span> Event Planning for <br/> <span style={{
+            fontSize: '5rem'
+          }}>Every Occasion.</span></span>
+          </p>  
+
         </div>
-        <Stack direction="row" spacing={2} sx={{ mt: "50px" }}>
+        
+        <Box sx={{mt:2}}>
+        <Typography variant="h6" className="sub-heading1" sx={{ml: '55px', mt: '5px',
+          // fontFamily: 'Brush Script MT'
+        }}>
+          <b>Eventer</b> is the best University Event planner  
+        </Typography>
+        <Typography variant="h6"  sx={{ml: '55px', mt: '5px',
+          
+        }}>
+        Where Campus Life Comes Alive: Discover, Plan, and Celebrate Every Moment  
+        </Typography>
+
+        </Box>
+        <Stack direction="row" spacing={2} sx={{ mt: 2, display: 'flex', justifyContent: "flex-statrt", ml: '50px' }}>
           <Button
             variant="contained"
             //  className ={classes.button}
             size="large"
             sx={{
-              bgcolor: "#311b92",
-              width: 220,
+              bgcolor: "linear-gradient(45deg, #673ab7 30%, #3f51b5 90%)",
+              width: 200,
               fontSize: "20px",
 
               "&:hover": {
@@ -41,9 +88,9 @@ export const Home = () => {
             //  className ={classes.button}
             size="large"
             sx={{
-              width: 220,
+              width: 200,
               fontSize: "20px",
-              color: "#311b92",
+              color: "linear-gradient(45deg, #673ab7 30%, #3f51b5 90%)",
               border: 2,
 
               "&:hover": {
@@ -54,13 +101,13 @@ export const Home = () => {
             }}
             disableElevation
           >
-            GET STARTED
+            SIGN IN
           </Button>
         </Stack>
 
-        <Typography variant="h5" mt={2}>
-          <b>Eventer</b> is the best University Event planner
-        </Typography>
+        </Box>
+
+        
       </div>
 
       <Brandcarousel />
@@ -102,7 +149,7 @@ export const Home = () => {
             height: 50,
             borderRadius: 5,
             mt: 6,
-            bgcolor: "#311b92",
+            bgcolor: "linear-gradient(45deg, #673ab7 30%, #3f51b5 90%)",
 
             "&:hover": {
               bgcolor: "#512da8", // Change this to the desired color
