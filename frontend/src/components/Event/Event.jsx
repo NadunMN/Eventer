@@ -18,6 +18,8 @@ import {
   IconButton,
   CardActions,
   CircularProgress,
+  Snackbar,
+  Alert,
 } from "@mui/material";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FavoriteIcon from "@mui/icons-material/Favorite";
@@ -50,8 +52,19 @@ export const Event = () => {
   const [userId, setUserId] = useState("");
   const [favorites, setFavorites] = useState([]);
   const [register, setRegister] = useState([]);
+  const [snackbarOpen, setSnackbarOpen] = useState(false); // Alert visibility state
+  const [alert, setAlert] = useState("");
+  const [message, setMessage] = useState("");
+
   const navigate = useNavigate();
   const location = useLocation();
+
+  const handleSnackbarClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setSnackbarOpen(false); // Close the snackbar
+  };
 
   //get user data from local storage
   useEffect(() => {
