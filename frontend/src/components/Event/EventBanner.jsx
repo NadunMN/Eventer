@@ -1,9 +1,19 @@
-import { Card, CardMedia, Box, IconButton, Typography } from "@mui/material";
+import {
+  Card,
+  CardMedia,
+  Box,
+  IconButton,
+  Typography,
+  Snackbar,
+  Container,
+  Alert,
+} from "@mui/material";
 import React, { useState, useEffect } from "react";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import { jwtDecode } from "jwt-decode";
 import axios from "axios";
+import { Style } from "@mui/icons-material";
 
 function EventBanner({ event }) {
   const [isFav, setIsFev] = useState(false);
@@ -11,6 +21,7 @@ function EventBanner({ event }) {
   const [userRole, setUserRole] = useState("");
   const [userId, setUserId] = useState("");
   const [favorites, setFavorites] = useState([]);
+  const [message, setMessage] = useState("");
 
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("user"));
@@ -29,9 +40,8 @@ function EventBanner({ event }) {
     }
   }, []);
   const handleFav = (event_id) => {
-    console.log(event_id);
-
     const isFav = favorites.includes(event_id);
+
     const updatedFavorites = isFav
       ? favorites.filter((id) => id !== event_id)
       : [...favorites, event_id];
@@ -49,8 +59,9 @@ function EventBanner({ event }) {
         console.error(err);
       });
   };
+
   return (
-    <Box>
+    <Container>
       <Box
         sx={{
           backgroundImage: `url(${event.cover_image})`,
@@ -65,9 +76,13 @@ function EventBanner({ event }) {
         }}
       >
         <IconButton
-          variant="outlined"
-          color={favorites.includes(event._id) ? "warning" : "neutral"}
-          sx={{ position: "absolute", bottom: 10, right: 40 }}
+          variant="variant"
+          sx={{
+            color: favorites.includes(event._id) ? "#FF5733" : "#AAB7B8", // Custom colors
+            position: "absolute",
+            bottom: 10,
+            right: 40,
+          }}
           onClick={() => handleFav(event._id)}
         >
           {favorites.includes(event._id) ? (
@@ -76,14 +91,13 @@ function EventBanner({ event }) {
             <FavoriteBorderIcon sx={{ fontSize: 60 }} />
           )}
         </IconButton>
-        
       </Box>
       <Box>
-        <Typography variant="h3" component="h3" sx={{ flexGrow: 6 }}>
+        <Typography variant="h1" component="h1" sx={{ flexGrow: 6 }}>
           {event.title}
         </Typography>
       </Box>
-    </Box>
+    </Container>
   );
 }
 
