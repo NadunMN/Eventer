@@ -15,7 +15,7 @@ const EventSchema = new mongoose.Schema({
   created_by: { type: String, required: true },
   created_at: { type: String, required: true },
   category: { type: String, required: true },
-  organizer: { type: String, require: true },
+  organizer: { type: String },
 });
 
 // Create the event model
