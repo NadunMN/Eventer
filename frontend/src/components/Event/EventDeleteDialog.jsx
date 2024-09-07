@@ -1,6 +1,5 @@
 import * as React from 'react';
 import Button from '@mui/material/Button';
-import TextField from '@mui/material/TextField';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
@@ -8,26 +7,45 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import Box from '@mui/material/Box';
 import axios from 'axios';
-import { useParams} from "react-router-dom";
+import { useState } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+import Snackbar from '@mui/material/Snackbar';
+import Alert from '@mui/material/Alert';
 
 export default function FormDialogDelete() {
-    const {eventId} = useParams();
-  const [open, setOpen] = React.useState(false);
+  const { eventId } = useParams();
+  const [open, setOpen] = useState(false);
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [alertMessage, setAlertMessage] = useState("");
+  const [alertSeverity, setAlertSeverity] = useState("success"); // Set default severity
 
-
-console.log(eventId);
+  const navigate = useNavigate();
 
   const handleDeleteClick = async () => {
     try {
-
-        await axios.delete(`http://localhost:5000/api/event/delete/${eventId}`);
-        // logout();
-        // navigate("/", { replace: true });
+      // Attempt to delete the event
+      await axios.delete(`http://localhost:5000/api/event/delete/${eventId}`);
+      setAlertMessage("Event deleted successfully!"); 
+      setAlertSeverity("success"); 
+      setSnackbarOpen(true); 
+      setTimeout(() => {
+        navigate("/event", { replace: true });
+      }, 2000);
 
     } catch (error) {
-        console.error("Failed to save the user:", error);
+      setAlertMessage("Failed to delete the event."); 
+      setAlertSeverity("error"); 
+      setSnackbarOpen(true);
+      console.error("Failed to delete the event:", error);
     }
-};
+  };
+
+  const handleSnackbarClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setSnackbarOpen(false); // Close the snackbar
+  };
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -37,20 +55,18 @@ console.log(eventId);
     setOpen(false);
   };
 
-
-
   return (
     <React.Fragment>
-      <Box 
+      <Box
         sx={{
           display: 'flex',
-          justifyContent: 'center', // Center horizontally
-          alignItems: 'center',    // Center vertically
+          justifyContent: 'center', 
+          alignItems: 'center',   
         }}
       >
-        <Button 
-          variant="contained" 
-          color='error' 
+        <Button
+          variant="contained"
+          color='error'
           sx={{
             width: '500px',
             display: 'flex',
@@ -58,7 +74,7 @@ console.log(eventId);
             justifyContent: 'center',
             alignItems: 'center',
             borderRadius: 10,
-          }} 
+          }}
           onClick={handleClickOpen}
         >
           Delete this event
@@ -72,10 +88,6 @@ console.log(eventId);
           component: 'form',
           onSubmit: (event) => {
             event.preventDefault();
-            const formData = new FormData(event.currentTarget);
-            const formJson = Object.fromEntries(formData.entries());
-            const email = formJson.email;
-            console.log(email);
             handleClose();
           },
         }}
@@ -83,19 +95,28 @@ console.log(eventId);
         <DialogTitle>Delete the event</DialogTitle>
         <DialogContent>
           <DialogContentText>
-          Once you delete a Account, there is no going back. Please be certain.
+            Once you delete an account, there is no going back. Please be certain.
           </DialogContentText>
           <DialogContentText variant='body2' color='error' m='2'>
-          "All your data will be permanently erased, and it cannot be recovered."
+            "All your data will be permanently erased, and it cannot be recovered."
           </DialogContentText>
-          
-          
         </DialogContent>
-        <DialogActions sx={{display:'flex', justifyContent: 'center'}}>
+        <DialogActions sx={{ display: 'flex', justifyContent: 'center' }}>
           <Button variant='contained' onClick={handleClose}>Cancel</Button>
           <Button variant='contained' color="error" type="submit" onClick={handleDeleteClick}>Delete</Button>
         </DialogActions>
       </Dialog>
+
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={3000}
+        onClose={handleSnackbarClose}
+        anchorOrigin={{ vertical: "top", horizontal: "right" }}
+      >
+        <Alert onClose={handleSnackbarClose} severity={alertSeverity} sx={{ width: "100%" }}>
+          {alertMessage}
+        </Alert>
+      </Snackbar>
     </React.Fragment>
   );
 }
