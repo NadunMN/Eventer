@@ -366,14 +366,6 @@ export default function EventData(handleNavigate) {
               {register.includes(event._id) ? "Unregister" : "Register"}
             </Button>
 
-            <Button
-              sx={{px: 5, py: 2,width: '500px', borderRadius:10}}
-              variant="contained"
-              color="error"
->
-              Delete this event
-            </Button>
-
             {userId === eventCreatedId ? <FormDialogDelete /> : null}
             {/* <FormDialogDelete/> */}
 
