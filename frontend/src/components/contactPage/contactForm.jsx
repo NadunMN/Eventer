@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { TextField, Button, Box, Typography, Alert } from '@mui/material';
+import axios from 'axios';
 
 const ContactForm = () => {
   const [formData, setFormData] = useState({ name: '', email: '', message: '' });
@@ -25,18 +26,38 @@ const ContactForm = () => {
   };
 
   // Handle form submission
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    
     const errors = validate();
     if (Object.keys(errors).length === 0) {
-     
-      console.log('Form data:', formData);
-      setFormSubmitted(true);
-      setFormData({ name: '', email: '', message: '' }); 
+      setFormErrors({}); // Clear any previous errors
+      setFormSubmitted(false); // Reset form submission status
+  
+      try {
+        // Sending form data to backend
+        const response = await axios.post('http://localhost:5000/api/contact/addContact', formData, {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+  
+        if (response.status === 201) {
+          // Success
+          console.log('Data saved successfully:', response.data);
+          setFormSubmitted(true); // Show success message
+          setFormData({ name: '', email: '', message: '' }); // Reset form fields
+        } else {
+          console.error('Failed to save data:', response.status);
+        }
+      } catch (error) {
+        console.error('Error saving data:', error.response ? error.response.data : error.message);
+      }
     } else {
-      setFormErrors(errors);
+      setFormErrors(errors); // Display validation errors
     }
   };
+
 
   return (
     <Box
@@ -44,8 +65,8 @@ const ContactForm = () => {
       sx={{ display: 'flex', flexDirection: 'column', gap: 2, width: '200%', maxWidth: 500, mx: 'auto', mt: 5 }}
       onSubmit={handleSubmit}
     >
-      <Typography variant="h5" component="h1" gutterBottom>
-        Or Leave a Short Messege
+      <Typography variant="h4" component="h1" gutterBottom>
+        Contact Us
       </Typography>
       {formSubmitted && <Alert severity="success">Your message has been sent successfully!</Alert>}
       <TextField
@@ -85,3 +106,4 @@ const ContactForm = () => {
 };
 
 export default ContactForm;
+

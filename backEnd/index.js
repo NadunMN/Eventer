@@ -7,6 +7,7 @@ const userProfileRoutes = require("./routes/userProfileRoutes");
 
 const userRoutes = require("./routes/userRoutes");
 const reviewRoutes = require("./routes/reviewRoutes");
+const contactRoutes = require("./routes/contactRoutes");
 
 const errorHadler = require("./middleware/errorHandler");
 const bodyParser = require("body-parser");
@@ -34,6 +35,8 @@ app.use("/api", userProfileRoutes);
 app.use("/api/user", userRoutes);
 
 app.use("/api/review", reviewRoutes);
+
+app.use("/api/contact/", contactRoutes);
 
 // Error handling
 app.use(errorHadler);
