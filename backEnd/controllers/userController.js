@@ -99,11 +99,6 @@ const login = async (req, res) => {
   }
 };
 
-
-
-
-
-
 const editUser = async (req, res) => {
   try {
     const { id } = req.params;
@@ -114,6 +109,7 @@ const editUser = async (req, res) => {
     const result = await userModel.findByIdAndUpdate(id, req.body, {
       new: true,
     });
+    console.log(result);
 
     if (!result) {
       return res.status(404).json({ message: "User not found" });

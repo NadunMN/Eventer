@@ -2,7 +2,7 @@ const { default: mongoose } = require("mongoose");
 const EventModel = require("../models/eventModel");
 const multer = require("multer");
 
-const upload = multer(); //upload a form data to the db
+// const upload = multer(); //upload a form data to the db
 
 // api to get Events
 const getEvents = async (req, res) => {
@@ -200,6 +200,32 @@ const editEvent = async (req, res) => {
   }
 };
 
+//register for event
+const registerForEvent = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { user_id } = req.body;
+
+    const event = await EventModel.findById(id);
+    if (!event) {
+      return res.status(404).json({ message: "Event not found" });
+    }
+
+    // Add the event ID to the user's registered list
+    const user = await UserModel.findById(user_id);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    user.registered_events.push(id);
+    await user.save();
+
+    res.status(200).json({ message: "Successfully registered for event" });
+  } catch (error) {
+    res.status(500).json({ message: "Failed to register for event" });
+  }
+}
+
 module.exports = {
   getEvents,
   searchEvents,
@@ -211,4 +237,5 @@ module.exports = {
   deleteEvent,
   editEvent,
   getCategory,
+  registerForEvent,
 };

@@ -16,7 +16,7 @@ const convertBinaryToBase64 = (binaryData, contentType) => {
   }
 };
 
-const CategoryDropdown = ({ setListOfEvents , setCategory} ) => {
+const CategoryDropdown = ({ setListOfEvents, setCategory }) => {
   const [error, setError] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("");
   const navigate = useNavigate();
