@@ -54,7 +54,7 @@ const ErrorMessage = styled(Typography)(({ theme }) => ({
 const SearchForm = ({ setListOfEvents }) => {
   const [searchString, setSearchString] = useState(""); // State for the search input
   const [error, setError] = useState(""); // State for error messages
-  
+
   // Function to handle searching events
   const handleSearchEvent = async (event) => {
     event.preventDefault(); // Prevent default form submission
@@ -63,9 +63,9 @@ const SearchForm = ({ setListOfEvents }) => {
       const response = await axios.get(
         `${Api_url}:5000/api/event/searchEvents?title=${searchString}`
       );
-      
+
       let events = response.data;
-      
+
       // Process the event data
       const processedEvents = events.map((event) => {
         if (event.cover_image) {
@@ -77,7 +77,7 @@ const SearchForm = ({ setListOfEvents }) => {
         }
         return event;
       });
-      
+
       setListOfEvents(processedEvents); // Update event list with response data
       // setIsSearch(true);
       setError(""); // Clear any existing errors
@@ -89,9 +89,10 @@ const SearchForm = ({ setListOfEvents }) => {
 
   return (
     <>
-      <form onSubmit={handleSearchEvent}>
+      <form onSubmit={handleSearchEvent} >
         <SearchWrapper>
           <StyledInputBase
+           
             placeholder="Search events..."
             inputProps={{ "aria-label": "search events" }}
             value={searchString} // Bind input value to searchString state

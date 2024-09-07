@@ -16,6 +16,8 @@ import {
   IconButton,
   CardActions,
   CircularProgress,
+  Snackbar,
+  Alert,
 } from "@mui/material";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FavoriteIcon from "@mui/icons-material/Favorite";
@@ -24,7 +26,6 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import SearchForm from "./SearchForm";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import EventGrids from "./EventGrids";
-import CategoryDropdown from "./CategoryDropdown";
 import { useAuthContext } from "../../hooks/useAuthContext";
 
 // Function to convert binary data to base64
@@ -49,8 +50,19 @@ export const Event = () => {
   const [userId, setUserId] = useState("");
   const [favorites, setFavorites] = useState([]);
   const [register, setRegister] = useState([]);
+  const [snackbarOpen, setSnackbarOpen] = useState(false); // Alert visibility state
+  const [alert, setAlert] = useState("");
+  const [message, setMessage] = useState("");
+
   const navigate = useNavigate();
   const location = useLocation();
+
+  const handleSnackbarClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setSnackbarOpen(false); // Close the snackbar
+  };
 
   //get user data from local storage
   useEffect(() => {
@@ -138,17 +150,22 @@ export const Event = () => {
       })
       .then(() => {
         setFavorites(updatedFavorites);
+        isFav
+          ? setMessage("Event removed from your favorites")
+          : setMessage("Event added to favorites");
+        isFav ? setAlert("info") : setAlert("success");
         console.log(isFav ? "Removed from favorites" : "Added to favorites");
+        setSnackbarOpen(true);
       })
       .catch((err) => {
-        alert("An error occurred. Please check the console");
+        setAlert("error");
+        setMessage("Failed to add event to favorites");
+        setSnackbarOpen(true);
         console.error(err);
       });
   };
 
   //Handle evet registere
-  // In Event.jsx
-
   const handleRegister = async (event_id) => {
     try {
       // Fetch the latest participants for the event
@@ -178,10 +195,17 @@ export const Event = () => {
 
       // Update the local state after both requests succeed
       setRegister(updatedRegister);
+      isReg
+        ? setMessage("Unegistered for event successfully")
+        : setMessage("Registered for event successfully");
+      isReg ? setAlert("info") : setAlert("success");
+      setSnackbarOpen(true);
       console.log(isReg ? "Removed from Register" : "Added to Register");
     } catch (err) {
+      setAlert("error");
+      setMessage("Failed to register for event");
+      setSnackbarOpen(true);
       console.error("Error while registering/unregistering", err);
-      alert("An error occurred. Please check the console");
     }
   };
 
@@ -203,48 +227,50 @@ export const Event = () => {
   return (
     <Box>
       {/* Search form and category dropdown */}
-      <Container
-        fixed
-        sx={{
-          display: "flex",
-          mt: 4,
-          gap: 30,
-          backgroundColor: "#f0f0f0",
-        }}
-      >
-        <SearchForm setListOfEvents={setListOfEvent} />
-        <FormControl
-          fullWidth
-          variant="outlined"
+      <Container maxWidth="lg">
+        <Box
           sx={{
-            m: "auto",
-            boxShadow: 4,
-            transition: "box-shadow 0.3s ease-in-out",
-            "&:hover": {
-              boxShadow: "0 5px 15px 5px rgba(0, 0, 0, .2)",
-            },
-            maxWidth: 300,
+            mt: 4,
+            display: "flex",
+            gap: 40,
+            justifyContent: "center",
           }}
         >
-          <InputLabel id="category-select-label">Category</InputLabel>
-          <Select
-            labelId="category-select-label"
-            id="category-select"
-            value={category}
-            onChange={handleCategoryChange}
-            label="Category"
+          <FormControl
+            fullWidth
+            sx={{
+              boxShadow: 4,
+              maxWidth: 600,
+              m: 1,
+              transition: "box-shadow 0.3s ease-in-out",
+              "&:hover": {
+                boxShadow: "0 5px 15px 5px rgba(0, 0, 0, .2)",
+              },
+            }}
           >
-            <MenuItem value="">
-              <em>None</em>
-            </MenuItem>
-            <MenuItem value="event">Event</MenuItem>
-            <MenuItem value="sports">Sports</MenuItem>
-            <MenuItem value="parties">Parties</MenuItem>
-            <MenuItem value="communities">Communities</MenuItem>
-            <MenuItem value="theaters">Theaters</MenuItem>
-            <MenuItem value="concerts">Concerts</MenuItem>
-          </Select>
-        </FormControl>
+            <InputLabel id="category-select-label">Category</InputLabel>
+            <Select
+              labelId="category-select-label"
+              id="category-select"
+              value={category}
+              onChange={handleCategoryChange}
+              label="Category"
+            >
+              <MenuItem value="">
+                <em>None</em>
+              </MenuItem>
+              <MenuItem value="event">Event</MenuItem>
+              <MenuItem value="sports">Sports</MenuItem>
+              <MenuItem value="parties">Parties</MenuItem>
+              <MenuItem value="communities">Communities</MenuItem>
+              <MenuItem value="theaters">Theaters</MenuItem>
+              <MenuItem value="concerts">Concerts</MenuItem>
+            </Select>
+          </FormControl>
+          <Box sx={{ ml: 2, width: "100%", maxWidth: 500 }}>
+            <SearchForm setListOfEvents={setListOfEvent} />
+          </Box>
+        </Box>
       </Container>
 
       {/* Event cards */}
@@ -347,6 +373,21 @@ export const Event = () => {
           ))}
         </Grid>
       </Container>
+      {/* alert  */}
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={3000}
+        onClose={handleSnackbarClose}
+        anchorOrigin={{ vertical: "top", horizontal: "right" }}
+      >
+        <Alert
+          onClose={handleSnackbarClose}
+          severity={alert}
+          sx={{ width: "100%" }}
+        >
+          {message}
+        </Alert>
+      </Snackbar>
     </Box>
   );
 };
