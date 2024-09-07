@@ -10,6 +10,7 @@ import {
   Menu,
   MenuItem,
   Snackbar,
+  Box,
   Alert,
 } from "@mui/material";
 import axios from "axios";
@@ -188,7 +189,7 @@ export const Reviews = () => {
       style={{
         display: "flex",
         justifyContent: "center",
-        marginTop: 50,
+        marginTop: 60,
       }}
     >
       <Paper
