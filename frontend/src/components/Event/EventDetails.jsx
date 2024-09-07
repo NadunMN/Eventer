@@ -7,10 +7,20 @@ import LocationOnIcon from '@mui/icons-material/LocationOn';
 import PeopleIcon from '@mui/icons-material/People';
 
 const EventDetails = ({ event }) => {
+  let styleListItem = {
+    backgroundColor: "",
+    borderRadius: '50px',
+    width: '50%',
+
+  }
   return (
-    <Box>
+    <Box 
+    sx={{
+      backgroundColor: '#f9f9f9',
+    }}
+    >
       <List>
-        <ListItem>
+        <ListItem sx={styleListItem}>
           <ListItemIcon>
             <EventIcon />
           </ListItemIcon>
