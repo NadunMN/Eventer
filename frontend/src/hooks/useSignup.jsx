@@ -16,7 +16,7 @@ export const useSignup = () => {
         "http://localhost:5000/api/user/signup",
         userData
       );
-      console.log(res);
+      console.log("Rs: ", res.data);
 
       const json = res.data;
 
@@ -27,6 +27,7 @@ export const useSignup = () => {
       dispatch({ type: "LOGIN", payload: json });
 
       setIsLoading(false);
+      return res.data;
     } catch (error) {
       setIsLoading(false);
       setError(
