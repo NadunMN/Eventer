@@ -3,6 +3,7 @@ import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import ButtonBase from '@mui/material/ButtonBase';
 import Typography from '@mui/material/Typography';
+import { useNavigate } from 'react-router-dom';
 
 
 const images = [
@@ -11,12 +12,14 @@ const images = [
     title: 'EVENTS',
     width: '400px',
     height: '300px',
+    category: "event"
   },
   {
     url:'/src/asset/sports.jpg',
     title: 'SPORTS',
     width: '400px',
     height: '300px',
+    category: "sports",
 
 },
   {
@@ -24,6 +27,7 @@ const images = [
     title: 'PARTIES',
     width: '400px',
     height: '300px',
+    category: "parties"
 
 },
   {
@@ -31,6 +35,7 @@ const images = [
     title: 'COMMUNITIE',
     width: '400px',
     height: '300px',
+    category: "communities"
 
 },
   {
@@ -38,6 +43,7 @@ const images = [
     title: 'THEATERS',
     width: '400px',
     height: '300px',
+    category: "theaters"
 
 },
   {
@@ -45,6 +51,7 @@ const images = [
     title: 'CONCERTS',
     width: '400px',
     height: '300px',
+    category: "concerts"
 
 },
 ];
@@ -117,6 +124,11 @@ const ImageMarked = styled('span')(({ theme }) => ({
 }));
 
 export default function ButtonBaseDemo() {
+
+  const navigate = useNavigate();
+  const handleNavigateCategory = (category) => {
+    navigate(`/event`, { state: { category } });
+  }
   return (
     <Box sx={{ display: 'flex', flexWrap: 'wrap', minWidth: 300, maxWidth: 1500, gap: 2, mt:2, justifyContent:'center'}}>
       {images.map((image) => (
@@ -126,7 +138,9 @@ export default function ButtonBaseDemo() {
           style={{
             width: image.width,
             height: image.height,
+
           }}
+          onClick={handleNavigateCategory(image.category)}
         >
           <ImageSrc style={{ backgroundImage: `url(${image.url})` }} />
           <ImageBackdrop className="MuiImageBackdrop-root" />

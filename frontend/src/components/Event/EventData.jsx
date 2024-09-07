@@ -60,6 +60,7 @@ export default function EventData(handleNavigate) {
   const [message, setMessage] = useState("");
 
   const handleSnackbarClose = (event, reason) => {
+    
     if (reason === "clickaway") {
       return;
     }
