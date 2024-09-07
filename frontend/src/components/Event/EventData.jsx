@@ -30,8 +30,6 @@ import {
 import { Reviews } from "../Reviews";
 import { EventParticipant } from "./EventParticipant";
 
-
-
 // Convert binary data to base64
 const convertBinaryToBase64 = (binaryData, contentType) => {
   if (binaryData && binaryData instanceof Uint8Array) {
@@ -66,7 +64,6 @@ export default function EventData(handleNavigate) {
     setSnackbarOpen(false); // Close the snackbar
   };
 
-
   //get user data from local storage
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("user"));
@@ -88,8 +85,6 @@ export default function EventData(handleNavigate) {
 
   // Handle favorite events
   const handleFav = (event_id) => {
-
-
     const isFav = favorites.includes(event_id);
     const updatedFavorites = isFav
       ? favorites.filter((id) => id !== event_id)
@@ -101,7 +96,9 @@ export default function EventData(handleNavigate) {
       })
       .then(() => {
         setFavorites(updatedFavorites);
-        isFav ? setMessage("Event removed from favorites") : setMessage("Event added to favorites");
+        isFav
+          ? setMessage("Event removed from favorites")
+          : setMessage("Event added to favorites");
         isFav ? setAlert("info") : setAlert("success");
         console.log(isFav ? "Removed from favorites" : "Added to favorites");
         setSnackbarOpen(true);
@@ -115,32 +112,49 @@ export default function EventData(handleNavigate) {
   };
 
   //Hadle evet registere
-  const handleRegister = (event_id) => {
-    const isReg = register.includes(event_id);
-    const updatedRegister = isReg
-      ? register.filter((id) => id !== event_id)
-      : [...register, event_id];
+  const handleRegister = async (event_id) => {
+    try {
+      // Fetch the latest participants for the event
+      const eventResponse = await axios.get(
+        `http://localhost:5000/api/event/getEvent/${event_id}`
+      );
+      const currentParticipants = eventResponse.data.participants;
 
-    axios
-      .put(`http://localhost:5000/api/user/edit/${userId}`, {
+      const isReg = register.includes(event_id);
+      const updatedRegister = isReg
+        ? register.filter((id) => id !== event_id)
+        : [...register, event_id];
+
+      const updatedParticipants = isReg
+        ? currentParticipants.filter((id) => id !== userId)
+        : [...currentParticipants, userId];
+
+      // First, update the user's registered events
+      await axios.put(`http://localhost:5000/api/user/edit/${userId}`, {
         registered_events: updatedRegister,
-      })
-      .then(() => {
-        setRegister(updatedRegister);
-        isReg ? setMessage("Event removed from register") : setMessage("Event added to register");
-        isReg ? setAlert("info") : setAlert("success");
-        setSnackbarOpen(true);
-        console.log(isReg ? "Removed from Register" : "Added to Register");
-      })
-      .catch((err) => {
-        setAlert("error")
-        setMessage("Failed to register for event");
-        setSnackbarOpen(true);
-        console.error(err);
       });
+
+      // Then, update the event's participants
+      await axios.put(`http://localhost:5000/api/event/edit/${event_id}`, {
+        participants: updatedParticipants,
+      });
+
+      // Update the local state after both requests succeed
+      setRegister(updatedRegister);
+      isReg
+        ? setMessage("Event removed from register")
+        : setMessage("Event added to register");
+      isReg ? setAlert("info") : setAlert("success");
+      setSnackbarOpen(true);
+      console.log(isReg ? "Removed from Register" : "Added to Register");
+    } catch (err) {
+      setAlert("error");
+      setMessage("Failed to register for event");
+      setSnackbarOpen(true);
+      console.error("Error while registering/unregistering", err);
+    }
   };
 
-  //fetch event data
   useEffect(() => {
     const fetchEvent = async () => {
       try {
@@ -316,9 +330,9 @@ export default function EventData(handleNavigate) {
             </List>
           </Box>
           {/* right */}
-          <Container sx={{display: "flex", flexDirection: "column", mt: 3} } >
+          <Container sx={{ display: "flex", flexDirection: "column", mt: 3 }}>
             <Button
-              sx={{px: 5, py: 2,}}
+              sx={{ px: 5, py: 2 }}
               variant="contained"
               color="primary"
               onClick={() => handleRegister(event._id)}
@@ -326,7 +340,10 @@ export default function EventData(handleNavigate) {
               {register.includes(event._id) ? "Unregister" : "Register"}
             </Button>
 
-            <Typography variant="body1" sx={{mt:2}}> {event.description}</Typography>
+            <Typography variant="body1" sx={{ mt: 2 }}>
+              {" "}
+              {event.description}
+            </Typography>
           </Container>
         </Container>
       </Container>
@@ -342,10 +359,10 @@ export default function EventData(handleNavigate) {
       >
         <Alert
           onClose={handleSnackbarClose}
-          severity= {alert}
+          severity={alert}
           sx={{ width: "100%" }}
         >
-            {message}
+          {message}
         </Alert>
       </Snackbar>
     </>

@@ -152,17 +152,22 @@ export const Event = () => {
       })
       .then(() => {
         setFavorites(updatedFavorites);
+        isFav
+          ? setMessage("Event removed from favorites")
+          : setMessage("Event added to favorites");
+        isFav ? setAlert("info") : setAlert("success");
         console.log(isFav ? "Removed from favorites" : "Added to favorites");
+        setSnackbarOpen(true);
       })
       .catch((err) => {
-        alert("An error occurred. Please check the console");
+        setAlert("error");
+        setMessage("Failed to add event to favorites");
+        setSnackbarOpen(true);
         console.error(err);
       });
   };
 
   //Handle evet registere
-  // In Event.jsx
-
   const handleRegister = async (event_id) => {
     try {
       // Fetch the latest participants for the event
@@ -192,10 +197,17 @@ export const Event = () => {
 
       // Update the local state after both requests succeed
       setRegister(updatedRegister);
+      isReg
+        ? setMessage("Event removed from register")
+        : setMessage("Event added to register");
+      isReg ? setAlert("info") : setAlert("success");
+      setSnackbarOpen(true);
       console.log(isReg ? "Removed from Register" : "Added to Register");
     } catch (err) {
+      setAlert("error");
+      setMessage("Failed to register for event");
+      setSnackbarOpen(true);
       console.error("Error while registering/unregistering", err);
-      alert("An error occurred. Please check the console");
     }
   };
 
