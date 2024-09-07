@@ -23,7 +23,7 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
-  CircularProgress, // Import CircularProgress for loading indicator
+  CircularProgress,
 } from "@mui/material";
 import {
   Event as EventIcon,
@@ -42,7 +42,6 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import axios from "axios";
-import { AddUser } from "./AddUser";
 import { jwtDecode } from "jwt-decode";
 import { ReviewPannel } from "./ReviewPannel";
 
@@ -55,7 +54,8 @@ export const AdminDashboard = () => {
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   const [selectedItemId, setSelectedItemId] = useState(null);
   const [deleteType, setDeleteType] = useState(null);
-  const [loading, setLoading] = useState(false); // Loading state
+  const [loading, setLoading] = useState(false); // Overall loading state
+  const [eventsLoading, setEventsLoading] = useState(false); // Loading state for events
   const [deleting, setDeleting] = useState(false); // Deleting state
 
   const monthlyData = {
@@ -75,7 +75,8 @@ export const AdminDashboard = () => {
 
   // Fetch data
   useEffect(() => {
-    setLoading(true); // Start loading
+    setLoading(true); // Start overall loading
+    setEventsLoading(true); // Start loading for events
     const user = JSON.parse(localStorage.getItem("user"));
     if (user) {
       const token = jwtDecode(user.token);
@@ -88,8 +89,6 @@ export const AdminDashboard = () => {
         .then((res) => {
           const eventsData = res.data;
           setEvents(eventsData);
-          console.log("Events data:", eventsData);
-          console.log("Parti", events.participants);
 
           // Process monthly data
           const monthlyDataCopy = { ...monthlyData }; // Copy to avoid mutating the original object
@@ -113,12 +112,13 @@ export const AdminDashboard = () => {
           }));
 
           setChartData(formattedData);
-          console.log(formattedData);
-          setLoading(false); // End loading
+          setEventsLoading(false); // End loading for events
+          setLoading(false); // End overall loading
         })
         .catch((error) => {
           console.error("Error fetching events:", error);
-          setLoading(false); // End loading
+          setEventsLoading(false); // End loading for events
+          setLoading(false); // End overall loading
         });
 
       // Fetch users
@@ -128,16 +128,15 @@ export const AdminDashboard = () => {
         })
         .then((res) => {
           setUserData(res.data);
-          console.log("User data:", res.data);
-          setLoading(false); // End loading
+          setLoading(false); // End overall loading
         })
         .catch((error) => {
           console.error("Error fetching users:", error);
-          setLoading(false); // End loading
+          setLoading(false); // End overall loading
         });
     } else {
       console.error("No user token found.");
-      setLoading(false); // End loading
+      setLoading(false); // End overall loading
     }
   }, []);
 
@@ -204,6 +203,21 @@ export const AdminDashboard = () => {
 
   const renderContent = () => {
     if (loading) {
+      return (
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            height: "100%",
+          }}
+        >
+          <CircularProgress />
+        </Box>
+      );
+    }
+
+    if (eventsLoading && activeTab === "events") {
       return (
         <Box
           sx={{
