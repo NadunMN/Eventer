@@ -30,6 +30,8 @@ import {
 import { Reviews } from "../Reviews";
 import { EventParticipant } from "./EventParticipant";
 
+
+
 // Convert binary data to base64
 const convertBinaryToBase64 = (binaryData, contentType) => {
   if (binaryData && binaryData instanceof Uint8Array) {
@@ -53,7 +55,17 @@ export default function EventData(handleNavigate) {
   const [favorites, setFavorites] = useState([]);
   const [register, setRegister] = useState([]);
   const [isFav, setIsFev] = useState(false);
+  const [snackbarOpen, setSnackbarOpen] = useState(false); // Alert visibility state
+  const [alert, setAlert] = useState("");
   const [message, setMessage] = useState("");
+
+  const handleSnackbarClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setSnackbarOpen(false); // Close the snackbar
+  };
+
 
   //get user data from local storage
   useEffect(() => {
@@ -76,6 +88,8 @@ export default function EventData(handleNavigate) {
 
   // Handle favorite events
   const handleFav = (event_id) => {
+
+
     const isFav = favorites.includes(event_id);
     const updatedFavorites = isFav
       ? favorites.filter((id) => id !== event_id)
@@ -87,10 +101,15 @@ export default function EventData(handleNavigate) {
       })
       .then(() => {
         setFavorites(updatedFavorites);
+        isFav ? setMessage("Event removed from favorites") : setMessage("Event added to favorites");
+        isFav ? setAlert("info") : setAlert("success");
         console.log(isFav ? "Removed from favorites" : "Added to favorites");
+        setSnackbarOpen(true);
       })
       .catch((err) => {
-        alert("An error occurred. Please check the console");
+        setAlert("error");
+        setMessage("Failed to add event to favorites");
+        setSnackbarOpen(true);
         console.error(err);
       });
   };
@@ -108,10 +127,15 @@ export default function EventData(handleNavigate) {
       })
       .then(() => {
         setRegister(updatedRegister);
+        isReg ? setMessage("Event removed from register") : setMessage("Event added to register");
+        isReg ? setAlert("info") : setAlert("success");
+        setSnackbarOpen(true);
         console.log(isReg ? "Removed from Register" : "Added to Register");
       })
       .catch((err) => {
-        alert("An error occurred. Please check the console");
+        setAlert("error")
+        setMessage("Failed to register for event");
+        setSnackbarOpen(true);
         console.error(err);
       });
   };
@@ -308,6 +332,22 @@ export default function EventData(handleNavigate) {
       </Container>
       <EventParticipant />
       <Reviews />
+
+      {/* alert  */}
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={3000}
+        onClose={handleSnackbarClose}
+        anchorOrigin={{ vertical: "top", horizontal: "right" }}
+      >
+        <Alert
+          onClose={handleSnackbarClose}
+          severity= {alert}
+          sx={{ width: "100%" }}
+        >
+            {message}
+        </Alert>
+      </Snackbar>
     </>
   );
 }
