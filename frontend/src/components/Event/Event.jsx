@@ -22,9 +22,6 @@ import {
   IconButton,
   CardActions,
 } from "@mui/material";
-import EventGrids from "./EventGrids";
-import CategoryDropdown from "./CategoryDropdown";
-import SearchForm from "./SearchForm";
 
 // Function to convert binary data to base64
 const convertBinaryToBase64 = (binaryData, contentType) => {
@@ -169,10 +166,6 @@ const Event = () => {
           gap: 2,
         }}
       >
-        {/* <CategoryDropdown
-          setListOfEvents={setListOfEvent}
-          setCategory={setCategory}
-        /> */}
         <FormControl
           fullWidth
           variant="outlined"
