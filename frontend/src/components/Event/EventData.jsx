@@ -187,7 +187,7 @@ export default function EventData(handleNavigate) {
           height: "100%",
         }}
       >
-        <CircularProgress />
+        {/* <CircularProgress /> */}
       </Box>
     );
   }
