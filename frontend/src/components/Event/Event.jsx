@@ -229,15 +229,10 @@ export const Event = () => {
   return (
     <Box>
       {/* Search form and category dropdown */}
-      <Container
-        fixed
-        sx={{
+      <Container maxWidth="lg">
+        <Box sx={{
           display: "flex",
-          mt: 4,
-          gap: 30,
-          backgroundColor: "#f0f0f0",
-        }}
-      >
+        }}>
         <SearchForm setListOfEvents={setListOfEvent} />
         <FormControl
           fullWidth
@@ -271,6 +266,7 @@ export const Event = () => {
             <MenuItem value="concerts">Concerts</MenuItem>
           </Select>
         </FormControl>
+        </Box>
       </Container>
 
       {/* Event cards */}
