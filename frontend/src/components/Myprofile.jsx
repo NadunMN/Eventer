@@ -1,4 +1,4 @@
-import { Box, Stack, Button, Typography, TextField, Avatar, InputAdornment, IconButton, Menu, MenuItem, Divider } from '@mui/material';
+import { Box, Stack, Button, Typography, TextField, Divider } from '@mui/material';
 import React, { useState,useEffect } from 'react';
 import EditIcon from '@mui/icons-material/Edit';
 import SaveIcon from '@mui/icons-material/Save';
@@ -22,14 +22,12 @@ function Myprofile() {
     const [userId, setUserId] = useState("");
 
 
-    // console.log(user);
     const user_id = JSON.parse(localStorage.getItem("user"));
 
     useEffect(() => {
         if (user_id) {
             const jsonString = JSON.stringify(user_id);
             const jwtToken = jwtDecode(jsonString);
-            // console.log(jwtToken);
             setUserId(jwtToken._id); // This will trigger the second useEffect
         }
     }, [user_id]);
@@ -93,25 +91,40 @@ function Myprofile() {
         <Stack
             sx={{
                 display: 'flex',
-                flexDirection: 'column',
-                justifyContent: 'flex-start',
-                gap: 3,
+                flexDirection: 'row',
+                justifyContent: 'flex-start', 
+                width: 'auto',
+                height: 'auto',
+                // pl:15,
+                alignItems: 'flex-start'
             }}
         >
-            <Box sx={{display: 'flex',gap: 23}}>
-          <Typography variant='h4' color='#311b92' sx={{fontWeight: 'bold'}}>Personal Details Account configurations</Typography>
+        
+            <Box  sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'flex-start', 
+                gap: 3,
+                // alignItems: 'center'
+                
+            }}>
+            <Box sx={{display: 'flex',width: 950, justifyContent:'space-between', alignItems: 'center' }}>
+                <Box sx={{display: 'flex', gap: 4}}>
+            <div className="art-div"></div>
+          <Typography variant='h4' color='#311b92' sx={{fontWeight: 'bold'}}>Personal Account Details</Typography>
+          </Box>
           <Button
-                    variant="contained"
+                    variant="outlined"
                     endIcon={isEditing ? <SaveIcon /> : <EditIcon />}
                     size="large"
                     sx={{
-                        bgcolor: isEditing ? 'darkred' : '#311b92',
+                        color: isEditing ? 'darkgreen' : 'darkred',
                         width: 130,
                         fontSize: '15px',
                         height: 40,
                         borderRadius: 20   ,
                         '&:hover': {
-                            bgcolor: isEditing ? 'red' : '#512da8',
+                            color: isEditing ? 'green' : '#512da8',
                             cursor: 'pointer',
                         },
                     }}
@@ -122,15 +135,17 @@ function Myprofile() {
                 </Button>
 
                 </Box>
-            <Box sx={{ width: '85%', bgcolor: '#ede7f6', borderRadius: 3, height: 'auto' }}>
-                <Box sx={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+            <Box sx={{ width: 950, bgcolor: '#ede7f6', borderRadius: 3, height: 'auto', display: 'flex', flexDirection: 'column',
+                
+            }}>
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 4, }}>
                 <TextField
                     id="first-name-input"
                     value={isEditing ? editedValues.first_name : (user.first_name || 'First name')}
                     helperText='Your first-name may appear around GitHub where you contribute or are mentioned.'
                     label={isEditing ? "Edit" : "Disabled"}
                     onChange={(e) => setEditedValues({ ...editedValues, first_name: e.target.value })}
-                    sx={{ width: '70%', ml: 5, my: 5 }}
+                    sx={{ width: '90%', ml: 5, my: 5 }}
                     InputProps={{
                         readOnly: !isEditing,
                     }}
@@ -138,7 +153,6 @@ function Myprofile() {
 
                     
 
-                    {/* <Divider/> */}
                 </Box>
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 4, height: 50 }}>
                     <TextField
@@ -147,7 +161,7 @@ function Myprofile() {
                         helperText ='Your last-name may appear around GitHub where you contribute or are mentioned. '
                         label={isEditing ? "Edit" : "Disabled"}
                     onChange={(e) => setEditedValues({ ...editedValues, last_name: e.target.value })}
-                    sx={{ width: '70%', ml: 5, my: 5 }}
+                    sx={{ width: '90%', ml: 5, my: 5 }}
                     InputProps={{
                         readOnly: !isEditing,
                     }}
@@ -161,7 +175,7 @@ function Myprofile() {
                         helperText ="Enter a valid phone number including the country code."
                         label={isEditing ? "Edit" : "Disabled"}
                     onChange={(e) => setEditedValues({ ...editedValues, phone_number: e.target.value })}
-                    sx={{ width: '70%', ml: 5, my: 5 }}
+                    sx={{ width: '90%', ml: 5, my: 5 }}
                     InputProps={{
                         readOnly: !isEditing,
                     }}
@@ -177,7 +191,7 @@ function Myprofile() {
                         This email will be used for account notifications and recovery."
                         label={isEditing ? "Edit" : "Disabled"}
                         onChange={(e) => setEditedValues({ ...editedValues, email: e.target.value })}
-                        sx={{ width: '70%', ml: 5, my: 5 }}
+                        sx={{ width: '90%', ml: 5, my: 5 }}
                         InputProps={{
                             readOnly: !isEditing,
                         }}
@@ -193,7 +207,7 @@ function Myprofile() {
                         Share something interesting about yourself, such as hobbies or profession."
                         label={isEditing ? "Edit" : "Disabled"}
                         onChange={(e) => setEditedValues({ ...editedValues, Bio: e.target.value })}
-                        sx={{ width: '70%', ml: 5, my: 5 }}
+                        sx={{ width: '90%', ml: 5, my: 5 }}
                         InputProps={{
                             readOnly: !isEditing,
                         }}
@@ -202,28 +216,48 @@ function Myprofile() {
                 </Box>
             </Box>
 
-            <Stack sx={{ display: 'flex', flexDirection: 'row', gap: 4 }}>
-                <Box sx={{ width: '42%', height: 500, bgcolor: '#ede7f6', borderRadius: 3, display: 'flex', flexDirection: 'column',}}>
-                    {/* <Typography variant='h4' color='primary' sx={{position: 'absolute', m: 3}}>Upload a profile Photo</Typography> */}
-                   <ImageUpload/>
-                    {/* <Typography variant='body2' sx={{ m: 3}}>Upload a profile Photo</Typography> */}
-                 
-                    
+            <Stack sx={{ display: 'flex', flexDirection: 'row', gap: 3, width: 950, justifyContent: 'space-between'}}>
+                <Box
+                    sx={{
+                        width: '100%',  // Responsive width based on breakpoints
+                        height: { xs: 'auto', md: 500 },  // Responsive height
+                        bgcolor: '#ede7f6',  // Background color
+                        borderRadius: 3,  // Smooth borders
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',  // Center the content horizontally
+                        justifyContent: 'center',  // Center the content vertically
+                        p: { xs: 2, sm: 3 },  // Padding for internal spacing
+                        boxSizing: 'border-box',  // Ensure padding is accounted for in width
+                    }}
+                    >
+                    <ImageUpload />
                 </Box>
 
-                <Box sx={{ width: '40%',height:'auto',maxHeight:500, bgcolor: '#ede7f6', borderRadius: 3, display: 'flex', flexDirection: 'column', }}>
-                    <Typography variant='h4' color='error' sx={{m: 3, display: 'flex',maxWidth:400}}>Danger Zone</Typography>
+                <Box  sx={{
+        width: '100%', // Responsive width
+        height: 'auto',
+        maxHeight: { xs: 'none', sm: 500, md: 500 }, // Responsive maxHeight
+        bgcolor: '#ede7f6',
+        borderRadius: 3,
+        display: 'flex',
+        flexDirection: 'column',
+        p: 2, // Add padding
+        // boxSizing: 'border-box',
+
+      }} >
+                    <Typography variant='h4' color='error' sx={{m: 3, display: 'flex',maxWidth:400,fontWeight: 'bold'}}>*Danger Zone</Typography>
                     <Typography variant='h6' sx={{ml:3, maxWidth:400,}}>Delete this Account</Typography>
                     <Typography variant='body1' sx={{ml:3, mt:1, maxWidth:400}}>Once you delete a Account, there is no going back. Please be certain.</Typography>
-                    <Typography variant='body2' color='darkred' sx={{ml:3, mt:1, maxWidth:400}}>"All your data will be permanently erased, and it cannot be recovered."</Typography>
-                    <Typography variant='body2' color='darkred' sx={{ml:3, mt:1, maxWidth:400}}>"You will lose access to all your content, subscriptions, and services."</Typography>
-                    <Typography variant='body2' color='darkred' sx={{ml:3, mt:1, maxWidth:400}}>"Any remaining balances or credits in your account will be forfeited."</Typography>
-                    <Typography variant='body2' color='darkred' sx={{ml:3, mt:1, maxWidth:400}}>"Your profile, including any saved preferences, will be deleted."</Typography>
-                    <Typography variant='body2' color='darkred' sx={{ml:3, mt:1, maxWidth:400}}>"This action is irreversible, so make sure you have saved any important information."</Typography>
+                    <Typography variant='body2' color='darkred' sx={{ml:3, mt:1, maxWidth:400, fontFamily: 'monospace',fontSize: 13}}>"All your data will be permanently erased, and it cannot be recovered."</Typography>
+                    <Typography variant='body2' color='darkred' sx={{ml:3, mt:1, maxWidth:400,  fontFamily: 'monospace',fontSize: 13}}>"You will lose access to all your content, subscriptions, and services."</Typography>
+                    <Typography variant='body2' color='darkred' sx={{ml:3, mt:1, maxWidth:400, fontFamily: 'monospace',fontSize: 13}}>"Any remaining balances or credits in your account will be forfeited."</Typography>
+                    <Typography variant='body2' color='darkred' sx={{ml:3, mt:1, maxWidth:400,  fontFamily: 'monospace',fontSize: 13}}>"Your profile, including any saved preferences, will be deleted."</Typography>
+                    <Typography variant='body2' color='darkred' sx={{ml:3, mt:1, maxWidth:400, fontFamily: 'monospace', fontSize: 13}}>"This action is irreversible, so make sure you have saved any important information."</Typography>
                     <FormDialog/>
                 </Box>
             </Stack>
-            
+            </Box>
         </Stack>
     );
 }
