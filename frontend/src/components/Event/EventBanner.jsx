@@ -71,11 +71,12 @@ function EventBanner({ event }) {
           onClick={() => handleFav(event._id)}
         >
           {favorites.includes(event._id) ? (
-            <FavoriteIcon sx={{ fontSize: 30 }} />
+            <FavoriteIcon sx={{ fontSize: 60 }} />
           ) : (
-            <FavoriteBorderIcon sx={{ fontSize: 30 }} />
+            <FavoriteBorderIcon sx={{ fontSize: 60 }} />
           )}
         </IconButton>
+        
       </Box>
       <Box>
         <Typography variant="h3" component="h3" sx={{ flexGrow: 6 }}>

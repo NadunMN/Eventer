@@ -1,17 +1,14 @@
-import "bootstrap/dist/css/bootstrap.min.css";
-import { useState, useEffect } from "react";
+// Event.jsx
+
+import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { jwtDecode } from "jwt-decode";
-import { useLocation, useNavigate } from "react-router-dom";
-import FavoriteIcon from "@mui/icons-material/Favorite";
-import { useAuthContext } from "../../hooks/useAuthContext";
-import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
+import { useNavigate, useLocation } from "react-router-dom";
 import {
-  Container,
   FormControl,
   InputLabel,
   MenuItem,
   Select,
+  Container,
   Box,
   Typography,
   Grid,
@@ -22,6 +19,11 @@ import {
   IconButton,
   CardActions,
 } from "@mui/material";
+import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
+import FavoriteIcon from "@mui/icons-material/Favorite";
+import { jwtDecode } from "jwt-decode";
+import "bootstrap/dist/css/bootstrap.min.css";
+import SearchForm from "./SearchForm";
 
 // Function to convert binary data to base64
 const convertBinaryToBase64 = (binaryData, contentType) => {
@@ -36,22 +38,19 @@ const convertBinaryToBase64 = (binaryData, contentType) => {
   }
 };
 
-const Event = () => {
-  //useStates
-  const [userRole, setUserRole] = useState("");
-  const [responseData, setResponseData] = useState([]);
-  const [registeredList, setRegisteredList] = useState([]);
+export const Event = () => {
   const [listOfEvent, setListOfEvent] = useState([]);
   const [loading, setLoading] = useState(true);
   const [category, setCategory] = useState("");
+  const [error, setError] = useState("");
+  const [userRole, setUserRole] = useState("");
   const [userId, setUserId] = useState("");
   const [favorites, setFavorites] = useState([]);
+  const [register, setRegister] = useState([]);
   const navigate = useNavigate();
   const location = useLocation();
-  const { user } = useAuthContext();
 
-  // useEffects
-  // Fetch user data from local storage
+  //get user data from local storage
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("user"));
     if (user) {
@@ -62,6 +61,7 @@ const Event = () => {
         .get(`http://localhost:5000/api/user/${jwtToken._id}`)
         .then((res) => {
           setFavorites(res.data.favourite_events || []);
+          setRegister(res.data.registered_events || []);
         })
         .catch((err) => {
           console.error("Failed to fetch user data", err);
@@ -69,15 +69,24 @@ const Event = () => {
     }
   }, []);
 
-  //fetch all events
+  // Fetch event data
   useEffect(() => {
     const fetchEvent = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:5000/api/event/getEvent"
+          category
+            ? `http://localhost:5000/api/event/getCategory/?category=${category}`
+            : "http://localhost:5000/api/event/getEvent"
         );
 
+        if (response.status === 404) {
+          setListOfEvent([]);
+          console.log("No events found (404)");
+          return;
+        }
+
         let res_data = response.data;
+        console.log(res_data);
 
         // Process the event data
         const listOfEvents = res_data.map((event) => {
@@ -92,6 +101,7 @@ const Event = () => {
         });
 
         setListOfEvent(listOfEvents);
+        setError("");
       } catch (error) {
         console.error("Failed to fetch data:", error);
         setError("Failed to fetch the event");
@@ -99,58 +109,62 @@ const Event = () => {
         setLoading(false);
       }
     };
-    fetchEvent();
-  }, [user]);
 
-  //fetch category based events
-  useEffect(() => {
-    const fetchEvent = async () => {
-      try {
-        if (category) {
-          const response = await axios.get(
-            `http://localhost:5000/api/event/getCategory/?category=${category}`
-          );
-          setResponseData(response.data);
-        } else {
-          const response = await axios.get(
-            "http://localhost:5000/api/event/getEvent"
-          );
-          setResponseData(response.data);
-          console.log(responseData);
-        }
-
-        if (response.state === 404) {
-          console.log("No events found");
-          return;
-        }
-
-        let res_data = responseData;
-        // Process the event dataa
-        const listOfEvents = res_data.map((event) => {
-          if (event.cover_image) {
-            const base64Image = convertBinaryToBase64(
-              new Uint8Array(event.cover_image.data),
-              event.cover_image.contentType
-            );
-            event.cover_image = base64Image;
-          }
-          return event;
-        });
-
-        if (listOfEvents.length === 0) {
-          setListOfEvent([]);
-          console.log("No events found");
-          console.log(listOfEvents);
-        } else {
-          setListOfEvent(listOfEvents);
-        }
-      } catch (error) {
-        console.error("Failed to fetch data:", error);
-        setError("Failed to fetch the event");
-      }
-    };
     fetchEvent();
   }, [category]);
+
+  // Handle category change
+  const handleCategoryChange = (event) => {
+    const selectedCategory = event.target.value;
+    setCategory(selectedCategory);
+  };
+
+  // Handle navigation to event details
+  const handleNavigate = (event_id) => {
+    navigate(`/event/${event_id}`);
+  };
+
+  // Handle favorite event
+  const handleFav = (event_id) => {
+    const isFav = favorites.includes(event_id);
+    const updatedFavorites = isFav
+      ? favorites.filter((id) => id !== event_id)
+      : [...favorites, event_id];
+
+    axios
+      .put(`http://localhost:5000/api/user/edit/${userId}`, {
+        favourite_events: updatedFavorites,
+      })
+      .then(() => {
+        setFavorites(updatedFavorites);
+        console.log(isFav ? "Removed from favorites" : "Added to favorites");
+      })
+      .catch((err) => {
+        alert("An error occurred. Please check the console");
+        console.error(err);
+      });
+  };
+
+  //Hadle evet registere
+  const handleRegister = (event_id) => {
+    const isReg = register.includes(event_id);
+    const updatedRegister = isReg
+      ? register.filter((id) => id !== event_id)
+      : [...register, event_id];
+
+    axios
+      .put(`http://localhost:5000/api/user/edit/${userId}`, {
+        registered_events: updatedRegister,
+      })
+      .then(() => {
+        setRegister(updatedRegister);
+        console.log(isReg ? "Removed from Register" : "Added to Register");
+      })
+      .catch((err) => {
+        alert("An error occurred. Please check the console");
+        console.error(err);
+      });
+  };
 
   if (loading) {
     return "Loading ...";
@@ -158,33 +172,36 @@ const Event = () => {
 
   return (
     <Box>
+      {/* Search form and category dropdown */}
       <Container
         fixed
         sx={{
           display: "flex",
-          m: 4,
-          gap: 2,
+          mt: 4,
+          gap: 30,
+          backgroundColor: "#f0f0f0",
         }}
       >
+        <SearchForm setListOfEvents={setListOfEvent} />
         <FormControl
           fullWidth
           variant="outlined"
           sx={{
             m: "auto",
-            boxShadow: 2,
+            boxShadow: 4,
             transition: "box-shadow 0.3s ease-in-out",
             "&:hover": {
               boxShadow: "0 5px 15px 5px rgba(0, 0, 0, .2)",
             },
+            maxWidth: 300,
           }}
         >
           <InputLabel id="category-select-label">Category</InputLabel>
           <Select
             labelId="category-select-label"
             id="category-select"
-            onChange={(e) => {
-              setCategory(e.target.value);
-            }}
+            value={category}
+            onChange={handleCategoryChange}
             label="Category"
           >
             <MenuItem value="">
@@ -198,29 +215,13 @@ const Event = () => {
             <MenuItem value="concerts">Concerts</MenuItem>
           </Select>
         </FormControl>
-
-        <SearchForm setListOfEvents={setListOfEvent} />
-
       </Container>
 
+      {/* Event cards */}
       <Container maxWidth="xl" fixed sx={{ mt: 9 }}>
         <Grid container spacing={8} columns={20}>
           {listOfEvent.map((event) => (
-            <Grid
-              item
-              key={event._id}
-              xs={20}
-              sm={12}
-              md={8}
-              lg={5}
-              sx={{
-                mt: 1,
-                pl: 8,
-                display: "flex",
-                flexDirection: "column",
-                gutterBottom: 2,
-              }}
-            >
+            <Grid item key={event._id} xs={20} sm={12} md={8} lg={5}>
               <Card
                 sx={{
                   height: 450,
@@ -241,9 +242,7 @@ const Event = () => {
                 }}
               >
                 <CardMedia
-                  sx={{
-                    minHeight: 150,
-                  }}
+                  sx={{ minHeight: 150 }}
                   image={
                     event.cover_image || "https://via.placeholder.com/345x140"
                   }
@@ -283,7 +282,7 @@ const Event = () => {
                   <Button
                     variant="contained"
                     color="primary"
-                    onClick={() => handleNavigate(event)}
+                    onClick={() => handleNavigate(event._id)}
                   >
                     More info
                   </Button>
@@ -292,7 +291,7 @@ const Event = () => {
                     color="primary"
                     onClick={() => handleRegister(event._id)}
                   >
-                    Register
+                    {register.includes(event._id) ? "Unregister" : "Register"}
                   </Button>
                   <Box>
                     <IconButton
@@ -319,5 +318,3 @@ const Event = () => {
     </Box>
   );
 };
-
-export default Event;
