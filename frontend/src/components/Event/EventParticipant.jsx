@@ -86,7 +86,7 @@ export const EventParticipant = () => {
       style={{
         display: "flex",
         flexDirection: "column",
-        marginTop: 50,
+        marginTop: 1,
       }}
     >
       <div
@@ -98,16 +98,16 @@ export const EventParticipant = () => {
           marginBottom: 20,
         }}
       >
-        <Typography variant="h4" sx={{ padding: 5 }}>
+        <Typography variant="h6" sx={{ padding: 5 }}>
           Participants
         </Typography>
 
         <AvatarGroup
-          max={10}
+          max={5}
           sx={{
             "& .MuiAvatar-root": {
-              width: 56,
-              height: 56,
+              width: 40,
+              height: 40,
               fontSize: 18,
               boxShadow: 2,
             },
@@ -124,6 +124,11 @@ export const EventParticipant = () => {
               </Avatar>
             </Tooltip>
           ))}
+          <Avatar>A</Avatar>
+          <Avatar>B</Avatar>
+          <Avatar>C</Avatar>
+          <Avatar>D</Avatar>
+          <Avatar>E</Avatar>
         </AvatarGroup>
       </div>
     </div>
