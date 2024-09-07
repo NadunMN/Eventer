@@ -26,7 +26,6 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import SearchForm from "./SearchForm";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import EventGrids from "./EventGrids";
-import CategoryDropdown from "./CategoryDropdown";
 import { useAuthContext } from "../../hooks/useAuthContext";
 
 // Function to convert binary data to base64
