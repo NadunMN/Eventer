@@ -7,6 +7,7 @@ import EventGrids from "./EventGrids";
 import { Container, Box } from "@mui/material";
 import CategoryDropdown from "./CategoryDropdown";
 import { useAuthContext } from "../../hooks/useAuthContext";
+import { CircularProgress } from "@mui/material";
 
 // Function to convert binary data to base64
 const convertBinaryToBase64 = (binaryData, contentType) => {
@@ -62,7 +63,18 @@ const Event = () => {
   }, [user]);
 
   if (loading) {
-    return "Loading ...";
+    return (
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100%",
+        }}
+      >
+        <CircularProgress />
+      </Box>
+    );
   }
 
   return (
