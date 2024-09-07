@@ -1,6 +1,13 @@
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
+import { jwtDecode } from "jwt-decode";
+import EventIcon from "@mui/icons-material/Event";
+import AccessTimeIcon from "@mui/icons-material/AccessTime";
+import LocationOnIcon from "@mui/icons-material/LocationOn";
+import PeopleIcon from "@mui/icons-material/People";
+import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
+import FavoriteIcon from "@mui/icons-material/Favorite";
 import {
   Container,
   Typography,
@@ -8,11 +15,18 @@ import {
   colors,
   Grid,
   Button,
+  CircularProgress,
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+  Card,
+  CardMedia,
+  IconButton,
+  Snackbar,
+  Alert,
 } from "@mui/material";
-import { jwtDecode } from "jwt-decode";
 
-import EventBanner from "./EventBanner";
-import EventDetails from "./EventDetails";
 import { Reviews } from "../Reviews";
 
 // Convert binary data to base64
@@ -33,14 +47,15 @@ export default function EventData(handleNavigate) {
   const [event, setEvent] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [register, setRegister] = useState([]);
   const [userId, setUserId] = useState("");
   const [userRole, setUserRole] = useState("");
   const [favorites, setFavorites] = useState([]);
+  const [register, setRegister] = useState([]);
+  const [isFav, setIsFev] = useState(false);
+  const [message, setMessage] = useState("");
 
-
-   //get user data from local storage
-   useEffect(() => {
+  //get user data from local storage
+  useEffect(() => {
     const user = JSON.parse(localStorage.getItem("user"));
     if (user) {
       const jwtToken = jwtDecode(user.token);
@@ -58,7 +73,7 @@ export default function EventData(handleNavigate) {
     }
   }, []);
 
-  // Handle favorite event
+  // Handle favorite events
   const handleFav = (event_id) => {
     const isFav = favorites.includes(event_id);
     const updatedFavorites = isFav
@@ -100,6 +115,7 @@ export default function EventData(handleNavigate) {
       });
   };
 
+  //fetch event data
   useEffect(() => {
     const fetchEvent = async () => {
       try {
@@ -135,6 +151,17 @@ export default function EventData(handleNavigate) {
     fetchEvent();
   }, [eventId]);
 
+  let styleListItem = {
+    backgroundColor: "#ede7f6",
+    borderRadius: "50px",
+    padding: "8px",
+    margin: "8px",
+  };
+
+  let styleListItemText = {
+    ml: 1,
+  };
+
   if (loading) {
     return (
       <Box
@@ -156,25 +183,127 @@ export default function EventData(handleNavigate) {
 
   return (
     <>
-      <Container maxWidth="lg">
-        <Box>
-          <EventBanner event={event} />
-        </Box>
-        <Grid container spacing={4}></Grid>
-        <Grid item xs={12} md={6}>
-          <EventDetails event={event} />
-        </Grid>
-
-        <Grid item xs={12} md={6}>
-          <Typography variant="body1">{event.description}</Typography>
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={() => handleRegister(event._id)}
+      <Container maxWidth="xl" sx={{ mt: 8 }}>
+        {/* upper */}
+        <Container>
+          {/* event Banner */}
+          <Box
+            sx={{
+              backgroundImage: `url(${event.cover_image})`,
+              backgroundSize: "cover",
+              backgroundPosition: "center",
+              backgroundColor: "#3f51b5",
+              height: "400px",
+              display: "flex",
+              alignItems: "center",
+              jestifyContent: "center",
+              position: "relative",
+            }}
           >
-            {register.includes(event._id) ? "Unregister" : "Register"}
-          </Button>
-        </Grid>
+            <IconButton
+              variant="variant"
+              sx={{
+                color: favorites.includes(event._id) ? "#FF5733" : "#AAB7B8", // Custom colors
+                position: "absolute",
+                bottom: 10,
+                right: 40,
+              }}
+              onClick={() => handleFav(event._id)}
+            >
+              {favorites.includes(event._id) ? (
+                <FavoriteIcon sx={{ fontSize: 60 }} />
+              ) : (
+                <FavoriteBorderIcon sx={{ fontSize: 60 }} />
+              )}
+            </IconButton>
+          </Box>
+          <Box sx={{ width: "50%" }}>
+            <Typography variant="h1" component="h1" sx={{ flexGrow: 6 }}>
+              {event.title}
+            </Typography>
+          </Box>
+        </Container>
+        {/* down  */}
+        <Container
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            position: "relative",
+            flexDirection: "row",
+          }}
+        >
+          <Box sx={{ width: "45%" }}>
+            <List>
+              <ListItem sx={styleListItem}>
+                <ListItemIcon>
+                  <EventIcon />
+                </ListItemIcon>
+                <ListItemText sx={styleListItemText}>
+                  {" "}
+                  Start Date: {event.start_date}{" "}
+                </ListItemText>
+              </ListItem>
+              <ListItem sx={styleListItem}>
+                <ListItemIcon>
+                  <AccessTimeIcon />
+                </ListItemIcon>
+                <ListItemText sx={styleListItemText}>
+                  {" "}
+                  Start Time: {event.start_time}{" "}
+                </ListItemText>
+              </ListItem>
+              <ListItem sx={styleListItem}>
+                <ListItemIcon>
+                  <EventIcon />
+                </ListItemIcon>
+                <ListItemText sx={styleListItemText}>
+                  {" "}
+                  End Date: {event.end_date}{" "}
+                </ListItemText>
+              </ListItem>
+              <ListItem sx={styleListItem}>
+                <ListItemIcon>
+                  <AccessTimeIcon />
+                </ListItemIcon>
+                <ListItemText sx={styleListItemText}>
+                  {" "}
+                  End Time: {event.end_time}{" "}
+                </ListItemText>
+              </ListItem>
+              <ListItem sx={styleListItem}>
+                <ListItemIcon>
+                  <LocationOnIcon />
+                </ListItemIcon>
+                <ListItemText sx={styleListItemText}>
+                  {" "}
+                  {event.venue}{" "}
+                </ListItemText>
+              </ListItem>
+              <ListItem sx={styleListItem}>
+                <ListItemIcon>
+                  <PeopleIcon />
+                </ListItemIcon>
+                <ListItemText sx={styleListItemText}>
+                  {" "}
+                  Capacity : {event.capacity}{" "}
+                </ListItemText>
+              </ListItem>
+            </List>
+          </Box>
+          {/* right */}
+          <Container sx={{display: "flex", flexDirection: "column", mt: 3} } >
+            <Button
+              sx={{px: 5, py: 2,}}
+              variant="contained"
+              color="primary"
+              onClick={() => handleRegister(event._id)}
+            >
+              {register.includes(event._id) ? "Unregister" : "Register"}
+            </Button>
+
+            <Typography variant="body1" sx={{mt:2}}> {event.description}</Typography>
+          </Container>
+        </Container>
       </Container>
       <Reviews />
     </>
