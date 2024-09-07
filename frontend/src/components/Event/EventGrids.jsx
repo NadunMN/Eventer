@@ -10,6 +10,7 @@ import {
   Box,
   IconButton,
   CardActions,
+  CircularProgress,
 } from "@mui/material";
 import { useNavigate, useLocation } from "react-router-dom";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
@@ -60,10 +61,10 @@ function EventGrids({ listOfEvent, setListOfEvent, category }) {
     const fetchEvent = async () => {
       try {
         // if (category) {
-          const response = await axios.get(
-            `http://localhost:5000/api/event/getCategory/?category=${category}`
-          );
-          setResponseData(response.data);
+        const response = await axios.get(
+          `http://localhost:5000/api/event/getCategory/?category=${category}`
+        );
+        setResponseData(response.data);
         // } else {
         //   const response = await axios.get(
         //     "http://localhost:5000/api/event/getEvent"

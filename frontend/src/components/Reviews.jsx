@@ -388,15 +388,12 @@ export const Reviews = () => {
                           <Typography variant="h6" component="div" gutterBottom>
                             {review.review}
                           </Typography>
-                          <Typography variant="body2" color="text.secondary">
-                            Event ID: {review.event_id}
-                          </Typography>
                           <Typography
                             variant="caption"
                             display="block"
                             gutterBottom
                           >
-                            {`By User: ${review.user_id}`}
+                            {`${review.user_name}`}
                           </Typography>
                         </>
                       )}

@@ -1,8 +1,15 @@
-import React, { useState, useEffect } from 'react';
-import { Stack, Typography, Avatar, Button } from '@mui/material';
-import CustomizedDialogs from './Dialog';
-import axios from 'axios';
-import {jwtDecode} from "jwt-decode";
+import React, { useState, useEffect } from "react";
+import {
+  Stack,
+  Typography,
+  Avatar,
+  Button,
+  Box,
+  CircularProgress,
+} from "@mui/material";
+import CustomizedDialogs from "./Dialog";
+import axios from "axios";
+import { jwtDecode } from "jwt-decode";
 
 const convertBinaryToBase64 = (binaryData, contentType) => {
   if (binaryData && binaryData instanceof Uint8Array) {
@@ -27,15 +34,12 @@ function Accountname() {
 
   useEffect(() => {
     if (user_id) {
-        const jsonString = JSON.stringify(user_id);
-        const jwtToken = jwtDecode(jsonString);
-        // console.log(jwtToken);
-        setUserId(jwtToken._id); // This will trigger the second useEffect
+      const jsonString = JSON.stringify(user_id);
+      const jwtToken = jwtDecode(jsonString);
+      // console.log(jwtToken);
+      setUserId(jwtToken._id); // This will trigger the second useEffect
     }
-}, [user_id]);
-
-
-
+  }, [user_id]);
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -68,7 +72,18 @@ function Accountname() {
   }, [userId]);
 
   if (loading) {
-    return <Typography>Loading...</Typography>;
+    return (
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100%",
+        }}
+      >
+        <CircularProgress />
+      </Box>
+    );
   }
 
   if (error) {
@@ -77,16 +92,27 @@ function Accountname() {
 
   return (
     <div>
-      <Stack direction="row" spacing={5} sx={{ display: 'flex', justifyContent: 'flex-start', mt: 3 }}>
-        <Avatar alt={`${user.first_name} ${user.last_name}`} src={user.cover_image} title={`${user.first_name} ${user.last_name}`} sx={{ width: 220, height: 220 }} />
+      <Stack
+        direction="row"
+        spacing={5}
+        sx={{ display: "flex", justifyContent: "flex-start", mt: 3 }}
+      >
+        <Avatar
+          alt={`${user.first_name} ${user.last_name}`}
+          src={user.cover_image}
+          title={`${user.first_name} ${user.last_name}`}
+          sx={{ width: 220, height: 220 }}
+        />
         <Stack
           sx={{
-            display: 'flex',
-            justifyContent: 'center',
-            flexDirection: 'column',
+            display: "flex",
+            justifyContent: "center",
+            flexDirection: "column",
           }}
         >
-          <Typography sx={{ fontSize: 50, fontWeight: 'bold', color: 'black' }}>{`${user.first_name} ${user.last_name}`}</Typography>
+          <Typography
+            sx={{ fontSize: 50, fontWeight: "bold", color: "black" }}
+          >{`${user.first_name} ${user.last_name}`}</Typography>
           <Typography>{user.email}</Typography>
           <CustomizedDialogs open={open} handleClose={() => setOpen(false)} />
         </Stack>
