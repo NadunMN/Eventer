@@ -59,10 +59,7 @@ export default function FormDialogDelete() {
     const user = JSON.parse(localStorage.getItem("user"));
     if (user && user.token) {
       try {
-<<<<<<< HEAD
-=======
         const user = JSON.parse(localStorage.getItem("user"));
->>>>>>> eb8fe8be7ed626d00cc61d9126f6899e1b8de194
         // Attempt to delete the event
         await axios.delete(
           `http://localhost:5000/api/event/delete/${eventId}`,
@@ -122,11 +119,7 @@ export default function FormDialogDelete() {
         );
       }
     } else {
-<<<<<<< HEAD
-      console.log("User no logged in or invalid access token");
-=======
       console.log("User not logged in or invalid access token");
->>>>>>> eb8fe8be7ed626d00cc61d9126f6899e1b8de194
     }
   };
 
