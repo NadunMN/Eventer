@@ -10,6 +10,7 @@ import {
   Menu,
   MenuItem,
   Snackbar,
+  Box,
   Alert,
 } from "@mui/material";
 import axios from "axios";
@@ -25,6 +26,7 @@ export const Reviews = () => {
   const [value, setValue] = useState(0);
   const [userReview, setUserReview] = useState("");
   const [userId, setUserId] = useState("");
+  const [userRole, setUserRole] = useState("");
   const [userName, setUserName] = useState("");
   const [anchorEl, setAnchorEl] = useState(null);
   const [selectedReview, setSelectedReview] = useState(null);
@@ -75,15 +77,22 @@ export const Reviews = () => {
   }, [eventId]);
 
   useEffect(() => {
-    if (userId) {
+    const user = JSON.parse(localStorage.getItem("user"));
+    if (user && user.token) {
       axios
-        .get(`http://localhost:5000/api/user/${userId}`)
+        .get(`http://localhost:5000/api/user/${userId}`, {
+          headers: {
+            Authorization: `Bearer ${user.token}`,
+          },
+        })
         .then((res) => {
           setUserName(`${res.data.first_name} ${res.data.last_name}`);
         })
         .catch((err) => {
           console.log("Error fetching user name:", err);
         });
+    } else {
+      console.log("User not logged in or invalid access token");
     }
   }, [userId]);
 
@@ -164,15 +173,25 @@ export const Reviews = () => {
   };
 
   const handleDeleteClick = async () => {
-    try {
-      await axios.delete(
-        `http://localhost:5000/api/review/deleteReview/${selectedReview._id}`
-      );
-      setReviews(reviews.filter((r) => r._id !== selectedReview._id));
-      setAlert("delete");
-      setSnackbarOpen(true);
-    } catch (err) {
-      console.log("Error deleting review:", err);
+    const user = JSON.parse(localStorage.getItem("user"));
+    if (user && user.token) {
+      try {
+        await axios.delete(
+          `http://localhost:5000/api/review/deleteReview/${selectedReview._id}`,
+          {
+            headers: {
+              Authorization: `Bearer ${user.token}`,
+            },
+          }
+        );
+        setReviews(reviews.filter((r) => r._id !== selectedReview._id));
+        setAlert("delete");
+        setSnackbarOpen(true);
+      } catch (err) {
+        console.log("Error deleting review:", err);
+      }
+    } else {
+      console.log("User not logged in or invalid access token");
     }
     handleMenuClose();
   };
@@ -188,7 +207,7 @@ export const Reviews = () => {
       style={{
         display: "flex",
         justifyContent: "center",
-        marginTop: 50,
+        marginTop: 60,
       }}
     >
       <Paper
@@ -312,7 +331,7 @@ export const Reviews = () => {
                     }}
                   >
                     <CardContent>
-                      {editReviewId === review._id ? (
+                      {editReviewId === review._id || userRole === "admin" ? (
                         <>
                           {/* Editable Fields for review in the card */}
                           <TextField
@@ -387,15 +406,12 @@ export const Reviews = () => {
                           <Typography variant="h6" component="div" gutterBottom>
                             {review.review}
                           </Typography>
-                          <Typography variant="body2" color="text.secondary">
-                            Event ID: {review.event_id}
-                          </Typography>
                           <Typography
                             variant="caption"
                             display="block"
                             gutterBottom
                           >
-                            {`By User: ${review.user_id}`}
+                            {`${review.user_name}`}
                           </Typography>
                         </>
                       )}

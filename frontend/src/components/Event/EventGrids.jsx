@@ -10,6 +10,7 @@ import {
   Box,
   IconButton,
   CardActions,
+  CircularProgress,
 } from "@mui/material";
 import { useNavigate, useLocation } from "react-router-dom";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
@@ -33,39 +34,57 @@ function EventGrids({ listOfEvent, setListOfEvent, category }) {
   const [userRole, setUserRole] = useState("");
   const [userId, setUserId] = useState("");
   const [favorites, setFavorites] = useState([]);
-  const location = useLocation();
+  const [responseData, setResponseData] = useState([]);
+  const [registeredList, setRegisteredList] = useState([]);
+  console.log(category);
 
+  // Fetch user data from local storage
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("user"));
-    if (user) {
-      const jwtToken = jwtDecode(user.token);
-      setUserId(jwtToken._id);
-      setUserRole(jwtToken.role);
+    if (user && user.token) {
+      const token = jwtDecode(user.token);
+      setUserId(token._id);
+      setUserRole(token.role);
       axios
-        .get(`http://localhost:5000/api/user/${jwtToken._id}`)
+        .get(`http://localhost:5000/api/user/${token._id}`, {
+          headers: {
+            Authorization: `Bearer ${user.token}`,
+          },
+        })
         .then((res) => {
           setFavorites(res.data.favourite_events || []);
         })
         .catch((err) => {
           console.error("Failed to fetch user data", err);
         });
+    } else {
+      console.log("User not logged in or invalid access token");
     }
   }, []);
 
+  //useEffect to fetch events based on category
   useEffect(() => {
     const fetchEvent = async () => {
       try {
+        // if (category) {
         const response = await axios.get(
           `http://localhost:5000/api/event/getCategory/?category=${category}`
         );
+        setResponseData(response.data);
+        // } else {
+        //   const response = await axios.get(
+        //     "http://localhost:5000/api/event/getEvent"
+        //   );
+        //   setResponseData(response.data);
+        //   console.log(responseData);
+        // }
 
-        let res_data = response.data;
-        
-        if (response.status === 404) {
-          setListOfEvent([]);
-          console.log("No events found (404)");
-          return;
-        }
+        // if (response.state === 404) {
+        //   console.log("No events found");
+        //   return;
+        // }
+
+        let res_data = responseData;
         // Process the event dataa
         const listOfEvents = res_data.map((event) => {
           if (event.cover_image) {
@@ -78,51 +97,92 @@ function EventGrids({ listOfEvent, setListOfEvent, category }) {
           return event;
         });
 
-
         if (listOfEvents.length === 0) {
           setListOfEvent([]);
           console.log("No events found");
           console.log(listOfEvents);
-
         } else {
           setListOfEvent(listOfEvents);
         }
       } catch (error) {
         console.error("Failed to fetch data:", error);
         setError("Failed to fetch the event");
-      } finally {
-        setLoading(false);
       }
     };
     fetchEvent();
-  }, [category], []);
+  }, [category]);
 
   const navigate = useNavigate();
+
+  const handleCloseSnackbar = () => {
+    setSnackbarOpen(false);
+  };
 
   const handleNavigate = (event) => {
     navigate(`/event/${event._id}`);
   };
 
-  const handleFav = (event_id) => {
+  const handleRegister = (event_id) => {
     console.log(event_id);
+    const user = JSON.parse(localStorage.getItem("user"));
+    if (user && user.token) {
+      axios
+        .put(
+          `http://localhost:5000/api/user/edit/${userId}`,
+          {
+            registered_events: [...registeredList, event_id],
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${user.token}`,
+            },
+          }
+        )
+        .then(() => {
+          setRegisteredList([...registeredList, event_id]);
+          console.log("Event registered successfully");
+        })
+        .catch((err) => {
+          alert("An error occurred. Please check the console");
+          console.error(err);
+        });
+    } else {
+      console.log("User not logged in or invalid access token");
+    }
+  };
 
+  const handleFav = (event_id) => {
     const isFav = favorites.includes(event_id);
     const updatedFavorites = isFav
       ? favorites.filter((id) => id !== event_id)
       : [...favorites, event_id];
 
-    axios
-      .put(`http://localhost:5000/api/user/edit/${userId}`, {
-        favourite_events: updatedFavorites,
-      })
-      .then(() => {
-        setFavorites(updatedFavorites);
-        console.log(isFav ? "Removed from favorites" : "Added to favorites");
-      })
-      .catch((err) => {
-        alert("An error occurred. Please check the console");
-        console.error(err);
-      });
+    const user = JSON.parse(localStorage.getItem("user"));
+    if (user && user.token) {
+      axios
+        .put(
+          `http://localhost:5000/api/user/edit/${userId}`,
+          {
+            favourite_events: updatedFavorites,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${user.token}`,
+            },
+          }
+        )
+        .then(() => {
+          setFavorites(updatedFavorites);
+          console.log(isFav ? "Removed from favorites" : "Added to favorites");
+          setSnackbarOpen(true);
+        })
+        .catch((err) => {
+          alert("An error occurred. Please check the console");
+          console.error(err);
+        });
+    } else {
+      console.log("User not logged in or invalid access token");
+    }
   };
 
   const gridItemProps = {
@@ -214,7 +274,7 @@ function EventGrids({ listOfEvent, setListOfEvent, category }) {
                   <Button
                     variant="contained"
                     color="primary"
-                    onClick={() => handleNavigate(event)}
+                    onClick={() => handleRegister(event._id)}
                   >
                     Register
                   </Button>

@@ -1,8 +1,18 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+
+
+  
 *{
     margin: 0;
     padding: 0;
     font-family: sans-serif;
+    
 }
+
+body{
+        overflow-x: hidden;    
+}
+
 
 .Main-part{
     background-image: url('./asset/group-people-enjoying-holi-color.jpg');
@@ -11,30 +21,10 @@
     background-repeat: no-repeat; /* Prevent the image from repeating */
     height: 100vh;
     display: flex;
-    align-items: center;
+    /* align-items: center; */
     justify-content: center;
     flex-direction: column;
 }
-
-.Topic-div{
-    text-align: center;
-    /* background-color: aqua; */
-    display: inline;
-    padding: auto;
-    margin-top: -60px;
-}
-
-.Topic-div .main-topic-para{
-
-    text-align: center;
-    font-size: 5em;
-}
-
-.Topic-div .main-topic-para span{
-    color: #311b92;
-    font-weight: bold;
-}
-
 
 .art-div{
     width: 20px;
@@ -43,20 +33,18 @@
 }
 
 .upcoming-para{
-    /* background-color: aqua; */
+
     display: flex;
     justify-content: center;
     gap: 60px;
-    /* width: 1000px; */
-    /* height: 500px; */
+    
     align-items: center;
     margin-left: 135px;
 }
 
 .upcoming-para .section-para{
     max-width: 900px;
-    
-    /* background-color: aqua; */
+
     margin-top: 40px;
     margin-left: -100px;
     font-size: 20px;
@@ -191,10 +179,12 @@
 
 .brandcarousel-container{
     margin-top: 100px;
-    padding-left: 50px;
-    margin-bottom: 100px;
-    justify-content: space-evenly;
+    display: flex;
     align-items: center;
+    margin-bottom: 100px;
+    justify-content: flex-end;
+    align-items: center;
+    /* background-color: #311b92; */
 }
 
 .card-container {
@@ -211,12 +201,21 @@
     max-width: 100%; /* Ensure cards fit within grid cells */
   }
 
+  .footer-main-div{
+    position: relative;
+    bottom: 0;
+    margin-top: 10px;
+  }
+
 
   .footer {
     background: linear-gradient(45deg, #673ab7 30%, #3f51b5 90%);
     color: rgb(255, 255, 255);
     padding: 50px 5vw;
     margin-top: 200px;
+    /* position: absolute; */
+    
+    
 }
 
 

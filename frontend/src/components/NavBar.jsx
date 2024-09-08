@@ -15,6 +15,7 @@ import {
   ListItemIcon,
   ListItemText,
   Box,
+  CircularProgress,
 } from "@mui/material";
 import { styled } from "@mui/system";
 import { Link, useNavigate } from "react-router-dom";
@@ -74,7 +75,7 @@ const StyledMenuItem = styled(MenuItem)(({ theme }) => ({
   },
 }));
 
-export const NavBar = ({logout, userId, userRole}) => {
+export const NavBar = ({ logout, userId, userRole }) => {
   const { user } = useAuthContext();
   const [open, setOpen] = useState(false);
   const anchorRef = useRef(null);
@@ -153,6 +154,7 @@ export const NavBar = ({logout, userId, userRole}) => {
                   placement="bottom-end"
                   transition
                   disablePortal
+                  sx={{ zIndex: 99 }}
                 >
                   {({ TransitionProps, placement }) => (
                     <Grow

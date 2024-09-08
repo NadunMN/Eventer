@@ -6,6 +6,7 @@ import CardMedia from "@mui/material/CardMedia";
 import CardContent from "@mui/material/CardContent";
 import CardActions from "@mui/material/CardActions";
 import Typography from "@mui/material/Typography";
+import { Box, CircularProgress } from "@mui/material";
 import Button from "@mui/material/Button";
 import { jwtDecode } from "jwt-decode";
 
@@ -30,98 +31,117 @@ export default function FavoriteEvent() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
- 
+  
   const user_id = JSON.parse(localStorage.getItem("user"));
 
   useEffect(() => {
-      if (user_id) {
-          const jsonString = JSON.stringify(user_id);
-          const jwtToken = jwtDecode(jsonString);
-          // console.log(jwtToken);
-          setUserId(jwtToken._id); // This will trigger the second useEffect
-      }
+    if (user_id) {
+      const jsonString = JSON.stringify(user_id);
+      const jwtToken = jwtDecode(jsonString);
+      // console.log(jwtToken);
+      setUserId(jwtToken._id); // This will trigger the second useEffect
+    }
   }, [user_id]);
 
-  
-
-  
   useEffect(() => {
     if (userId) {
-        const fetchUser = async () => {
-            try {
-                const response = await axios.get(`http://localhost:5000/api/getUserById/${userId}`);
-                let userData = response.data;
-                setUser(userData);    
-            } catch (error) {
-                console.error("Failed to fetch the user:", error);
-                setError("Failed to fetch the user");
-                
-            }
-        };
+      const fetchUser = async () => {
+        try {
+          const response = await axios.get(
+            `http://localhost:5000/api/getUserById/${userId}`
+          );
+          let userData = response.data;
+          setUser(userData);
+        } catch (error) {
+          console.error("Failed to fetch the user:", error);
+          setError("Failed to fetch the user");
+        }
+      };
 
-        fetchUser();
+      fetchUser();
     }
-}, [userId]);
+  }, [userId]);
 
-
-
-
-
-useEffect(() => {
-  if (Array.isArray(user.favourite_events) && user.favourite_events.length > 0) {
-    const fetchEvents = async () => {
-      try {
-        const fetchedEvents = await Promise.all(
-          user.favourite_events.map(async (id) => {
-            // Make a separate GET request for each ID
-            const response = await axios.get(`http://localhost:5000/api/event/getEvent/${id}`);
-            let eventData = response.data;
-            
-            // Convert binary data to base64 if there is a cover image
-            if (eventData.cover_image) {
-              const base64Image = convertBinaryToBase64(
-                new Uint8Array(eventData.cover_image.data),
-                eventData.cover_image.contentType
+  useEffect(() => {
+    if (
+      Array.isArray(user.favourite_events) &&
+      user.favourite_events.length > 0
+    ) {
+      const fetchEvents = async () => {
+        try {
+          const fetchedEvents = await Promise.all(
+            user.favourite_events.map(async (id) => {
+              // Make a separate GET request for each ID
+              const response = await axios.get(
+                `http://localhost:5000/api/event/getEvent/${id}`
               );
-              eventData.cover_image = base64Image;
-            }
-            
-            return eventData;
-          })
-        );
-        
-        setEvents(fetchedEvents);
-        setLoading(false);
-      } catch (error) {
-        console.error("Failed to fetch the events:", error);
-        setError("Failed to fetch the events");
-        setLoading(false);
-      }
-    };
-    
-    fetchEvents();
-  } else {
-    // Handle the case where there are no favorite events
-    setEvents([]);
-    setLoading(false);
-  }
-}, [user.favourite_events]);
+              let eventData = response.data;
 
+              // Convert binary data to base64 if there is a cover image
+              if (eventData.cover_image) {
+                const base64Image = convertBinaryToBase64(
+                  new Uint8Array(eventData.cover_image.data),
+                  eventData.cover_image.contentType
+                );
+                eventData.cover_image = base64Image;
+              }
 
+              return eventData;
+            })
+          );
+
+          setEvents(fetchedEvents);
+          setLoading(false);
+        } catch (error) {
+          console.error("Failed to fetch the events:", error);
+          setError("Failed to fetch the events");
+          setLoading(false);
+        }
+      };
+
+      fetchEvents();
+    } else {
+      // Handle the case where there are no favorite events
+      setEvents([]);
+      setLoading(false);
+    }
+  }, [user.favourite_events]);
 
   return (
     <div className="card-container">
       {loading ? (
-        <p>Loading...</p>
+        
+            <Box
+              sx={{
+                mt:20,
+                ml: 50,
+                display: "flex",
+                // justifyContent: "center",
+                // alignItems: "center",
+                height: '100vh',
+                // bgcolor:'black'
+              }}
+            >
+              <CircularProgress />
+            </Box>
       ) : error ? (
         <p>{error}</p>
       ) : events.length > 0 ? (
         events.map((event, index) => (
           <div key={index}>
-            <Card sx={{ width: 345, height: 450, margin: "1rem auto", position: 'relative' }}>
+            <Card
+              sx={{
+                width: 345,
+                height: 450,
+                margin: "1rem auto",
+                position: "relative",
+              }}
+            >
               <CardMedia
                 sx={{ height: 250 }}
-                image={event.cover_image || "https://via.placeholder.com/345x140"}
+                image={
+                  event.cover_image || "https://via.placeholder.com/345x140"
+                }
                 title={event.title}
               />
               <CardContent>
@@ -132,7 +152,9 @@ useEffect(() => {
                   {event.description.slice(0, 200)}
                 </Typography>
               </CardContent>
-              <CardActions sx={{ display: 'flex', position: 'absolute', bottom: 0 }}>
+              <CardActions
+                sx={{ display: "flex", position: "absolute", bottom: 0 }}
+              >
                 <Button sx={{ color: "#311b92" }} size="small">
                   Share
                 </Button>

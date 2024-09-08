@@ -2,9 +2,38 @@ import React from 'react';
 import { Container, Grid, Box, Typography } from '@mui/material';
 import ContactForm from './contactForm';
 import './Contact.css';
-import image from '../../asset/contactImage.jpg';
+import image from '../../asset/contactImage2.jpg';
+import { useState, useEffect } from 'react';
+import { Avatar, CircularProgress } from "@mui/material";
 
 export const Contact = () => {
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    // Set loading to false when component mounts
+    setLoading(true);
+    setTimeout(()=>{
+      setLoading(false);
+    },2000);
+  }, []);  // Empty dependency array means this runs only once on mount
+
+  if (loading) {
+    return (
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100vh",
+        }}
+      >
+        <CircularProgress />
+      </Box>
+    );
+  }
+
+
+
   return (
     <Container className="contact-container">
       <Typography variant="h4" component="h1" className="contact-title">

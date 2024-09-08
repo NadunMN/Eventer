@@ -6,8 +6,38 @@ import teamMember3 from '../../asset/team-member3.jpg';
 import teamMember4 from '../../asset/team-member4.jpg';
 import introImage from '../../asset/introImage.jpg';
 import introImage2 from '../../asset/introImage2.jpg'; // Import the intro image
+import { useState, useEffect } from 'react';
+import { Avatar, CircularProgress } from "@mui/material";
+import Box from "@mui/material/Box";
+import { Stack, Typography, Button, TextField } from "@mui/material";
+
+
 
 export const About = () => {
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    // Set loading to false when component mounts
+    setLoading(true);
+    setTimeout(()=>{
+      setLoading(false);
+    },2000);
+  }, []);  // Empty dependency array means this runs only once on mount
+
+  if (loading) {
+    return (
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100vh",
+        }}
+      >
+        <CircularProgress />
+      </Box>
+    );
+  }
   return (
     <div className="about-container">
       <section className="about-intro">
@@ -51,7 +81,7 @@ export const About = () => {
           </div>
           <div className="team-member">
             <img src={teamMember4} alt="Team Member 4" />
-            <h3>Sachith</h3>
+            <h3>Mahesh</h3>
             <p>Event Coordinator</p>
           </div>
           {/* Add more team members as needed */}

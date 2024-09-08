@@ -29,9 +29,7 @@ export default function MediaCard() {
 
       // Fetch events
       axios
-        .get("http://localhost:5000/api/event/getEvent", {
-          headers: { Authorization: `Bearer ${token}` },
-        })
+        .get("http://localhost:5000/api/event/getEvent")
         .then((res) => {
           const eventsData = res.data;
 
@@ -62,11 +60,11 @@ export default function MediaCard() {
       console.error("No user token found.");
     }
   }, []);
-  console.log("events", events);
+  // console.log("events", events);
 
   events.sort((a, b) => b.participants - a.participants);
   const topEvents = events.slice(0, 4);
-  console.log(topEvents);
+  // console.log(topEvents);
 
   return (
     <>

@@ -78,13 +78,11 @@ export const AdminDashboard = () => {
     setLoading(true); // Start overall loading
     setEventsLoading(true); // Start loading for events
     const user = JSON.parse(localStorage.getItem("user"));
-    if (user) {
-      const token = jwtDecode(user.token);
-
+    if (user && user.token) {
       // Fetch events
       axios
         .get("http://localhost:5000/api/event/getEvent", {
-          headers: { Authorization: `Bearer ${token}` },
+          headers: { Authorization: `Bearer ${user.token}` },
         })
         .then((res) => {
           const eventsData = res.data;
@@ -112,30 +110,30 @@ export const AdminDashboard = () => {
           }));
 
           setChartData(formattedData);
-          setEventsLoading(false); // End loading for events
-          setLoading(false); // End overall loading
+          setEventsLoading(false);
+          setLoading(false);
         })
         .catch((error) => {
           console.error("Error fetching events:", error);
-          setEventsLoading(false); // End loading for events
-          setLoading(false); // End overall loading
+          setEventsLoading(false);
+          setLoading(false);
         });
 
       // Fetch users
       axios
         .get("http://localhost:5000/api/user", {
-          headers: { Authorization: `Bearer ${token}` },
+          headers: { Authorization: `Bearer ${user.token}` },
         })
         .then((res) => {
           setUserData(res.data);
-          setLoading(false); // End overall loading
+          setLoading(false);
         })
         .catch((error) => {
           console.error("Error fetching users:", error);
-          setLoading(false); // End overall loading
+          setLoading(false);
         });
     } else {
-      console.error("No user token found.");
+      console.log("User not logged in or invalid access token");
       setLoading(false); // End overall loading
     }
   }, []);
@@ -157,7 +155,11 @@ export const AdminDashboard = () => {
           : `http://localhost:5000/api/user/delete/${selectedItemId}`;
 
       axios
-        .delete(endpoint)
+        .delete(endpoint, {
+          headers: {
+            Authorization: `Bearer ${user.token}`,
+          },
+        })
         .then((res) => {
           if (deleteType === "event") {
             setEvents((prevEvents) =>
@@ -178,6 +180,8 @@ export const AdminDashboard = () => {
           console.error(`Error deleting ${deleteType}:`, error);
           setDeleting(false); // End deleting
         });
+    } else {
+      console.log("User is not Login or invalid access token");
     }
   };
 
@@ -425,7 +429,7 @@ export const AdminDashboard = () => {
                 onClick={() => setActiveTab("review")}
               >
                 <CommentIcon sx={{ mr: 2 }} />
-                <ListItemText primary="review" />
+                <ListItemText primary="Review" />
               </ListItem>
             </List>
           </Paper>

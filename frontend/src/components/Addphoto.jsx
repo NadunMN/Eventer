@@ -1,16 +1,26 @@
-import React, { useState,useEffect } from "react";
-import { IconButton, Box, Button } from "@mui/material";
+import React, { useState, useEffect } from "react";
+import {
+  Box,
+  Stack,
+  Button,
+  Typography,
+  TextField,
+  Avatar,
+  InputAdornment,
+  IconButton,
+  Menu,
+  MenuItem,
+  Divider,
+} from "@mui/material";
 import { styled } from "@mui/material/styles";
 import { AddPhotoAlternate } from "@mui/icons-material";
 import addImg from "../asset/addImage.jpg";
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
-import Alert from '@mui/material/Alert';
-import Grid from '@mui/material/Grid';
+import Alert from "@mui/material/Alert";
+import Grid from "@mui/material/Grid";
 // import Snackbar from "@mui/material";
-import Snackbar from '@mui/material/Snackbar';
-
-
+import Snackbar from "@mui/material/Snackbar";
 
 const Input = styled("input")({
   display: "none",
@@ -23,23 +33,17 @@ const ImageUpload = ({ onImageChange }) => {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
 
-
-
   console.log(userId);
-
-
-
-
 
   const user_id = JSON.parse(localStorage.getItem("user"));
 
   useEffect(() => {
-      if (user_id) {
-          const jsonString = JSON.stringify(user_id);
-          const jwtToken = jwtDecode(jsonString);
-          // console.log(jwtToken);
-          setUserId(jwtToken._id); // This will trigger the second useEffect
-      }
+    if (user_id) {
+      const jsonString = JSON.stringify(user_id);
+      const jwtToken = jwtDecode(jsonString);
+      // console.log(jwtToken);
+      setUserId(jwtToken._id); // This will trigger the second useEffect
+    }
   }, [user_id]);
 
   const handleImageChange = (e) => {
@@ -62,31 +66,34 @@ const ImageUpload = ({ onImageChange }) => {
     // FormData to send the selected image file to the backend
     const formDataToSend = new FormData();
     formDataToSend.append("cover_image", coverImg, coverImg.name);
-
-    try {
-      const response = await axios.put(
-        `http://localhost:5000/api/updatedUserImage/${userId}`,
-        formDataToSend,
+    const user = JSON.parse(localStorage.getItem("user"));
+    if (user && user.token) {
+      try {
+        const response = await axios.put(
+          `http://localhost:5000/api/updatedUserImage/${userId}`,
+          formDataToSend,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+              Authorization: `Bearer ${user.token}`,
+            },
+          }
+        );
         {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
+          setAlertMessage("Profile image updated successfully!");
+          setSnackbarOpen(true);
         }
-      );
-      {
-        setAlertMessage("Profile image updated successfully!");
-        setSnackbarOpen(true);
-        
-      };
-        
-      console.log("Response data:", response.data);
-      // Handle success (e.g., update state/UI with the new image)
-    } catch (error) {
-      console.error("Error updating profile image:", error);
-      // Handle error (e.g., display an error message)
+
+        console.log("Response data:", response.data);
+        // Handle success (e.g., update state/UI with the new image)
+      } catch (error) {
+        console.error("Error updating profile image:", error);
+        // Handle error (e.g., display an error message)
+      }
+    } else {
+      console.log("User not logged in or invalid access token");
     }
   };
-
 
   const handleSnackbarClose = (event, reason) => {
     if (reason === "clickaway") {
@@ -95,17 +102,18 @@ const ImageUpload = ({ onImageChange }) => {
     setSnackbarOpen(false); // Close the snackbar
   };
 
-
   return (
     <Box
       sx={{
-        position: "relative",
+        // position: "relative",
         mb: 2,
-        mt: 15,
+        mt: 5,
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
         justifyContent: "center",
+        height: "auto",
+        // bgcolor:'black'
       }}
     >
       <img
@@ -133,8 +141,8 @@ const ImageUpload = ({ onImageChange }) => {
           component="span"
           sx={{
             backgroundColor: "background.paper",
-            '&:hover': {
-              backgroundColor: 'primary.light',
+            "&:hover": {
+              backgroundColor: "primary.light",
             },
           }}
         >
@@ -143,7 +151,6 @@ const ImageUpload = ({ onImageChange }) => {
       </label>
       <Button
         onClick={handleSubmit}
-        
         variant="contained"
         color="primary"
         sx={{
@@ -155,7 +162,7 @@ const ImageUpload = ({ onImageChange }) => {
         }}
       >
         Upload a Profile Image
-      </Button> 
+      </Button>
 
       <Snackbar
         open={snackbarOpen}
@@ -163,13 +170,19 @@ const ImageUpload = ({ onImageChange }) => {
         onClose={handleSnackbarClose}
         anchorOrigin={{ vertical: "top", horizontal: "right" }}
       >
-        <Alert onClose={handleSnackbarClose} severity={alertMessage==="Profile image updated successfully!"? "success": "error" } sx={{ width: "100%" }}>
+        <Alert
+          onClose={handleSnackbarClose}
+          severity={
+            alertMessage === "Profile image updated successfully!"
+              ? "success"
+              : "error"
+          }
+          sx={{ width: "100%" }}
+        >
           {alertMessage}
         </Alert>
       </Snackbar>
-
     </Box>
-
   );
 };
 
