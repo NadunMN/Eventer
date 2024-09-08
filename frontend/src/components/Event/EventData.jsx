@@ -65,8 +65,8 @@ export default function EventData(handleNavigate) {
     }
     setSnackbarOpen(false); // Close the snackbar
   };
-  console.log(userId);
-  console.log(eventCreatedId);
+  // console.log(userId);
+  // console.log(eventCreatedId);
 
   useEffect(() => {
     if (event && event.created_by) {
@@ -366,8 +366,8 @@ export default function EventData(handleNavigate) {
               {register.includes(event._id) ? "Unregister" : "Register"}
             </Button>
 
-            {userId === eventCreatedId ? <FormDialogDelete /> : null}
-            {/* <FormDialogDelete/> */}
+            {/* {userId === eventCreatedId ? <FormDialogDelete /> : null} */}
+            <FormDialogDelete/>
 
             <Typography variant="body1" sx={{ mt: 2 }}>
               {" "}

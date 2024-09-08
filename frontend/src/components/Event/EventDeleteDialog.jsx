@@ -7,10 +7,12 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import Box from '@mui/material/Box';
 import axios from 'axios';
-import { useState } from 'react';
+import { useState,useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
+import { jwtDecode } from "jwt-decode";
+
 
 export default function FormDialogDelete() {
   const { eventId } = useParams();
@@ -18,6 +20,40 @@ export default function FormDialogDelete() {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
   const [alertSeverity, setAlertSeverity] = useState("success"); // Set default severity
+  const [userId, setUserId] = useState("");
+  const [user, setUser] = useState([]);
+
+
+  console.log(user);
+  const user_id = JSON.parse(localStorage.getItem("user"));
+
+  useEffect(() => {
+      if (user_id) {
+          const jsonString = JSON.stringify(user_id);
+          const jwtToken = jwtDecode(jsonString);
+          // console.log(jwtToken);
+          setUserId(jwtToken._id); // This will trigger the second useEffect
+      }
+  }, [user_id]);
+
+  useEffect(() => {
+    if (userId) {
+      const fetchUser = async () => {
+        try {
+          const response = await axios.get(
+            `http://localhost:5000/api/getUserById/${userId}`
+          );
+          let userData = response.data;
+          setUser(userData);
+        } catch (error) {
+          console.error("Failed to fetch the user:", error);
+          setError("Failed to fetch the user");
+        }
+      };
+
+      fetchUser();
+    }
+  }, [userId]);
 
   const navigate = useNavigate();
 
@@ -28,17 +64,47 @@ export default function FormDialogDelete() {
       setAlertMessage("Event deleted successfully!"); 
       setAlertSeverity("success"); 
       setSnackbarOpen(true); 
-      setTimeout(() => {
-        navigate("/event", { replace: true });
-      }, 2000);
-
+  
+      try {
+        // Attempt to remove the event from all users
+        const response = await axios.post(`http://localhost:5000/api/user/remove-event/${eventId}`);
+  
+        if (response.status === 200) {
+          console.log('Event removed from all users:', response.data.message);
+          // Optionally, trigger some UI update or notification
+  
+          // Only navigate if both operations succeed
+          setTimeout(() => {
+            navigate("/event", { replace: true });
+          }, 2000);
+        } else {
+          // Handle unexpected response status
+          setAlertMessage("Event deletion succeeded but failed to remove from users.");
+          setAlertSeverity("warning");
+          setSnackbarOpen(true);
+        }
+      } catch (error) {
+        setAlertMessage("Failed to remove event from users."); 
+        setAlertSeverity("error"); 
+        setSnackbarOpen(true);
+        console.error('Failed to remove event from users:', error.response ? error.response.data.message : error.message);
+      }
+  
     } catch (error) {
       setAlertMessage("Failed to delete the event."); 
       setAlertSeverity("error"); 
       setSnackbarOpen(true);
-      console.error("Failed to delete the event:", error);
+      console.error("Failed to delete the event:", error.response ? error.response.data.message : error.message);
     }
   };
+  
+  console.log(eventId);
+
+  // const removeEventFromAllUsers = async (eventId) => {
+    
+  // };
+  
+
 
   const handleSnackbarClose = (event, reason) => {
     if (reason === "clickaway") {
@@ -103,7 +169,16 @@ export default function FormDialogDelete() {
         </DialogContent>
         <DialogActions sx={{ display: 'flex', justifyContent: 'center' }}>
           <Button variant='contained' onClick={handleClose}>Cancel</Button>
-          <Button variant='contained' color="error" type="submit" onClick={handleDeleteClick}>Delete</Button>
+          <Button 
+  variant='contained' 
+  color="error" 
+  type="submit" 
+  onClick={handleDeleteClick }     // Add parentheses to call the function
+    // removeEventFromAllUsers();  Add parentheses to call the function
+>
+  Delete
+</Button>
+
         </DialogActions>
       </Dialog>
 
