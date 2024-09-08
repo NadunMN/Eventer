@@ -2,12 +2,12 @@ import React from 'react';
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 
-import Ceatlogo from '../asset/Icon/images (1).jpg';
-import Maxxislogo from '../asset/Icon/images.png';
-import Bridgestonelogo from '../asset/Icon/logo1.jpeg';
-import Dunloplogo from '../asset/Icon/Rotaract-300x130.png';
-import Michelinlogo from '../asset/Icon/images.jpg';
-import Federallogo from '../asset/Icon/colombo.png';
+import Ceatlogo from '../asset/Icon/colombo.png';
+import Maxxislogo from '../asset/Icon/compsoc.jpg';
+import Bridgestonelogo from '../asset/Icon/IEEE.jpg';
+import Dunloplogo from '../asset/Icon/images (1).jpg';
+import Michelinlogo from '../asset/Icon/Systemlogo2.jpg';
+import Federallogo from '../asset/Icon/rotaract.jpg';
 
 function Brandcarousel() {
     const responsive = {

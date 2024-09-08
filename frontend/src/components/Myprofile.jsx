@@ -5,7 +5,9 @@ import {
   Typography,
   TextField,
   Divider,
+  CircularProgress,
 } from "@mui/material";
+
 import React, { useState, useEffect } from "react";
 import EditIcon from "@mui/icons-material/Edit";
 import SaveIcon from "@mui/icons-material/Save";
@@ -89,7 +91,23 @@ function Myprofile() {
     }
   };
 
-  if (loading) return <Typography>Loading...</Typography>;
+  if (loading) {
+    return (
+      <Box
+        sx={{
+          mt:20,
+          ml: 50,
+          display: "flex",
+          // justifyContent: "center",
+          // alignItems: "center",
+          height: '100vh',
+          // bgcolor:'black'
+        }}
+      >
+        <CircularProgress />
+      </Box>
+    );
+  }
   if (error) return <Typography>{error}</Typography>;
 
   return (

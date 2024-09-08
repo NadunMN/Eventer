@@ -31,6 +31,7 @@ export default function FavoriteEvent() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  
   const user_id = JSON.parse(localStorage.getItem("user"));
 
   useEffect(() => {
@@ -109,16 +110,20 @@ export default function FavoriteEvent() {
   return (
     <div className="card-container">
       {loading ? (
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            height: "100%",
-          }}
-        >
-          <CircularProgress />
-        </Box>
+        
+            <Box
+              sx={{
+                mt:20,
+                ml: 50,
+                display: "flex",
+                // justifyContent: "center",
+                // alignItems: "center",
+                height: '100vh',
+                // bgcolor:'black'
+              }}
+            >
+              <CircularProgress />
+            </Box>
       ) : error ? (
         <p>{error}</p>
       ) : events.length > 0 ? (

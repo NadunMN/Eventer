@@ -6,8 +6,36 @@ import ButtonBaseDemo from "./Category";
 import MediaCard from "./Card";
 import Brandcarousel from "./Carousel";
 import { Link } from "react-router-dom";
+import { useState, useEffect } from 'react';
+import { Avatar, CircularProgress } from "@mui/material";
+
 
 export const Home = ({ token }) => {
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    // Set loading to false when component mounts
+    setLoading(true);
+    setTimeout(()=>{
+      setLoading(false);
+    },2000);
+  }, []);  // Empty dependency array means this runs only once on mount
+
+  if (loading) {
+    return (
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100vh",
+        }}
+      >
+        <CircularProgress />
+      </Box>
+    );
+  }
+
   return (
     <>
       <div className="Main-part">
