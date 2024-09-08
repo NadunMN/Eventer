@@ -53,7 +53,15 @@ export const Event = () => {
   const [message, setMessage] = useState("");
 
   const navigate = useNavigate();
+  // Set the category from the location state
   const location = useLocation();
+  useEffect(() => {
+    const locationData = location.state || {};
+    console.log("locationData useEffect");
+    console.log(locationData.category);
+
+    locationData.category ? setCategory(locationData.category) : null;
+  }, []);
 
   // Function to handle closing the snackbar
   const handleSnackbarClose = (event, reason) => {
@@ -62,15 +70,6 @@ export const Event = () => {
     }
     setSnackbarOpen(false); // Close the snackbar
   };
-
-  // Set the category from the location state
-  useEffect(() => {
-    const locationData = location.state || {};
-    console.log("locationData");
-    console.log(locationData.category);
-
-    locationData.category ? setCategory(locationData.category) : null;
-  }, []);
 
   //get user data from local storage
   useEffect(() => {
@@ -97,52 +96,64 @@ export const Event = () => {
     }
   }, []);
 
-  // Fetch event data
+  // Set the category from the location state
   useEffect(() => {
-    const fetchEvent = async () => {
-      setLoading(true);
+    const locationData = location.state || {};
+    if (locationData) {
+      setCategory(locationData.category);
+      // setIsfromlocation(true);
+      console.log("locationData");
+      console.log(locationData.category);
+    }
+  }, []);
 
-      try {
-        const response = await axios.get(
-          category
-            ? `http://localhost:5000/api/event/getCategory/?category=${category}`
-            : "http://localhost:5000/api/event/getEvent"
-        );
+  // Fetch event data
+  useEffect(
+    () => {
+      const fetchEvent = async () => {
+        setLoading(true);
 
-        let res_data = response.data;
-        console.log("res_data");
-        console.log(res_data);
+        try {
+          const response = await axios.get(
+            category
+              ? `http://localhost:5000/api/event/getCategory/?category=${category}`
+              : "http://localhost:5000/api/event/getEvent"
+          );
 
-        // Process the event data
-        const listOfEvents = res_data.map((event) => {
-          if (event.cover_image) {
-            const base64Image = convertBinaryToBase64(
-              new Uint8Array(event.cover_image.data),
-              event.cover_image.contentType
-            );
-            event.cover_image = base64Image;
+          let res_data = response.data;
+          console.log("res_data");
+          console.log(res_data);
+
+          // Process the event data
+          const listOfEvents = res_data.map((event) => {
+            if (event.cover_image) {
+              const base64Image = convertBinaryToBase64(
+                new Uint8Array(event.cover_image.data),
+                event.cover_image.contentType
+              );
+              event.cover_image = base64Image;
+            }
+            return event;
+          });
+
+          setListOfEvent(listOfEvents);
+          setError("");
+        } catch (error) {
+          if (error.response?.status === 404) {
+            setListOfEvent([]);
+            console.log("No events found (404)");
+            return;
           }
-          return event;
-        });
 
-        setListOfEvent(listOfEvents);
-        setError("");
-      } catch (error) {
-        if (error.response?.status === 404) {
-          setListOfEvent([]);
-          console.log("No events found (404)");
-          return;
+          console.error("Failed to fetch data:", error);
+          setError("Failed to fetch the event");
+        } finally {
+          setLoading(false);
         }
+      };
 
-        console.error("Failed to fetch data:", error);
-        setError("Failed to fetch the event");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchEvent();
-  }, [category], []);
+      fetchEvent();
+    },[category]);
 
   // Handle category change
   const handleCategoryChange = (event) => {
