@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
 import EventIcon from "@mui/icons-material/Event";
@@ -44,7 +44,7 @@ const convertBinaryToBase64 = (binaryData, contentType) => {
   }
 };
 
-export default function EventData(handleNavigate) {
+export default function EventData() {
   const { eventId } = useParams(); //get the event ID from the route params
   const [event, setEvent] = useState(null);
   const [eventCreatedId, setEventCreatedId] = useState(null);
@@ -54,10 +54,14 @@ export default function EventData(handleNavigate) {
   const [userRole, setUserRole] = useState("");
   const [favorites, setFavorites] = useState([]);
   const [register, setRegister] = useState([]);
-  const [isFav, setIsFev] = useState(false);
+  // const [isFav, setIsFev] = useState(false);
   const [snackbarOpen, setSnackbarOpen] = useState(false); // Alert visibility state
   const [alert, setAlert] = useState("");
   const [message, setMessage] = useState("");
+
+  const location = useLocation();
+  const category = location.state?.category;
+  console.log(category);
 
   const handleSnackbarClose = (event, reason) => {
     if (reason === "clickaway") {
@@ -233,6 +237,7 @@ export default function EventData(handleNavigate) {
 
   return (
     <>
+      <h1>{category}</h1>
       <Container maxWidth="xl" sx={{ mt: 8 }}>
         {/* upper */}
         <Container>
