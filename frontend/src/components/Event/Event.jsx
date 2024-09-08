@@ -282,35 +282,79 @@ export const Event = () => {
 
   return (
     <Box>
+      
       {/* Search form and category dropdown */}
       <Container maxWidth="lg">
+        
+        <Box sx={{
+          display: "flex",
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: "center",
+          background:"linear-gradient(45deg, #673ab7 30%, #3f51b5 90%)",
+          mt: 4,
+          pt:5,
+          pb:5,
+          borderRadius: '50px'
+
+        }}>
+          <Typography variant="h4" sx={{
+            color: 'white',
+            m: 2
+          }}>Search for your next memorable event.</Typography>
         <Box
           sx={{
-            mt: 4,
+            
             display: "flex",
-            gap: 40,
+            width:'100%',
+            alignItems: 'center',
             justifyContent: "center",
+            // bgcolor:'blue',
+            // mt: 4,
+            // pt:15,
+            // pb:5
+            
           }}
         >
+          
           <FormControl
-            fullWidth
+            
             sx={{
-              boxShadow: 4,
+              // boxShadow: 4,
               maxWidth: 600,
+              width: 150,
               m: 1,
-              transition: "box-shadow 0.3s ease-in-out",
-              "&:hover": {
-                boxShadow: "0 5px 15px 5px rgba(0, 0, 0, .2)",
+              bgcolor:'white',
+              borderRadius: 4,
+              borderColor:'none',
+              '& .MuiOutlinedInput-root': {
+                '& fieldset': {
+                  borderColor: 'transparent', // Default border color
+                },
+                '&:hover fieldset': {
+                  borderColor: 'transparent', // Border color on hover
+                },
+                '&.Mui-focused fieldset': {
+                  borderColor: 'transparent', // Remove blue border on focus
+                },
               },
+      
+      
+              
             }}
           >
-            <InputLabel id="category-select-label">Category</InputLabel>
             <Select
+              displayEmpty
               labelId="category-select-label"
               id="category-select"
               value={category}
               onChange={handleCategoryChange}
-              label="Category"
+              renderValue={(selected) => {
+                if (!selected) {
+                  return <>Category</>; // Placeholder text
+                }
+                return selected;
+              }}
             >
               <MenuItem value="">
                 <em>None</em>
@@ -326,6 +370,12 @@ export const Event = () => {
           <Box sx={{ ml: 2, width: "100%", maxWidth: 500 }}>
             <SearchForm setListOfEvents={setListOfEvent} />
           </Box>
+          </Box>
+
+
+
+
+
         </Box>
       </Container>
 
