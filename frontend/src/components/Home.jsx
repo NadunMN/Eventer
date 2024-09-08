@@ -5,149 +5,189 @@ import Box from "@mui/material/Box";
 import ButtonBaseDemo from "./Category";
 import MediaCard from "./Card";
 import Brandcarousel from "./Carousel";
+import { Link } from "react-router-dom";
 
-export const Home = () => {
+export const Home = ({ token }) => {
   return (
     <>
       <div className="Main-part">
-{/* Text and Buttons */}
-<Box
-      sx={{
-        position: 'absolute',
-        top: { xs: 'auto', sm: 150 }, // Responsive top positioning
-        right: { xs: 'auto', sm:10 }, // Responsive right positioning
-        display: 'flex',
-        flexDirection: 'column',
-        mr: { xs: 2, sm: 5 }, // Responsive margin-right
-        p: { xs: 2, sm: 5 } // Responsive padding
-      }}
-    >
-      <Typography
-        className="Create-event-div"
-        sx={{
-          width: { xs: '100%', sm: 220 }, // Responsive width
-          fontFamily: 'monospace',
-          mb: { xs: 1, sm: 2 }, // Responsive margin-bottom
-          fontSize: { xs: '0.875rem', sm: '1rem' } // Responsive font-size
-        }}
-      >
-        Create your favorite event with our Eventer
-      </Typography>
-      <Button
-        variant="contained"
-        sx={{
-          height: { xs: 'auto', sm: 50 }, // Responsive height
-          bgcolor: 'linear-gradient(45deg, #673ab7 30%, #3f51b5 90%)',
-          fontSize: { xs: '14px', sm: '15px' } // Responsive font-size
-        }}
-      >
-        Create Your Own Event
-      </Button>
-    </Box>
+        {/* Text and Buttons */}
+        <Box
+          sx={{
+            position: "absolute",
+            top: { xs: "auto", sm: 150 }, // Responsive top positioning
+            right: { xs: "auto", sm: 10 }, // Responsive right positioning
+            display: "flex",
+            flexDirection: "column",
+            mr: { xs: 2, sm: 5 }, // Responsive margin-right
+            p: { xs: 2, sm: 5 }, // Responsive padding
+          }}
+        >
+          <Typography
+            className="Create-event-div"
+            sx={{
+              width: { xs: "100%", sm: 220 }, // Responsive width
+              fontFamily: "monospace",
+              mb: { xs: 1, sm: 2 }, // Responsive margin-bottom
+              fontSize: { xs: "0.875rem", sm: "1rem" }, // Responsive font-size
+            }}
+          >
+            Create your favorite event with our Eventer
+          </Typography>
+          <Button
+            variant="contained"
+            sx={{
+              height: { xs: "auto", sm: 50 }, // Responsive height
+              bgcolor: "linear-gradient(45deg, #673ab7 30%, #3f51b5 90%)",
+              fontSize: { xs: "14px", sm: "15px" }, // Responsive font-size
+            }}
+            component={Link}
+            to="/create-event"
+          >
+            Create Your Own Event
+          </Button>
+        </Box>
 
-{/* Responsive Text */}
-<Box sx={{
-  position: 'absolute',
-  fontSize: { xs: '1.5rem', sm: '2rem', md: '3rem', lg: '4rem' },  // Responsive font size
-  alignItems: 'center'
-}}>
-  <div className="Topic-div">
-  <p style={{
-  fontSize: 'clamp(1rem, 6vw, 5rem)', 
-  fontWeight: 'bold', 
-  textAlign: 'left', 
-  color: '#000', 
-  marginLeft: '50px',
-  padding: 0,
-  lineHeight: 1, 
-}}>
-  Effortless <br />
-  <span style={{
-    background: 'linear-gradient(45deg, #673ab7, #3f51b5)', 
-    WebkitBackgroundClip: 'text',
-    WebkitTextFillColor: 'transparent',
-    fontWeight: 'bold',
-    lineHeight: 1,
-    fontSize: 'clamp(2rem,6vw, 7rem)', 
-  }}>
-    Event Planning for <br />
-    <span style={{ fontSize: 'clamp(1rem, 6vw, 7rem)' }}>Every Occasion.</span> {/* Size for "Every Occasion." */}
-  </span>
-</p>
+        {/* Responsive Text */}
+        <Box
+          sx={{
+            position: "absolute",
+            fontSize: { xs: "1.5rem", sm: "2rem", md: "3rem", lg: "4rem" }, // Responsive font size
+            alignItems: "center",
+          }}
+        >
+          <div className="Topic-div">
+            <p
+              style={{
+                fontSize: "clamp(1rem, 6vw, 5rem)",
+                fontWeight: "bold",
+                textAlign: "left",
+                color: "#000",
+                marginLeft: "50px",
+                padding: 0,
+                lineHeight: 1,
+              }}
+            >
+              Effortless <br />
+              <span
+                style={{
+                  background: "linear-gradient(45deg, #673ab7, #3f51b5)",
+                  WebkitBackgroundClip: "text",
+                  WebkitTextFillColor: "transparent",
+                  fontWeight: "bold",
+                  lineHeight: 1,
+                  fontSize: "clamp(2rem,6vw, 7rem)",
+                }}
+              >
+                Event Planning for <br />
+                <span style={{ fontSize: "clamp(1rem, 6vw, 7rem)" }}>
+                  Every Occasion.
+                </span>{" "}
+                {/* Size for "Every Occasion." */}
+              </span>
+            </p>
+          </div>
 
-  </div>
-
-  {/* Subheadings */}
-  <Box sx={{ mt: 2, px: { xs: 2, sm: 3, md: 4 } }}>
-      <Typography
-        className="sub-heading1"
-        sx={{
-          ml:3, 
-          mt: { xs: '2px', sm: '5px', md: '10px' }, // Responsive margin-top
-          fontSize: { xs: '0.6rem', sm: '0.8rem', md: '1.1rem' } // Responsive font-size
-        }}
-      >
-        <b>Eventer</b> is the best University Event planner
-      </Typography>
-      <Typography
-        sx={{
-          ml: 3,
-          mt: { xs: '2px', sm: '5px', md: '10px' }, // Responsive margin-top
-          fontSize: { xs: '0.6rem', sm: '0.8rem', md: '1.1rem' } // Responsive font-size
-        }}
-      >
-        Where Campus Life Comes Alive: Discover, Plan, and Celebrate Every Moment
-      </Typography>
-    </Box>
-  {/* Buttons */}
-  <Stack
-      direction="row"
-      spacing={2}
-      sx={{
-        mt: 2,
-        display: 'flex',
-        justifyContent: 'flex-start',
-        ml: { xs: 2, sm: 4, md: '50px' }, // Responsive margin-left
-        flexWrap: { xs: 'wrap', sm: 'nowrap' } // Wrap buttons on smaller screens
-      }}
-    >
-      <Button
-        variant="contained"
-        size="large"
-        sx={{
-          bgcolor: 'linear-gradient(45deg, #673ab7 30%, #3f51b5 90%)',
-          width: { xs: '100%', sm: '200px' }, // Full width on small screens
-          fontSize: { xs: '16px', sm: '20px' }, // Responsive font-size
-          "&:hover": {
-            bgcolor: '#512da8',
-            cursor: 'pointer',
-          },
-        }}
-      >
-        SIGN UP
-      </Button>
-      <Button
-        variant="outlined"
-        endIcon={<ArrowForwardIcon />}
-        size="large"
-        sx={{
-          width: { xs: '100%', sm: '200px' }, // Full width on small screens
-          fontSize: { xs: '16px', sm: '20px' }, // Responsive font-size
-          color: 'linear-gradient(45deg, #673ab7 30%, #3f51b5 90%)',
-          border: 2,
-          "&:hover": {
-            borderColor: '#512da8',
-            cursor: 'pointer',
-            border: 1,
-          },
-        }}
-      >
-        SIGN IN
-      </Button>
-    </Stack>
-</Box>
-</div>
-
+          {/* Subheadings */}
+          <Box sx={{ mt: 2, px: { xs: 2, sm: 3, md: 4 } }}>
+            <Typography
+              className="sub-heading1"
+              sx={{
+                ml: 3,
+                mt: { xs: "2px", sm: "5px", md: "10px" }, // Responsive margin-top
+                fontSize: { xs: "0.6rem", sm: "0.8rem", md: "1.1rem" }, // Responsive font-size
+              }}
+            >
+              <b>Eventer</b> is the best University Event planner
+            </Typography>
+            <Typography
+              sx={{
+                ml: 3,
+                mt: { xs: "2px", sm: "5px", md: "10px" }, // Responsive margin-top
+                fontSize: { xs: "0.6rem", sm: "0.8rem", md: "1.1rem" }, // Responsive font-size
+              }}
+            >
+              Where Campus Life Comes Alive: Discover, Plan, and Celebrate Every
+              Moment
+            </Typography>
+          </Box>
+          {/* Buttons */}
+          <Stack
+            direction="row"
+            spacing={2}
+            sx={{
+              mt: 2,
+              display: "flex",
+              justifyContent: "flex-start",
+              ml: { xs: 2, sm: 4, md: "50px" }, // Responsive margin-left
+              flexWrap: { xs: "wrap", sm: "nowrap" }, // Wrap buttons on smaller screens
+            }}
+          >
+            {!token ? (
+              <>
+                <Button
+                  variant="contained"
+                  size="large"
+                  sx={{
+                    bgcolor: "linear-gradient(45deg, #673ab7 30%, #3f51b5 90%)",
+                    width: { xs: "100%", sm: "200px" }, // Full width on small screens
+                    fontSize: { xs: "16px", sm: "20px" }, // Responsive font-size
+                    "&:hover": {
+                      bgcolor: "#512da8",
+                      cursor: "pointer",
+                    },
+                  }}
+                  component={Link}
+                  to="/signup"
+                >
+                  SIGN UP
+                </Button>
+                <Button
+                  variant="outlined"
+                  endIcon={<ArrowForwardIcon />}
+                  size="large"
+                  sx={{
+                    width: { xs: "100%", sm: "200px" }, // Full width on small screens
+                    fontSize: { xs: "16px", sm: "20px" }, // Responsive font-size
+                    color: "linear-gradient(45deg, #673ab7 30%, #3f51b5 90%)",
+                    border: 2,
+                    "&:hover": {
+                      borderColor: "#512da8",
+                      cursor: "pointer",
+                      border: 1,
+                    },
+                  }}
+                  component={Link}
+                  to="/login"
+                >
+                  SIGN IN
+                </Button>
+              </>
+            ) : (
+              <Button
+                variant="outlined"
+                endIcon={<ArrowForwardIcon />}
+                size="large"
+                sx={{
+                  width: { xs: "100%", sm: "400px" }, // Full width on small screens
+                  fontSize: { xs: "16px", sm: "20px" }, // Responsive font-size
+                  color: "linear-gradient(45deg, #673ab7 30%, #3f51b5 90%)",
+                  border: 2,
+                  "&:hover": {
+                    borderColor: "#512da8",
+                    cursor: "pointer",
+                    border: 1,
+                  },
+                }}
+                component={Link}
+                to="/event"
+              >
+                Explore Our Events
+              </Button>
+            )}
+          </Stack>
+        </Box>
+      </div>
 
       <Brandcarousel />
 
