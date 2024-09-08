@@ -64,17 +64,6 @@ export const Event = () => {
     setSnackbarOpen(false); // Close the snackbar
   };
 
-  // Set the category from the location state
-  useEffect(() => {
-    const locationData = location.state || {};
-    if (locationData) {
-      setCategory(locationData.category);
-      setIsfromlocation(true);
-      console.log("locationData");
-      console.log(locationData.category);
-    }
-  }, []);
-
   //get user data from local storage
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("user"));
@@ -100,6 +89,17 @@ export const Event = () => {
     }
   }, []);
 
+  // Set the category from the location state
+  useEffect(() => {
+    const locationData = location.state || {};
+    if (locationData) {
+      setCategory(locationData.category);
+      // setIsfromlocation(true);
+      console.log("locationData");
+      console.log(locationData.category);
+    }
+  }, []);
+
   // Fetch event data based on category
   useEffect(() => {
     const fetchEvent = async () => {
@@ -107,7 +107,7 @@ export const Event = () => {
 
       try {
         const response = await axios.get(
-          `http://localhost:5000/api/event/getCategory/?category=${category}`
+          category ? `http://localhost:5000/api/event/getCategory/?category=${category}` : "http://localhost:5000/api/event/getEvent";
         );
 
         let res_data = response.data;
@@ -161,7 +161,7 @@ export const Event = () => {
 
         // Process the event data
         const listOfEvents = res_data.map((event) => {
-          if (event.cover_image) {
+          if (!event.cover_image) {
             const base64Image = convertBinaryToBase64(
               new Uint8Array(event.cover_image.data),
               event.cover_image.contentType
@@ -186,7 +186,7 @@ export const Event = () => {
         setLoading(false);
       }
     };
-    if (!isfromlocation) {
+    if (!locationData) {
       fetchEvent();
     }
   }, []);
