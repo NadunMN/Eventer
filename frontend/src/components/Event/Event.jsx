@@ -24,9 +24,7 @@ import FavoriteIcon from "@mui/icons-material/Favorite";
 import { jwtDecode } from "jwt-decode";
 import "bootstrap/dist/css/bootstrap.min.css";
 import SearchForm from "./SearchForm";
-import { Outlet, useLocation, useNavigate } from "react-router-dom";
-import EventGrids from "./EventGrids";
-import { useAuthContext } from "../../hooks/useAuthContext";
+import { useLocation, useNavigate } from "react-router-dom";
 
 // Function to convert binary data to base64
 const convertBinaryToBase64 = (binaryData, contentType) => {
@@ -138,7 +136,7 @@ export const Event = () => {
     };
 
     fetchEvent();
-  }, [category]);
+  }, [category], []);
 
   // Handle category change
   const handleCategoryChange = (event) => {
