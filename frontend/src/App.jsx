@@ -64,9 +64,8 @@ function App() {
         <Route path="create-event" element={<AddEvent />} />
         <Route path="admin-dashboard" element={<AdminDashboard />} />
         <Route path="Event" element={<Event />} />
-        {/* <Route path="Event" element={<EventDetails />} /> */}
         <Route path="event/:eventId" element={<EventData />} />
-        <Route path="event/category/:category" element={<Event />} />
+        <Route path="event/category" element={<Event />} />
         <Route path="About" element={<About />} />
         <Route path="Contact" element={<Contact />} />
         <Route
