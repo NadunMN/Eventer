@@ -30,6 +30,7 @@ import addImg from "../../asset/addImage.jpg";
 import axios from "axios";
 import { jwtDecode } from "jwt-decode"; // Correct import
 import { useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
 const Input = styled("input")({
   display: "none",
@@ -44,9 +45,9 @@ export const EventEdite = ({event_id}) => {
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
   const [createdEvent, setCreatedEvent] = useState({});
-  const [eventId, setEventId] = useState(event_id);
   const [event, setEvent] = useState({});
   const navigate = useNavigate();
+  const { eventId } = useParams();
 
 
 
@@ -96,19 +97,20 @@ console.log(event_id)
 
   const [coverImg, setCoverImg] = useState(null);
   const [formData, setFormData] = useState({
-    title: "",
-    start_date: "",
-    start_time: "",
-    end_date: "",
-    end_time: "",
-    venue: "",
-    description: "",
-    capacity: "",
+    title: event.title,
+    start_date: event.start_date,
+    start_time: event.start_time,
+    end_date: event.end_date,
+    end_time: event.end_time,
+    venue: event.venue,
+    description: event.description,
+    capacity: event.capacity,
   });
   const [errors, setErrors] = useState({});
 
   // Handle input change
   const handleInputChange = (e) => {
+
     const { name, value } = e.target;
     setFormData((prevData) => ({
       ...prevData,

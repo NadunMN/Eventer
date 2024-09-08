@@ -31,6 +31,7 @@ import { Reviews } from "../Reviews";
 import { EventParticipant } from "./EventParticipant";
 import FormDialogDelete from "./EventDeleteDialog";
 import { EventEdite } from "./EventEdite";
+import { useNavigate } from "react-router-dom";
 // Convert binary data to base64
 const convertBinaryToBase64 = (binaryData, contentType) => {
   if (binaryData && binaryData instanceof Uint8Array) {
@@ -45,6 +46,7 @@ const convertBinaryToBase64 = (binaryData, contentType) => {
 };
 
 export default function EventData() {
+  
   const { eventId } = useParams(); //get the event ID from the route params
   const [event, setEvent] = useState(null);
   const [eventCreatedId, setEventCreatedId] = useState(null);
@@ -58,6 +60,7 @@ export default function EventData() {
   const [snackbarOpen, setSnackbarOpen] = useState(false); // Alert visibility state
   const [alert, setAlert] = useState("");
   const [message, setMessage] = useState("");
+  const navigate = useNavigate();
 
   const location = useLocation();
   const category = location.state?.category;
@@ -421,7 +424,7 @@ export default function EventData() {
             </Button>
 
             {userId === eventCreatedId ? <FormDialogDelete /> : null}
-            {userId === eventCreatedId ? <EventEdite event_id={event_id}/> : null}
+            {userId === eventCreatedId ? <Button onClick={() => {navigate(`/edite-event/${eventId}`)}}>edite</Button> : null}
             {/* <FormDialogDelete/> */}
               
           </Box>
