@@ -52,10 +52,10 @@ export const Event = () => {
   const [alert, setAlert] = useState("");
   const [message, setMessage] = useState("");
   var flagIsOpen = false;
+  const location = useLocation();
 
   const navigate = useNavigate();
   // Set the category from the location state
-  const location = useLocation();
   useEffect(() => {
     const locationData = location.state || {};
     console.log("locationData useEffect");
