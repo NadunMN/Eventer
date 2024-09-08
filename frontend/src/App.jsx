@@ -14,11 +14,12 @@ import EventData from "./components/Event/EventData";
 import { Navigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { jwtDecode } from "jwt-decode";
-import {Event} from "./components/Event/Event";
+import { Event } from "./components/Event/Event";
 
 function App() {
   const [userRole, setUserRole] = useState("");
   const [userId, setUserId] = useState("");
+  const [token, setToken] = useState("");
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -30,6 +31,7 @@ function App() {
       const jwtToken = jwtDecode(user.token);
       setUserId(jwtToken._id);
       setUserRole(jwtToken.role);
+      setToken(jwtToken);
     }
     setLoading(false);
   }, [navigate]);
@@ -42,9 +44,7 @@ function App() {
     setUserRole("");
     navigate("/login");
   };
-  const showNavBarAndFooter = !["/signup", "/login"].includes(
-    location.pathname
-  );
+  const showNavBarAndFooter = !["/signup"].includes(location.pathname);
   return (
     <>
       {/* <NavBar logout={logout} userId={userId} userRole={userRole} /> */}
@@ -52,7 +52,7 @@ function App() {
         <NavBar logout={logout} userId={userId} userRole={userRole} />
       )}
       <Routes>
-        <Route path="/" element={<Home />} />
+        <Route path="/" element={<Home token={token} />} />
         <Route
           path="login"
           element={!userId ? <Login /> : <Navigate to="/" />}
