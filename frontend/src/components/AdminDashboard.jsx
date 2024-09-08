@@ -45,6 +45,7 @@ import axios from "axios";
 import { jwtDecode } from "jwt-decode";
 import { ReviewPannel } from "./ReviewPannel";
 import { Feedback } from "./Feedback";
+import ForwardToInboxIcon from "@mui/icons-material/ForwardToInbox";
 
 export const AdminDashboard = () => {
   const [chartData, setChartData] = useState([]);
@@ -429,8 +430,8 @@ export const AdminDashboard = () => {
                 selected={activeTab === "review"}
                 onClick={() => setActiveTab("review")}
               >
-                <CommentIcon sx={{ mr: 2 }} />
-                <ListItemText primary="Review" />
+                <ForwardToInboxIcon sx={{ mr: 2 }} />
+                <ListItemText primary="Reviews" />
               </ListItem>
               <ListItem
                 button

@@ -17,6 +17,7 @@ import {
   Button,
   Checkbox,
   Tooltip,
+  CircularProgress,
 } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -31,6 +32,8 @@ export const Feedback = () => {
   const [alertSeverity, setAlertSeverity] = useState("success");
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [feedbackToDelete, setFeedbackToDelete] = useState(null);
+  const [openMoreInfoDialog, setOpenMoreInfoDialog] = useState(false);
+  const [selectedFeedback, setSelectedFeedback] = useState(null); // New state for selected feedback
 
   const navigate = useNavigate();
 
@@ -56,7 +59,7 @@ export const Feedback = () => {
     setDeleteDialogOpen(true);
   };
 
-  // Handle the deletion of a feedback
+  // Handle the deletion of feedback
   const handleDelete = async () => {
     const user = JSON.parse(localStorage.getItem("user"));
     if (user && user.token) {
@@ -117,6 +120,12 @@ export const Feedback = () => {
     }
   };
 
+  // Handle card click to show full feedback in a dialog
+  const handleCardClick = (fb) => {
+    setSelectedFeedback(fb);
+    setOpenMoreInfoDialog(true);
+  };
+
   // Close snackbar
   const handleSnackbarClose = () => {
     setSnackbarOpen(false);
@@ -126,6 +135,12 @@ export const Feedback = () => {
   const handleDialogClose = () => {
     setDeleteDialogOpen(false);
     setFeedbackToDelete(null);
+  };
+
+  // Close more info dialog
+  const handleMoreInfoDialogClose = () => {
+    setOpenMoreInfoDialog(false);
+    setSelectedFeedback(null); // Clear the selected feedback when the dialog is closed
   };
 
   return (
@@ -150,14 +165,19 @@ export const Feedback = () => {
               boxShadow: fb.processed
                 ? "0px 4px 8px rgba(0, 0, 0, 0.1)"
                 : "0px 6px 12px rgba(0, 0, 0, 0.15)",
-              bgcolor: fb.processed ? "grey.100" : "background.default",
+              bgcolor: fb.processed ? "grey.200" : "background.default",
+              border: fb.processed ? "1px solid" : "none",
+              borderColor: fb.processed ? "grey.300" : "transparent",
+              opacity: fb.processed ? 0.7 : 1, // Fade processed feedback slightly
               "&:hover": {
                 boxShadow: fb.processed
                   ? "0px 6px 12px rgba(0, 0, 0, 0.15)"
                   : "0px 8px 16px rgba(0, 0, 0, 0.2)",
               },
+              cursor: "pointer", // Make the card clickable
             }}
             key={fb._id}
+            onClick={() => handleCardClick(fb)} // Handle card click
           >
             <CardContent>
               <ListItem
@@ -173,15 +193,21 @@ export const Feedback = () => {
                     variant="body1"
                     sx={{
                       fontWeight: 500,
-                      cursor: "pointer",
-                      textDecoration: fb.processed ? "line-through" : "none",
+                      color: fb.processed ? "text.secondary" : "text.primary",
+                      textDecoration: fb.processed ? "line-through" : "none", // Strikethrough for processed feedback
                     }}
                   >
                     {fb.message.length > 50
                       ? fb.message.substring(0, 50) + "..."
                       : fb.message}
                   </Typography>
-                  <Typography variant="body2" color="text.secondary">
+                  <Typography
+                    variant="body2"
+                    color="text.secondary"
+                    sx={{
+                      textDecoration: fb.processed ? "line-through" : "none",
+                    }}
+                  >
                     {fb.name}
                   </Typography>
                 </Box>
@@ -199,23 +225,13 @@ export const Feedback = () => {
                       }}
                     />
                   </Tooltip>
-                  <Tooltip title="Edit feedback">
-                    <IconButton
-                      aria-label="edit"
-                      sx={{
-                        color: "primary.main",
-                        "&:hover": {
-                          color: "primary.dark",
-                        },
-                      }}
-                    >
-                      <EditIcon />
-                    </IconButton>
-                  </Tooltip>
                   <Tooltip title="Delete feedback">
                     <IconButton
                       aria-label="delete"
-                      onClick={() => handleDeleteConfirmation(fb._id)}
+                      onClick={(e) => {
+                        e.stopPropagation(); // Prevent the card click from triggering
+                        handleDeleteConfirmation(fb._id);
+                      }}
                       sx={{
                         color: "error.main",
                         "&:hover": {
@@ -263,6 +279,33 @@ export const Feedback = () => {
           </Button>
           <Button onClick={handleDelete} color="error">
             Delete
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      {/* More info dialog to show full feedback */}
+      <Dialog
+        open={openMoreInfoDialog}
+        onClose={handleMoreInfoDialogClose}
+        aria-labelledby="feedback-dialog-title"
+        aria-describedby="feedback-dialog-description"
+      >
+        <DialogTitle id="feedback-dialog-title">Feedback Details</DialogTitle>
+        <DialogContent>
+          {selectedFeedback && (
+            <>
+              <Typography variant="body1">
+                {selectedFeedback.message}
+              </Typography>
+              <Typography variant="body2" sx={{ mt: 2 }}>
+                {selectedFeedback.name}
+              </Typography>
+            </>
+          )}
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleMoreInfoDialogClose} color="primary">
+            Close
           </Button>
         </DialogActions>
       </Dialog>

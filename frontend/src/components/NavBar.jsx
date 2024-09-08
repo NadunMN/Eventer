@@ -27,6 +27,8 @@ import logo from "../asset/logoOriginal.png";
 import { useLogout } from "../hooks/useLogout";
 import { useAuthContext } from "../hooks/useAuthContext";
 import { jwtDecode } from "jwt-decode";
+import axios from "axios";
+import { BorderBottom, Scale } from "@mui/icons-material";
 
 const StyledAppBar = styled(AppBar)(({ theme }) => ({
   background: "linear-gradient(45deg, #673ab7 30%, #3f51b5 90%)",
@@ -34,12 +36,11 @@ const StyledAppBar = styled(AppBar)(({ theme }) => ({
 }));
 
 const StyledToolbar = styled(Toolbar)({
-  display: "flex",
-  justifyContent: "space-between",
+  // display: "flex",
+  // justifyContent: "space-between",
 });
 
 const LogoTypography = styled(Typography)({
-  flexGrow: 1,
   "& img": {
     width: "80px",
     transition: "transform 0.3s ease-in-out",
@@ -53,7 +54,11 @@ const NavButton = styled(Button)(({ theme }) => ({
   color: "white",
   margin: theme.spacing(0, 1),
   "&:hover": {
-    backgroundColor: "rgba(255, 255, 255, 0.1)",
+    // textDecoration: "underline",
+    borderBottom: "1px solid white",
+    fontWeight: "bold",
+    borderRaius: "0",
+    transform: "scale(1.05)",
   },
 }));
 
@@ -75,11 +80,32 @@ const StyledMenuItem = styled(MenuItem)(({ theme }) => ({
   },
 }));
 
-export const NavBar = ({ logout, userId, userRole }) => {
+export const NavBar = ({ logout, userId, userRole, token }) => {
   const { user } = useAuthContext();
   const [open, setOpen] = useState(false);
   const anchorRef = useRef(null);
   const navigate = useNavigate();
+  const [userName, setUserName] = useState("");
+
+  useEffect(() => {
+    const user = JSON.parse(localStorage.getItem("user"));
+    if (user && user.token) {
+      axios
+        .get(`http://localhost:5000/api/user/${userId}`, {
+          headers: {
+            Authorization: `Bearer ${user.token}`,
+          },
+        })
+        .then((res) => {
+          setUserName(`${res.data.username}`);
+        })
+        .catch((err) => {
+          console.log("Error fetching user name:", err);
+        });
+    } else {
+      console.log("User not logged in or invalid access token");
+    }
+  }, [userId]);
 
   const handleToggle = () => {
     setOpen((prevOpen) => !prevOpen);
@@ -108,25 +134,41 @@ export const NavBar = ({ logout, userId, userRole }) => {
   return (
     <StyledAppBar position="static">
       <StyledToolbar>
-        <LogoTypography variant="h3">
-          <Link to="/">
-            <img
-              src={logo}
-              style={{ width: "120px", position: "relative", top: -4 }}
-              alt="Logo"
-            />
-          </Link>
-        </LogoTypography>
         <Box
           sx={{
             display: "flex",
-            justifyContent: "center",
+            justifyContent: "space-between",
             alignItems: "center",
-            width: "auto",
-            gap: 2,
+            width: "100%",
           }}
         >
-          <Box>
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "left",
+              alignItems: "center",
+              flexGrow: 0,
+            }}
+          >
+            <LogoTypography variant="h3">
+              <Link to="/">
+                <img
+                  src={logo}
+                  style={{ width: "120px", position: "relative", top: -4 }}
+                  alt="Logo"
+                />
+              </Link>
+            </LogoTypography>
+          </Box>
+          <Box
+            sx={{
+              display: "flex",
+              gap: 2,
+              justifyContent: "center",
+              alignItems: "center",
+              flexGrow: 50,
+            }}
+          >
             <NavButton component={Link} to="/">
               <Typography variant="body1">Home</Typography>
             </NavButton>
@@ -139,8 +181,22 @@ export const NavBar = ({ logout, userId, userRole }) => {
             <NavButton component={Link} to="/contact">
               <Typography variant="body1">Contact Us</Typography>
             </NavButton>
+          </Box>
+          <Box
+            sx={{
+              display: "flex",
+              gap: 2,
+              justifyContent: "right",
+              alignItems: "center",
+              flexGrow: 0,
+            }}
+          >
             {userId ? (
               <>
+                <Typography variant="body1" sx={{ color: "white" }}>
+                  {" "}
+                  Welcome, {userName}
+                </Typography>
                 <Tooltip title={userId ? "Profile" : "Login"}>
                   <StyledIconButton ref={anchorRef} onClick={handleToggle}>
                     <AccountCircleIcon sx={{ width: 45, height: 45 }} />
@@ -157,51 +213,46 @@ export const NavBar = ({ logout, userId, userRole }) => {
                   sx={{ zIndex: 99 }}
                 >
                   {({ TransitionProps, placement }) => (
-                    <Grow
-                      {...TransitionProps}
-                      style={{
-                        transformOrigin:
-                          placement === "bottom-end"
-                            ? "right top"
-                            : "right bottom",
-                      }}
-                    >
-                      <Paper elevation={3}>
-                        <ClickAwayListener onClickAway={handleClose}>
-                          <StyledMenuList
-                            autoFocusItem={open}
-                            id="composition-menu"
-                            aria-labelledby="composition-button"
-                            onKeyDown={handleListKeyDown}
-                          >
-                            <StyledMenuItem onClick={handleClose}>
-                              <ListItemIcon>
-                                <AccountCircleIcon />
-                              </ListItemIcon>
-                              <ListItemText primary="Profile" />
-                            </StyledMenuItem>
-
-                            <StyledMenuItem
-                              component={Link}
-                              to="/dashboard"
-                              onClick={handleClose}
-                              divider
+                    <>
+                      <Grow
+                        {...TransitionProps}
+                        style={{
+                          transformOrigin:
+                            placement === "bottom-end"
+                              ? "right top"
+                              : "right bottom",
+                        }}
+                      >
+                        <Paper elevation={3}>
+                          <ClickAwayListener onClickAway={handleClose}>
+                            <StyledMenuList
+                              autoFocusItem={open}
+                              id="composition-menu"
+                              aria-labelledby="composition-button"
+                              onKeyDown={handleListKeyDown}
                             >
-                              <ListItemIcon>
-                                <DashboardIcon />
-                              </ListItemIcon>
-                              <ListItemText primary="Dashboard" />
-                            </StyledMenuItem>
-                            <StyledMenuItem onClick={handleLogout}>
-                              <ListItemIcon>
-                                <LogoutIcon />
-                              </ListItemIcon>
-                              <ListItemText primary="Logout" />
-                            </StyledMenuItem>
-                          </StyledMenuList>
-                        </ClickAwayListener>
-                      </Paper>
-                    </Grow>
+                              <StyledMenuItem
+                                component={Link}
+                                to="/dashboard"
+                                onClick={handleClose}
+                                divider
+                              >
+                                <ListItemIcon>
+                                  <AccountCircleIcon />
+                                </ListItemIcon>
+                                <ListItemText primary="Profile" />
+                              </StyledMenuItem>
+                              <StyledMenuItem onClick={handleLogout}>
+                                <ListItemIcon>
+                                  <LogoutIcon />
+                                </ListItemIcon>
+                                <ListItemText primary="Logout" />
+                              </StyledMenuItem>
+                            </StyledMenuList>
+                          </ClickAwayListener>
+                        </Paper>
+                      </Grow>
+                    </>
                   )}
                 </Popper>
               </>
