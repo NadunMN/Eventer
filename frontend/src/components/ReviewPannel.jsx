@@ -32,9 +32,20 @@ export const ReviewPannel = () => {
 
   // Fetch reviews
   useEffect(() => {
-    axios.get(`http://localhost:5000/api/review/`).then((res) => {
-      setReviews(res.data);
-    });
+    const user = JSON.parse(localStorage.getItem("user"));
+    if (user && user.token) {
+      axios
+        .get(`http://localhost:5000/api/review/`, {
+          headers: {
+            Authorization: `Bearer ${user.token}`,
+          },
+        })
+        .then((res) => {
+          setReviews(res.data);
+        });
+    } else {
+      console.log("User not logged in or invalid access token");
+    }
   }, []);
 
   const handleEdit = (id) => {

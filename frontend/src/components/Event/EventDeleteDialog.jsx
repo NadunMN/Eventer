@@ -118,7 +118,7 @@ export default function FormDialogDelete() {
         );
       }
     } else {
-      console.log("User no logged in or invalid access token");
+      console.log("User not logged in or invalid access token");
     }
   };
 
