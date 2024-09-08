@@ -77,15 +77,22 @@ export const Reviews = () => {
   }, [eventId]);
 
   useEffect(() => {
-    if (userId) {
+    const user = JSON.parse(localStorage.getItem("user"));
+    if (user && user.token) {
       axios
-        .get(`http://localhost:5000/api/user/${userId}`)
+        .get(`http://localhost:5000/api/user/${userId}`, {
+          headers: {
+            Authorization: `Bearer ${user.token}`,
+          },
+        })
         .then((res) => {
           setUserName(`${res.data.first_name} ${res.data.last_name}`);
         })
         .catch((err) => {
           console.log("Error fetching user name:", err);
         });
+    } else {
+      console.log("User not logged in or invalid access token");
     }
   }, [userId]);
 
