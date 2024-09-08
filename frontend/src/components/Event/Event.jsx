@@ -138,7 +138,7 @@ export const Event = () => {
     };
 
     fetchEvent();
-  }, [category]);
+  }, [category], []);
 
   // Handle category change
   const handleCategoryChange = (event) => {
