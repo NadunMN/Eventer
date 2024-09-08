@@ -165,19 +165,14 @@ export const Home = ({ token }) => {
               </>
             ) : (
               <Button
-                variant="outlined"
+                variant="contained"
                 endIcon={<ArrowForwardIcon />}
                 size="large"
                 sx={{
                   width: { xs: "100%", sm: "400px" }, // Full width on small screens
                   fontSize: { xs: "16px", sm: "20px" }, // Responsive font-size
                   color: "linear-gradient(45deg, #673ab7 30%, #3f51b5 90%)",
-                  border: 2,
-                  "&:hover": {
-                    borderColor: "#512da8",
-                    cursor: "pointer",
-                    border: 1,
-                  },
+                 
                 }}
                 component={Link}
                 to="/event"
