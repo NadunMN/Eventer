@@ -411,8 +411,13 @@ export default function EventData() {
               {register.includes(event._id) ? "Unregister" : "Register"}
             </Button>
 
+<<<<<<< Updated upstream
             {userId === eventCreatedId ? <FormDialogDelete /> : null}
             {/* <FormDialogDelete/> */}
+=======
+            {/* {userId === eventCreatedId ? <FormDialogDelete /> : null} */}
+            <FormDialogDelete />
+>>>>>>> Stashed changes
 
             <Typography variant="body1" sx={{ mt: 2 }}>
               {" "}

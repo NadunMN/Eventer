@@ -148,7 +148,6 @@ export const AdminDashboard = () => {
     const user = JSON.parse(localStorage.getItem("user"));
     if (user && user.token) {
       setDeleting(true); // Start deleting
-      const token = user.token;
       const endpoint =
         deleteType === "event"
           ? `http://localhost:5000/api/event/delete/${selectedItemId}`
@@ -180,6 +179,8 @@ export const AdminDashboard = () => {
           console.error(`Error deleting ${deleteType}:`, error);
           setDeleting(false); // End deleting
         });
+    } else {
+      console.log("User is not Login or invalid access token");
     }
   };
 

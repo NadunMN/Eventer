@@ -1,4 +1,5 @@
 import * as React from "react";
+<<<<<<< HEAD
 import {
   Avatar,
   AvatarGroup,
@@ -7,6 +8,9 @@ import {
   Box,
   CircularProgress,
 } from "@mui/material";
+=======
+import { Avatar, AvatarGroup, Tooltip, Typography,Box } from "@mui/material";
+>>>>>>> eb8fe8be7ed626d00cc61d9126f6899e1b8de194
 import { useState, useEffect } from "react";
 import axios from "axios";
 
@@ -99,7 +103,7 @@ export const EventParticipant = () => {
           // bgcolor:'black'
         }}
       >
-        <CircularProgress />
+        {/* <CircularProgress /> */}
       </Box>
     );
   }
