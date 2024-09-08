@@ -278,7 +278,7 @@ export default function EventData() {
   return (
     <>
       <h1>{category}</h1>
-      <Container maxWidth="xl" sx={{ mt: 8 }}>
+      <Container maxWidth="xl" sx={{ mt: 8, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
         {/* upper */}
         <Container>
           {/* event Banner */}
@@ -312,8 +312,8 @@ export default function EventData() {
               )}
             </IconButton>
           </Box>
-          <Box sx={{ width: "50%" }}>
-            <Typography variant="h1" component="h1" sx={{ flexGrow: 6 }}>
+          <Box sx={{ width: "50%",  }}>
+            <Typography variant="h2" component="h1" sx={{ flexGrow: 6 }}>
               {event.title}
             </Typography>
           </Box>
@@ -322,12 +322,15 @@ export default function EventData() {
         <Container
           sx={{
             display: "flex",
-            justifyContent: "space-between",
-            position: "relative",
-            flexDirection: "row",
+            justifyContent: 'space-evenly',
+            alignItems:'center',
+            // bgcolor: 'red',
+            // position: 'relative',
+            // gap:'34px'
+            
           }}
         >
-          <Box sx={{ width: "45%" }}>
+          <Box sx={{ width: "35%", mt:4}}>
             <List>
               <ListItem sx={styleListItem}>
                 <ListItemIcon>
@@ -386,16 +389,21 @@ export default function EventData() {
             </List>
           </Box>
           {/* right */}
-          <Container
+          <Box
             sx={{
               display: "flex",
               flexDirection: "column",
               alignItems: "center",
-              justifyContent: "center",
+              // justifyContent: "center",
               mt: 3,
               gap: 2,
             }}
           >
+
+            <Box sx={{width:'500px', }}>            
+                <Typography variant="h4" sx={{ mx: 2, }}><b>*Description of the Event</b></Typography>
+                <Typography variant="body1" sx={{ mx: 2, mt:1 }}>{" "}{event.description}</Typography>
+            </Box>
             <Button
               sx={{
                 px: 5,
@@ -413,12 +421,8 @@ export default function EventData() {
 
             {userId === eventCreatedId ? <FormDialogDelete /> : null}
             {/* <FormDialogDelete/> */}
-
-            <Typography variant="body1" sx={{ mt: 2 }}>
-              {" "}
-              {event.description}
-            </Typography>
-          </Container>
+              
+          </Box>
         </Container>
       </Container>
       <EventParticipant />
