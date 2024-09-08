@@ -29,9 +29,7 @@ export default function MediaCard() {
 
       // Fetch events
       axios
-        .get("http://localhost:5000/api/event/getEvent", {
-          headers: { Authorization: `Bearer ${token}` },
-        })
+        .get("http://localhost:5000/api/event/getEvent")
         .then((res) => {
           const eventsData = res.data;
 
