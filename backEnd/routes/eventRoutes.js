@@ -15,7 +15,7 @@ const {
 const multer = require("multer");
 const upload = require("../middleware/uploadMiddleware.js");
 
-// const requireAuth = require("../middleware/requireAuth");
+const requireAuth = require("../middleware/requireAuth");
 
 // Require auth for all routes
 // router.use(requireAuth);
@@ -32,7 +32,7 @@ router.get("/events/:id/image", getEventImage);
 // router.get("/events/:id", getEventById);
 
 router.get("/events/:id", getEventById);
-router.delete("/delete/:id", deleteEvent);
+router.delete("/delete/:id", requireAuth, deleteEvent);
 router.put("/edit/:id", editEvent);
 
 module.exports = router;
