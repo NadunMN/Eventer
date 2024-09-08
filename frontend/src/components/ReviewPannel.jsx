@@ -37,11 +37,6 @@ export const ReviewPannel = () => {
     });
   }, []);
 
-  const handleEdit = (id) => {
-    alert(`Edit comment with id ${id}`);
-    // Implement edit functionality here
-  };
-
   // Open delete confirmation dialog
   const handleDeleteConfirmation = (id) => {
     setReviewToDelete(id);
