@@ -75,13 +75,16 @@ function Accountname() {
     return (
       <Box
         sx={{
+          mt:20,
+          ml: 50,
           display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          height: "100%",
+          // justifyContent: "center",
+          // alignItems: "center",
+          height: '100vh',
+          // bgcolor:'black'
         }}
       >
-        <CircularProgress />
+        {/* <CircularProgress /> */}
       </Box>
     );
   }
