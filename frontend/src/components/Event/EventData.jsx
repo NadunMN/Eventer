@@ -30,8 +30,6 @@ import {
 import { Reviews } from "../Reviews";
 import { EventParticipant } from "./EventParticipant";
 import FormDialogDelete from "./EventDeleteDialog";
-import LinearProgress from '@mui/material/LinearProgress';
-import Stack from '@mui/material/Stack';
 
 // Convert binary data to base64
 const convertBinaryToBase64 = (binaryData, contentType) => {
@@ -84,12 +82,16 @@ export default function EventData() {
   //get user data from local storage
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("user"));
-    if (user) {
-      const jwtToken = jwtDecode(user.token);
-      setUserId(jwtToken._id);
-      setUserRole(jwtToken.role);
+    if (user && user.token) {
+      const token = jwtDecode(user.token);
+      setUserId(token._id);
+      setUserRole(token.role);
       axios
-        .get(`http://localhost:5000/api/user/${jwtToken._id}`)
+        .get(`http://localhost:5000/api/user/${token._id}`, {
+          headers: {
+            Authorization: `Bearer ${user.token}`,
+          },
+        })
         .then((res) => {
           setFavorites(res.data.favourite_events || []);
           setRegister(res.data.registered_events || []);
@@ -97,78 +99,114 @@ export default function EventData() {
         .catch((err) => {
           console.error("Failed to fetch user data", err);
         });
+    } else {
+      console.log("User not logged in or invalid access token");
     }
   }, []);
 
   // Handle favorite events
-  const handleFav = (event_id) => {
+  const handleFav = async (event_id) => {
     const isFav = favorites.includes(event_id);
     const updatedFavorites = isFav
       ? favorites.filter((id) => id !== event_id)
       : [...favorites, event_id];
 
-    axios
-      .put(`http://localhost:5000/api/user/edit/${userId}`, {
-        favourite_events: updatedFavorites,
-      })
-      .then(() => {
-        setFavorites(updatedFavorites);
-        isFav
-          ? setMessage("Event removed from your favorites")
-          : setMessage("Event added to favorites");
-        isFav ? setAlert("info") : setAlert("success");
-        console.log(isFav ? "Removed from favorites" : "Added to favorites");
-        setSnackbarOpen(true);
-      })
-      .catch((err) => {
-        setAlert("error");
-        setMessage("Failed to add event to favorites");
-        setSnackbarOpen(true);
-        console.error(err);
-      });
+    const user = JSON.parse(localStorage.getItem("user"));
+    if (user && user.token) {
+      await axios
+        .put(
+          `http://localhost:5000/api/user/edit/${userId}`,
+          {
+            favourite_events: updatedFavorites,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${user.token}`,
+            },
+          }
+        )
+        .then(() => {
+          setFavorites(updatedFavorites);
+          isFav
+            ? setMessage("Event removed from your favorites")
+            : setMessage("Event added to favorites");
+          isFav ? setAlert("info") : setAlert("success");
+          console.log(isFav ? "Removed from favorites" : "Added to favorites");
+          setSnackbarOpen(true);
+        })
+        .catch((err) => {
+          setAlert("error");
+          setMessage("Failed to add event to favorites");
+          setSnackbarOpen(true);
+          console.error(err);
+        });
+    } else {
+      console.log("User not logged in or invalid access token");
+    }
   };
 
   //Hadle evet registere
   const handleRegister = async (event_id) => {
-    try {
-      // Fetch the latest participants for the event
-      const eventResponse = await axios.get(
-        `http://localhost:5000/api/event/getEvent/${event_id}`
-      );
-      const currentParticipants = eventResponse.data.participants;
+    const user = JSON.parse(localStorage.getItem("user"));
+    if (user && user.token) {
+      try {
+        // Fetch the latest participants for the event
+        const eventResponse = await axios.get(
+          `http://localhost:5000/api/event/getEvent/${event_id}`
+        );
+        const currentParticipants = eventResponse.data.participants;
 
-      const isReg = register.includes(event_id);
-      const updatedRegister = isReg
-        ? register.filter((id) => id !== event_id)
-        : [...register, event_id];
+        const isReg = register.includes(event_id);
+        const updatedRegister = isReg
+          ? register.filter((id) => id !== event_id)
+          : [...register, event_id];
 
-      const updatedParticipants = isReg
-        ? currentParticipants.filter((id) => id !== userId)
-        : [...currentParticipants, userId];
+        const updatedParticipants = isReg
+          ? currentParticipants.filter((id) => id !== userId)
+          : [...currentParticipants, userId];
 
-      // First, update the user's registered events
-      await axios.put(`http://localhost:5000/api/user/edit/${userId}`, {
-        registered_events: updatedRegister,
-      });
+        // First, update the user's registered events
+        await axios.put(
+          `http://localhost:5000/api/user/edit/${userId}`,
+          {
+            registered_events: updatedRegister,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${user.token}`,
+            },
+          }
+        );
 
-      // Then, update the event's participants
-      await axios.put(`http://localhost:5000/api/event/edit/${event_id}`, {
-        participants: updatedParticipants,
-      });
+        // Then, update the event's participants
+        await axios.put(
+          `http://localhost:5000/api/event/edit/${event_id}`,
+          {
+            participants: updatedParticipants,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${user.token}`,
+            },
+          }
+        );
 
-      // Update the local state after both requests succeed
-      setRegister(updatedRegister);
-      isReg
-        ? setMessage("Unegistered for event successfully")
-        : setMessage("Registered for event successfully");
-      isReg ? setAlert("info") : setAlert("success");
-      setSnackbarOpen(true);
-      console.log(isReg ? "Removed from Register" : "Added to Register");
-    } catch (err) {
-      setAlert("error");
-      setMessage("Failed to register for event");
-      setSnackbarOpen(true);
-      console.error("Error while registering/unregistering", err);
+        // Update the local state after both requests succeed
+        setRegister(updatedRegister);
+        isReg
+          ? setMessage("Unegistered for event successfully")
+          : setMessage("Registered for event successfully");
+        isReg ? setAlert("info") : setAlert("success");
+        setSnackbarOpen(true);
+        console.log(isReg ? "Removed from Register" : "Added to Register");
+      } catch (err) {
+        setAlert("error");
+        setMessage("Failed to register for event");
+        setSnackbarOpen(true);
+        console.error("Error while registering/unregistering", err);
+      }
+    } else {
+      console.log("User not logged in or invalid access token");
     }
   };
 
@@ -222,16 +260,13 @@ export default function EventData() {
     return (
       <Box
         sx={{
-          mt:20,
-          ml: 50,
           display: "flex",
-          // justifyContent: "center",
-          // alignItems: "center",
-          height: '100vh',
-          // bgcolor:'black'
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100%",
         }}
       >
-        <CircularProgress />
+        {/* <CircularProgress /> */}
       </Box>
     );
   }
