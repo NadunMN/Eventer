@@ -65,6 +65,8 @@ const SearchForm = ({ setListOfEvents }) => {
       );
 
       let events = response.data;
+      console.log(events);
+      console.log("search form ")
 
       // Process the event data
       const processedEvents = events.map((event) => {

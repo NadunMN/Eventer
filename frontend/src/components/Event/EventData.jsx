@@ -54,26 +54,30 @@ export default function EventData() {
   const [userRole, setUserRole] = useState("");
   const [favorites, setFavorites] = useState([]);
   const [register, setRegister] = useState([]);
-  // const [isFav, setIsFev] = useState(false);
   const [snackbarOpen, setSnackbarOpen] = useState(false); // Alert visibility state
   const [alert, setAlert] = useState("");
   const [message, setMessage] = useState("");
+  
+  // console.log(userId);
+
 
   const location = useLocation();
   const category = location.state?.category;
   console.log(category);
+  // console.log(eventCreatedId);
 
+  // Handle the snackbar close event
   const handleSnackbarClose = (event, reason) => {
     if (reason === "clickaway") {
       return;
     }
     setSnackbarOpen(false); // Close the snackbar
   };
-  // console.log(userId);
-  // console.log(eventCreatedId);
 
+  // get the event created by user
   useEffect(() => {
     if (event && event.created_by) {
+      console.log("Event created by: authontication");
       console.log(event.created_by);
       setEventCreatedId(event.created_by);
     }
