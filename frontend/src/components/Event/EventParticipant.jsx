@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Avatar, AvatarGroup, Tooltip, Typography } from "@mui/material";
+import { Avatar, AvatarGroup, Tooltip, Typography,Box } from "@mui/material";
 import { useState, useEffect } from "react";
 import axios from "axios";
 
@@ -91,11 +91,11 @@ export const EventParticipant = () => {
           // bgcolor:'black'
         }}
       >
-        <CircularProgress />
+        {/* <CircularProgress /> */}
       </Box>
     );
   }
-  
+
   if (error) return <Typography>Error: {error}</Typography>;
 
   return (
