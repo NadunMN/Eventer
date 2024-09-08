@@ -8,14 +8,14 @@ import { useEffect, useState } from 'react';
 
 const images = [
   {
-    url: '/src/asset/EVENTS.jpg',
+    url: '/src/asset/Event/5.jpg',
     title: 'EVENTS',
     width: '400px',
     height: '300px',
     category: "event"
   },
   {
-    url:'/src/asset/sports.jpg',
+    url:'/src/asset/Event/4.jpg',
     title: 'SPORTS',
     width: '400px',
     height: '300px',
@@ -23,7 +23,7 @@ const images = [
 
 },
   {
-    url:'/src/asset/parties.jpg',
+    url:'/src/asset/Event/6.jpg',
     title: 'PARTIES',
     width: '400px',
     height: '300px',
@@ -31,7 +31,7 @@ const images = [
 
 },
   {
-    url: '/src/asset/commu.jpg',
+    url: '/src/asset/Event/7.jpg',
     title: 'COMMUNITIE',
     width: '400px',
     height: '300px',
@@ -39,7 +39,7 @@ const images = [
 
 },
   {
-    url: `/src/asset/Theater.jpg`,
+    url: `/src/asset/Event/8.jpg`,
     title: 'THEATERS',
     width: '400px',
     height: '300px',
@@ -47,7 +47,7 @@ const images = [
 
 },
   {
-    url:`/src/asset/concert.jpg` ,
+    url:`/src/asset/Event/9.jpg` ,
     title: 'CONCERTS',
     width: '400px',
     height: '300px',

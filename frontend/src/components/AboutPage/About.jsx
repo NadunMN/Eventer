@@ -4,8 +4,8 @@ import teamMember1 from '../../asset/team-member1.jpg';
 import teamMember2 from '../../asset/team-member2.jpg';
 import teamMember3 from '../../asset/team-member3.jpg';
 import teamMember4 from '../../asset/team-member4.jpg';
-import introImage from '../../asset/introImage.jpg';
-import introImage2 from '../../asset/introImage2.jpg'; // Import the intro image
+import introImage from '../../asset/Event/10.jpg';
+import introImage2 from '../../asset/Event/11.jpg'; 
 import { useState, useEffect } from 'react';
 import { Avatar, CircularProgress } from "@mui/material";
 import Box from "@mui/material/Box";

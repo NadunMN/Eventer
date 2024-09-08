@@ -96,9 +96,7 @@ export default function MediaCard() {
             </Typography>
           </CardContent>
           <CardActions>
-            <Button sx={{ color: "#311b92" }} size="small">
-              Share
-            </Button>
+            
             <Button size="small" sx={{ color: "#311b92" }}>
               Learn More
             </Button>
