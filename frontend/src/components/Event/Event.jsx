@@ -151,9 +151,15 @@ export const Event = () => {
           setLoading(false);
         }
       };
+      if (category) {
+        fetchEvent();
+      }
 
-      fetchEvent();
     },[category]);
+
+  useEffect(() => {
+
+  })
 
   // Handle category change
   const handleCategoryChange = (event) => {
