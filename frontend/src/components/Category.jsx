@@ -1,9 +1,9 @@
-import * as React from 'react';
 import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import ButtonBase from '@mui/material/ButtonBase';
 import Typography from '@mui/material/Typography';
 import { useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
 
 
 const images = [
@@ -124,11 +124,16 @@ const ImageMarked = styled('span')(({ theme }) => ({
 }));
 
 export default function ButtonBaseDemo() {
+  const [category, setCategory] = useState(null);
 
   const navigate = useNavigate();
-  const handleNavigateCategory = (category) => {
-    navigate(`/event`, { state: { category } });
-  }
+
+  useEffect(() => {
+    if (category) {
+      console.log(category)
+      navigate(`/`, { state: { category } });
+    }
+  },[category])
   return (
     <Box sx={{ display: 'flex', flexWrap: 'wrap', minWidth: 300, maxWidth: 1500, gap: 2, mt:2, justifyContent:'center'}}>
       {images.map((image) => (
@@ -140,7 +145,7 @@ export default function ButtonBaseDemo() {
             height: image.height,
 
           }}
-          onClick={handleNavigateCategory(image.category)}
+          onClick={() => setCategory(image.category)}
         >
           <ImageSrc style={{ backgroundImage: `url(${image.url})` }} />
           <ImageBackdrop className="MuiImageBackdrop-root" />
