@@ -30,6 +30,8 @@ import {
 import { Reviews } from "../Reviews";
 import { EventParticipant } from "./EventParticipant";
 import FormDialogDelete from "./EventDeleteDialog";
+import LinearProgress from '@mui/material/LinearProgress';
+import Stack from '@mui/material/Stack';
 
 // Convert binary data to base64
 const convertBinaryToBase64 = (binaryData, contentType) => {
@@ -220,13 +222,16 @@ export default function EventData() {
     return (
       <Box
         sx={{
+          mt:20,
+          ml: 50,
           display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          height: "100%",
+          // justifyContent: "center",
+          // alignItems: "center",
+          height: '100vh',
+          // bgcolor:'black'
         }}
       >
-        {/* <CircularProgress /> */}
+        <CircularProgress />
       </Box>
     );
   }
