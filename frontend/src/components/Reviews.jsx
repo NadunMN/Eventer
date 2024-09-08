@@ -55,37 +55,60 @@ export const Reviews = () => {
 
   // Get reviews from DB
   useEffect(() => {
-    axios
-      .get(`http://localhost:5000/api/review/getReview/${eventId}`)
-      .then((res) => {
-        setReviews(res.data);
-      });
+    const user = JSON.parse(localStorage.getItem("user"));
+    if (user && user.token) {
+      axios
+        .get(`http://localhost:5000/api/review/getReview/${eventId}`, {
+          headers: {
+            Authorization: `Bearer ${user.token}`,
+          },
+        })
+        .then((res) => {
+          setReviews(res.data);
+        });
+    } else {
+      console.log("User not logged in or invalid access token");
+    }
   }, [eventId]);
 
   // Get userName and eventTitle
   useEffect(() => {
-    if (eventId) {
+    const user = JSON.parse(localStorage.getItem("user"));
+    if (user && user.token && eventId) {
       axios
-        .get(`http://localhost:5000/api/event/getEvent/${eventId}`)
+        .get(`http://localhost:5000/api/event/getEvent/${eventId}`, {
+          headers: {
+            Authorization: `Bearer ${user.token}`,
+          },
+        })
         .then((res) => {
           setEventTitle(res.data.title);
         })
         .catch((err) => {
           console.log("Error fetching event title:", err);
         });
+    } else {
+      console.log("User not logged in or invalid access token");
     }
   }, [eventId]);
 
   useEffect(() => {
-    if (userId) {
+    const user = JSON.parse(localStorage.getItem("user"));
+    if (user && user.token) {
       axios
-        .get(`http://localhost:5000/api/user/${userId}`)
+        .get(`http://localhost:5000/api/user/${userId}`, {
+          headers: {
+            Authorization: `Bearer ${user.token}`,
+          },
+        })
         .then((res) => {
           setUserName(`${res.data.first_name} ${res.data.last_name}`);
         })
         .catch((err) => {
           console.log("Error fetching user name:", err);
         });
+    } else {
+      console.log("User not logged in or invalid access token");
     }
   }, [userId]);
 
@@ -106,19 +129,28 @@ export const Reviews = () => {
       event_title: eventTitle,
     };
     console.log(rev);
-
-    try {
-      const respons = await axios.post(
-        "http://localhost:5000/api/review/addReview",
-        rev
-      );
-      setReviews([respons.data.data, ...reviews]);
-      setUserReview("");
-      setValue(0);
-      setAlert("post");
-      setSnackbarOpen(true); // Show alert when review is added successfully
-    } catch (err) {
-      console.log("Error adding review:", err);
+    const user = JSON.parse(localStorage.getItem("user"));
+    if (user && user.token) {
+      try {
+        const respons = await axios.post(
+          "http://localhost:5000/api/review/addReview",
+          rev,
+          {
+            headers: {
+              Authorization: `Bearer ${user.token}`,
+            },
+          }
+        );
+        setReviews([respons.data.data, ...reviews]);
+        setUserReview("");
+        setValue(0);
+        setAlert("post");
+        setSnackbarOpen(true); // Show alert when review is added successfully
+      } catch (err) {
+        console.log("Error adding review:", err);
+      }
+    } else {
+      console.log("User not logged in or invalid access token");
     }
   };
 
@@ -141,40 +173,60 @@ export const Reviews = () => {
 
   // Handle editing review
   const handleSaveEdit = async (reviewId) => {
-    try {
-      await axios.put(
-        `http://localhost:5000/api/review/updateReview/${reviewId}`,
-        {
-          review: editReviewText,
-          rating: editReviewRating,
-        }
-      );
-      // Update the review in the local state
-      setReviews(
-        reviews.map((review) =>
-          review._id === reviewId
-            ? { ...review, review: editReviewText, rating: editReviewRating }
-            : review
-        )
-      );
-      setEditReviewId(null); // Exit edit mode
-      setAlert("edit");
-      setSnackbarOpen(true);
-    } catch (err) {
-      console.log("Error updating review:", err);
+    const user = JSON.parse(localStorage.getItem("user"));
+    if (user && user.token) {
+      try {
+        await axios.put(
+          `http://localhost:5000/api/review/updateReview/${reviewId}`,
+          {
+            review: editReviewText,
+            rating: editReviewRating,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${user.token}`,
+            },
+          }
+        );
+        // Update the review in the local state
+        setReviews(
+          reviews.map((review) =>
+            review._id === reviewId
+              ? { ...review, review: editReviewText, rating: editReviewRating }
+              : review
+          )
+        );
+        setEditReviewId(null); // Exit edit mode
+        setAlert("edit");
+        setSnackbarOpen(true);
+      } catch (err) {
+        console.log("Error updating review:", err);
+      }
+    } else {
+      console.log("User not logged in or invalid access token");
     }
   };
 
   const handleDeleteClick = async () => {
-    try {
-      await axios.delete(
-        `http://localhost:5000/api/review/deleteReview/${selectedReview._id}`
-      );
-      setReviews(reviews.filter((r) => r._id !== selectedReview._id));
-      setAlert("delete");
-      setSnackbarOpen(true);
-    } catch (err) {
-      console.log("Error deleting review:", err);
+    const user = JSON.parse(localStorage.getItem("user"));
+    if (user && user.token) {
+      try {
+        await axios.delete(
+          `http://localhost:5000/api/review/deleteReview/${selectedReview._id}`,
+          {
+            headers: {
+              Authorization: `Bearer ${user.token}`,
+            },
+          }
+        );
+        setReviews(reviews.filter((r) => r._id !== selectedReview._id));
+        setAlert("delete");
+        setSnackbarOpen(true);
+      } catch (err) {
+        console.log("Error deleting review:", err);
+      }
+    } else {
+      console.log("User not logged in or invalid access token");
     }
     handleMenuClose();
   };

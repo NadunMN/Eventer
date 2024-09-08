@@ -6,8 +6,36 @@ import ButtonBaseDemo from "./Category";
 import MediaCard from "./Card";
 import Brandcarousel from "./Carousel";
 import { Link } from "react-router-dom";
+import { useState, useEffect } from 'react';
+import { Avatar, CircularProgress } from "@mui/material";
+
 
 export const Home = ({ token }) => {
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    // Set loading to false when component mounts
+    setLoading(true);
+    setTimeout(()=>{
+      setLoading(false);
+    },2000);
+  }, []);  // Empty dependency array means this runs only once on mount
+
+  if (loading) {
+    return (
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100vh",
+        }}
+      >
+        <CircularProgress />
+      </Box>
+    );
+  }
+
   return (
     <>
       <div className="Main-part">
@@ -165,19 +193,14 @@ export const Home = ({ token }) => {
               </>
             ) : (
               <Button
-                variant="outlined"
+                variant="contained"
                 endIcon={<ArrowForwardIcon />}
                 size="large"
                 sx={{
                   width: { xs: "100%", sm: "400px" }, // Full width on small screens
                   fontSize: { xs: "16px", sm: "20px" }, // Responsive font-size
                   color: "linear-gradient(45deg, #673ab7 30%, #3f51b5 90%)",
-                  border: 2,
-                  "&:hover": {
-                    borderColor: "#512da8",
-                    cursor: "pointer",
-                    border: 1,
-                  },
+                 
                 }}
                 component={Link}
                 to="/event"

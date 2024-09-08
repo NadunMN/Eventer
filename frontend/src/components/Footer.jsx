@@ -8,6 +8,7 @@ import logo from '../asset/logoOriginal.png'
 
 export const Footer = () => {
   return (
+    <div className="footer-main-div">
     <footer className="footer">
       <div className="footer-content">
         <div className="footer-column logo-column">
@@ -115,5 +116,6 @@ export const Footer = () => {
         </div>
       </div>
     </footer>
+    </div>
   );
 };

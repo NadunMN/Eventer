@@ -5,7 +5,9 @@ import {
   Typography,
   TextField,
   Divider,
+  CircularProgress,
 } from "@mui/material";
+
 import React, { useState, useEffect } from "react";
 import EditIcon from "@mui/icons-material/Edit";
 import SaveIcon from "@mui/icons-material/Save";
@@ -72,24 +74,50 @@ function Myprofile() {
   };
 
   const handleSaveClick = async () => {
-    try {
-      // Save updated data to the database
-      await axios.put(
-        `http://localhost:5000/api/updateUser/${userId}`,
-        editedValues
-      );
-      // Update user state with new data if needed
-      setUser((prev) => ({
-        ...prev,
-        ...editedValues,
-      }));
-      setIsEditing(false);
-    } catch (error) {
-      console.error("Failed to save the user:", error);
+    const user = JSON.parse(localStorage.getItem("user"));
+    if (user && user.token) {
+      try {
+        // Save updated data to the database
+        await axios.put(
+          `http://localhost:5000/api/updateUser/${userId}`,
+          editedValues,
+          {
+            headers: {
+              Authorization: `Bearer ${user.token}`,
+            },
+          }
+        );
+        // Update user state with new data if needed
+        setUser((prev) => ({
+          ...prev,
+          ...editedValues,
+        }));
+        setIsEditing(false);
+      } catch (error) {
+        console.error("Failed to save the user:", error);
+      }
+    } else {
+      console.log("User not logged in or invalid access token");
     }
   };
 
-  if (loading) return <Typography>Loading...</Typography>;
+  if (loading) {
+    return (
+      <Box
+        sx={{
+          mt: 20,
+          ml: 50,
+          display: "flex",
+          // justifyContent: "center",
+          // alignItems: "center",
+          height: "100vh",
+          // bgcolor:'black'
+        }}
+      >
+        <CircularProgress />
+      </Box>
+    );
+  }
   if (error) return <Typography>{error}</Typography>;
 
   return (

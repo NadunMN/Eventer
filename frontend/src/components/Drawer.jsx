@@ -13,6 +13,8 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 import EventAvailableIcon from '@mui/icons-material/EventAvailable';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import { useNavigate } from 'react-router-dom';
+import CreateNewFolderIcon from '@mui/icons-material/CreateNewFolder';
+
 
 export default function TemporaryDrawer({ activeItem, setActiveItem }) {
 
@@ -23,6 +25,7 @@ export default function TemporaryDrawer({ activeItem, setActiveItem }) {
     { text: 'My Profile', icon: <AccountCircleIcon /> },
     { text: 'Favorite', icon: <FavoriteIcon /> },
     { text: 'Registered Events', icon: <EventAvailableIcon /> },
+    { text: 'Created Events', icon: <CreateNewFolderIcon /> },
   ];
 
   const secondListItems = [

@@ -1,5 +1,12 @@
 import * as React from "react";
-import { Avatar, AvatarGroup, Tooltip, Typography } from "@mui/material";
+import {
+  Avatar,
+  AvatarGroup,
+  Tooltip,
+  Typography,
+  Box,
+  CircularProgress,
+} from "@mui/material";
 import { useState, useEffect } from "react";
 import axios from "axios";
 
@@ -39,6 +46,7 @@ export const EventParticipant = () => {
           `http://localhost:5000/api/event/getEvent/${eventId}`
         );
         const participantIds = eventResponse.data.participants;
+        console.log(participantIds);
 
         // Fetch participant data for each participant ID
         const partiData = await Promise.all(
@@ -78,7 +86,24 @@ export const EventParticipant = () => {
     fetchParticipants();
   }, [eventId]);
 
-  if (loading) return <Typography>Loading...</Typography>;
+  if (loading) {
+    return (
+      <Box
+        sx={{
+          mt: 20,
+          ml: 50,
+          display: "flex",
+          // justifyContent: "center",
+          // alignItems: "center",
+          height: "100vh",
+          // bgcolor:'black'
+        }}
+      >
+        {/* <CircularProgress /> */}
+      </Box>
+    );
+  }
+
   if (error) return <Typography>Error: {error}</Typography>;
 
   return (
