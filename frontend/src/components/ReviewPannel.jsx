@@ -50,21 +50,31 @@ export const ReviewPannel = () => {
 
   // Handle the deletion of a review
   const handleDelete = async () => {
-    try {
-      await axios.delete(
-        `http://localhost:5000/api/review/deleteReview/${reviewToDelete}`
-      );
-      setReviews(reviews.filter((r) => r._id !== reviewToDelete));
-      setAlertMessage("Review deleted successfully");
-      setAlertSeverity("success");
-      setSnackbarOpen(true);
-    } catch (err) {
-      console.log("Error deleting review:", err);
-      setAlertMessage("Error deleting review");
-      setAlertSeverity("error");
-      setSnackbarOpen(true);
-    } finally {
-      setDeleteDialogOpen(false); // Close dialog after deletion
+    const user = JSON.parse(localStorage.getItem("user"));
+    if (user && user.token) {
+      try {
+        await axios.delete(
+          `http://localhost:5000/api/review/deleteReview/${reviewToDelete}`,
+          {
+            headers: {
+              Authorization: `Bearer ${user.token}`,
+            },
+          }
+        );
+        setReviews(reviews.filter((r) => r._id !== reviewToDelete));
+        setAlertMessage("Review deleted successfully");
+        setAlertSeverity("success");
+        setSnackbarOpen(true);
+      } catch (err) {
+        console.log("Error deleting review:", err);
+        setAlertMessage("Error deleting review");
+        setAlertSeverity("error");
+        setSnackbarOpen(true);
+      } finally {
+        setDeleteDialogOpen(false); // Close dialog after deletion
+      }
+    } else {
+      console.log("User not logged in or invalid access token");
     }
   };
 

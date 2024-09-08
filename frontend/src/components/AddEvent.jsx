@@ -90,17 +90,35 @@ export const AddEvent = () => {
 
   // Update event Id in user collection
   const updateUser = async (eventData) => {
-    try {
-      const userData = await axios.get(
-        `http://localhost:5000/api/user/${userId}`
-      );
-      const currentEvents = userData.data.created_event || [];
+    const user = JSON.parse(localStorage.getItem("user"));
+    if (user && user.token) {
+      try {
+        const userData = await axios.get(
+          `http://localhost:5000/api/user/${userId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${user.token}`,
+            },
+          }
+        );
+        const currentEvents = userData.data.created_event || [];
 
-      await axios.put(`http://localhost:5000/api/user/edit/${userId}`, {
-        created_event: [...currentEvents, eventData._id],
-      });
-    } catch (err) {
-      console.log("Error: ", err);
+        await axios.put(
+          `http://localhost:5000/api/user/edit/${userId}`,
+          {
+            created_event: [...currentEvents, eventData._id],
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${user.token}`,
+            },
+          }
+        );
+      } catch (err) {
+        console.log("Error: ", err);
+      }
+    } else {
+      console.log("User not logged in or invalid access token");
     }
   };
   const handleSubmit = async (e) => {
@@ -137,26 +155,31 @@ export const AddEvent = () => {
     const created_at = new Date().toISOString();
     formDataToSend.append("created_at", created_at);
     formDataToSend.append("category", category);
-
-    try {
-      const result = await axios.post(
-        "http://localhost:5000/api/event/createEvent",
-        formDataToSend,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
-      setCreatedEvent(result.data);
-      updateUser(result.data);
-      setAlertMessage("Event created successfully!");
-      setSnackbarOpen(true);
-      setTimeout(() => {
-        navigate("/event");
-      }, 3000);
-    } catch (error) {
-      console.log("Error uploading event:", error);
+    const user = JSON.parse(localStorage("user"));
+    if (user && user.token) {
+      try {
+        const result = await axios.post(
+          "http://localhost:5000/api/event/createEvent",
+          formDataToSend,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+              Authorization: `Bearer ${user.token}`,
+            },
+          }
+        );
+        setCreatedEvent(result.data);
+        updateUser(result.data);
+        setAlertMessage("Event created successfully!");
+        setSnackbarOpen(true);
+        setTimeout(() => {
+          navigate("/event");
+        }, 3000);
+      } catch (error) {
+        console.log("Error uploading event:", error);
+      }
+    } else {
+      console.log("User not logged in or invalid access token");
     }
   };
 

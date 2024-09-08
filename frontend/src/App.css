@@ -201,12 +201,21 @@ body{
     max-width: 100%; /* Ensure cards fit within grid cells */
   }
 
+  .footer-main-div{
+    position: relative;
+    bottom: 0;
+    margin-top: 10px;
+  }
+
 
   .footer {
     background: linear-gradient(45deg, #673ab7 30%, #3f51b5 90%);
     color: rgb(255, 255, 255);
     padding: 50px 5vw;
     margin-top: 200px;
+    /* position: absolute; */
+    
+    
 }
 
 
