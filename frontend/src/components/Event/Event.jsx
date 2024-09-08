@@ -51,9 +51,18 @@ export const Event = () => {
   const [snackbarOpen, setSnackbarOpen] = useState(false); // Alert visibility state
   const [alert, setAlert] = useState("");
   const [message, setMessage] = useState("");
+  var flagIsOpen = false;
+  const location = useLocation();
 
   const navigate = useNavigate();
-  const location = useLocation();
+  // Set the category from the location state
+  useEffect(() => {
+    const locationData = location.state || {};
+    console.log("locationData useEffect");
+    console.log(locationData.category);
+
+    locationData.category ? setCategory(locationData.category) : null;
+  }, []);
 
   // Function to handle closing the snackbar
   const handleSnackbarClose = (event, reason) => {
@@ -62,15 +71,6 @@ export const Event = () => {
     }
     setSnackbarOpen(false); // Close the snackbar
   };
-
-  // Set the category from the location state
-  useEffect(() => {
-    const locationData = location.state || {};
-    console.log("locationData");
-    console.log(locationData.category);
-
-    locationData.category ? setCategory(locationData.category) : null;
-  }, []);
 
   //get user data from local storage
   useEffect(() => {
@@ -97,9 +97,21 @@ export const Event = () => {
     }
   }, []);
 
+  // Set the category from the location state
+  useEffect(() => {
+    const locationData = location.state || {};
+    if (locationData) {
+      setCategory(locationData.category);
+      // setIsfromlocation(true);
+      console.log("locationData");
+      console.log(locationData.category);
+      flagIsOpen = true;
+    }
+  }, []);
+
   // Fetch event data
   useEffect(() => {
-    const fetchEvent = async () => {
+    const fetchEventCategory = async () => {
       setLoading(true);
 
       try {
@@ -141,8 +153,53 @@ export const Event = () => {
       }
     };
 
-    fetchEvent();
-  }, [category], []);
+    const fetchEvent = async () => {
+      setLoading(true);
+
+      try {
+        const response = await axios.get(
+          `http://localhost:5000/api/event/getCategory/?category=${category}`
+        );
+
+        let res_data = response.data;
+        console.log("res_data");
+        console.log(res_data);
+
+        // Process the event data
+        const listOfEvents = res_data.map((event) => {
+          if (event.cover_image) {
+            const base64Image = convertBinaryToBase64(
+              new Uint8Array(event.cover_image.data),
+              event.cover_image.contentType
+            );
+            event.cover_image = base64Image;
+          }
+          return event;
+        });
+
+        setListOfEvent(listOfEvents);
+        setError("");
+      } catch (error) {
+        if (error.response?.status === 404) {
+          setListOfEvent([]);
+          console.log("No events found (404)");
+          return;
+        }
+
+        console.error("Failed to fetch data:", error);
+        setError("Failed to fetch the event");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (!flagIsOpen) {
+      fetchEventCategory();
+    } else {
+      fetchEvent();
+      flagIsOpen = false;
+    }
+  }, [category]);
 
   // Handle category change
   const handleCategoryChange = (event) => {
@@ -282,35 +339,79 @@ export const Event = () => {
 
   return (
     <Box>
+      
       {/* Search form and category dropdown */}
       <Container maxWidth="lg">
+        
+        <Box sx={{
+          display: "flex",
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: "center",
+          background:"linear-gradient(45deg, #673ab7 30%, #3f51b5 90%)",
+          mt: 4,
+          pt:5,
+          pb:5,
+          borderRadius: '50px'
+
+        }}>
+          <Typography variant="h4" sx={{
+            color: 'white',
+            m: 2
+          }}>Search for your next memorable event.</Typography>
         <Box
           sx={{
-            mt: 4,
+            
             display: "flex",
-            gap: 40,
+            width:'100%',
+            alignItems: 'center',
             justifyContent: "center",
+            // bgcolor:'blue',
+            // mt: 4,
+            // pt:15,
+            // pb:5
+            
           }}
         >
+          
           <FormControl
-            fullWidth
+            
             sx={{
-              boxShadow: 4,
+              // boxShadow: 4,
               maxWidth: 600,
+              width: 150,
               m: 1,
-              transition: "box-shadow 0.3s ease-in-out",
-              "&:hover": {
-                boxShadow: "0 5px 15px 5px rgba(0, 0, 0, .2)",
+              bgcolor:'white',
+              borderRadius: 4,
+              borderColor:'none',
+              '& .MuiOutlinedInput-root': {
+                '& fieldset': {
+                  borderColor: 'transparent', // Default border color
+                },
+                '&:hover fieldset': {
+                  borderColor: 'transparent', // Border color on hover
+                },
+                '&.Mui-focused fieldset': {
+                  borderColor: 'transparent', // Remove blue border on focus
+                },
               },
+      
+      
+              
             }}
           >
-            <InputLabel id="category-select-label">Category</InputLabel>
             <Select
+              displayEmpty
               labelId="category-select-label"
               id="category-select"
               value={category}
               onChange={handleCategoryChange}
-              label="Category"
+              renderValue={(selected) => {
+                if (!selected) {
+                  return <>Category</>; // Placeholder text
+                }
+                return selected;
+              }}
             >
               <MenuItem value="">
                 <em>None</em>
@@ -326,6 +427,12 @@ export const Event = () => {
           <Box sx={{ ml: 2, width: "100%", maxWidth: 500 }}>
             <SearchForm setListOfEvents={setListOfEvent} />
           </Box>
+          </Box>
+
+
+
+
+
         </Box>
       </Container>
 

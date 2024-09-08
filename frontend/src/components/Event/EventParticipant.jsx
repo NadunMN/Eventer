@@ -105,7 +105,6 @@ export const EventParticipant = () => {
   }
 
   if (error) return <Typography>Error: {error}</Typography>;
-  userResponse;
 
   return (
     <div
