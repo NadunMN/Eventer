@@ -30,7 +30,7 @@ import {
 import { Reviews } from "../Reviews";
 import { EventParticipant } from "./EventParticipant";
 import FormDialogDelete from "./EventDeleteDialog";
-import { EventEdite } from "./EventEdite";
+import { EventEdit } from "./EventEdit";
 import { useNavigate } from "react-router-dom";
 // Convert binary data to base64
 const convertBinaryToBase64 = (binaryData, contentType) => {
@@ -46,7 +46,6 @@ const convertBinaryToBase64 = (binaryData, contentType) => {
 };
 
 export default function EventData() {
-  
   const { eventId } = useParams(); //get the event ID from the route params
   const [event, setEvent] = useState(null);
   const [eventCreatedId, setEventCreatedId] = useState(null);
@@ -282,7 +281,16 @@ export default function EventData() {
   return (
     <>
       <h1>{category}</h1>
-      <Container maxWidth="xl" sx={{ mt: 8, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+      <Container
+        maxWidth="xl"
+        sx={{
+          mt: 8,
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
         {/* upper */}
         <Container>
           {/* event Banner */}
@@ -316,7 +324,7 @@ export default function EventData() {
               )}
             </IconButton>
           </Box>
-          <Box sx={{ width: "50%",  }}>
+          <Box sx={{ width: "50%" }}>
             <Typography variant="h2" component="h1" sx={{ flexGrow: 6 }}>
               {event.title}
             </Typography>
@@ -326,15 +334,14 @@ export default function EventData() {
         <Container
           sx={{
             display: "flex",
-            justifyContent: 'space-evenly',
-            alignItems:'center',
+            justifyContent: "space-evenly",
+            alignItems: "center",
             // bgcolor: 'red',
             // position: 'relative',
             // gap:'34px'
-            
           }}
         >
-          <Box sx={{ width: "35%", mt:4}}>
+          <Box sx={{ width: "35%", mt: 4 }}>
             <List>
               <ListItem sx={styleListItem}>
                 <ListItemIcon>
@@ -403,10 +410,14 @@ export default function EventData() {
               gap: 2,
             }}
           >
-
-            <Box sx={{width:'500px', }}>            
-                <Typography variant="h4" sx={{ mx: 2, }}><b>*Description of the Event</b></Typography>
-                <Typography variant="body1" sx={{ mx: 2, mt:1 }}>{" "}{event.description}</Typography>
+            <Box sx={{ width: "500px" }}>
+              <Typography variant="h4" sx={{ mx: 2 }}>
+                <b>*Description of the Event</b>
+              </Typography>
+              <Typography variant="body1" sx={{ mx: 2, mt: 1 }}>
+                {" "}
+                {event.description}
+              </Typography>
             </Box>
             <Button
               sx={{
@@ -424,9 +435,16 @@ export default function EventData() {
             </Button>
 
             {userId === eventCreatedId ? <FormDialogDelete /> : null}
-            {userId === eventCreatedId ? <Button onClick={() => {navigate(`/edite-event/${eventId}`)}}>edite</Button> : null}
+            {userId === eventCreatedId ? (
+              <Button
+                onClick={() => {
+                  navigate(`/edit-event/${eventId}`);
+                }}
+              >
+                Edit
+              </Button>
+            ) : null}
             {/* <FormDialogDelete/> */}
-              
           </Box>
         </Container>
       </Container>

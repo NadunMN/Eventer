@@ -15,7 +15,7 @@ import { Navigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { jwtDecode } from "jwt-decode";
 import { Event } from "./components/Event/Event";
-import { EventEdite } from "./components/Event/EventEdite";
+import { EventEdit } from "./components/Event/EventEdit";
 
 function App() {
   const [userRole, setUserRole] = useState("");
@@ -63,7 +63,7 @@ function App() {
           element={!userId ? <Signup /> : <Navigate to="/" />}
         />
         <Route path="create-event" element={<AddEvent />} />
-        <Route path="edite-event/:eventId" element={<EventEdite />} />
+        <Route path="edit-event/:eventId" element={<EventEdit />} />
         <Route path="admin-dashboard" element={<AdminDashboard />} />
         <Route path="Event" element={<Event />} />
         <Route path="event/:eventId" element={<EventData />} />
