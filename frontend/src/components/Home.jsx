@@ -18,7 +18,7 @@ export const Home = ({ token }) => {
     setLoading(true);
     setTimeout(()=>{
       setLoading(false);
-    },2000);
+    },1000);
   }, []);  // Empty dependency array means this runs only once on mount
 
   if (loading) {
