@@ -44,6 +44,8 @@ import {
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
 import { ReviewPannel } from "./ReviewPannel";
+import { Feedback } from "./Feedback";
+import ForwardToInboxIcon from "@mui/icons-material/ForwardToInbox";
 
 export const AdminDashboard = () => {
   const [chartData, setChartData] = useState([]);
@@ -148,6 +150,7 @@ export const AdminDashboard = () => {
     const user = JSON.parse(localStorage.getItem("user"));
     if (user && user.token) {
       setDeleting(true); // Start deleting
+      const token = user.token;
       const endpoint =
         deleteType === "event"
           ? `http://localhost:5000/api/event/delete/${selectedItemId}`
@@ -189,8 +192,6 @@ export const AdminDashboard = () => {
     setSelectedItemId(null);
     setDeleteType(null);
   };
-
-  const handleAddUser = () => {};
 
   const theme = createTheme({
     palette: {
@@ -377,6 +378,8 @@ export const AdminDashboard = () => {
         );
       case "review":
         return <ReviewPannel />;
+      case "feedback":
+        return <Feedback />;
       default:
         return null;
     }
@@ -427,8 +430,16 @@ export const AdminDashboard = () => {
                 selected={activeTab === "review"}
                 onClick={() => setActiveTab("review")}
               >
+                <ForwardToInboxIcon sx={{ mr: 2 }} />
+                <ListItemText primary="Reviews" />
+              </ListItem>
+              <ListItem
+                button
+                selected={activeTab === "feedback"}
+                onClick={() => setActiveTab("feedback")}
+              >
                 <CommentIcon sx={{ mr: 2 }} />
-                <ListItemText primary="Review" />
+                <ListItemText primary="Feedbacks" />
               </ListItem>
             </List>
           </Paper>
