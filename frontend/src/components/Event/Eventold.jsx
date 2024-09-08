@@ -1,23 +1,29 @@
-import React, { useState, useEffect } from "react";
+import "bootstrap/dist/css/bootstrap.min.css";
+import { useState, useEffect } from "react";
+import axios from "axios";
+import { jwtDecode } from "jwt-decode";
+import { useLocation, useNavigate } from "react-router-dom";
+import FavoriteIcon from "@mui/icons-material/Favorite";
+import { useAuthContext } from "../../hooks/useAuthContext";
+import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import {
-  Typography,
   Container,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
+  Box,
+  Typography,
   Grid,
   Card,
   CardContent,
   Button,
   CardMedia,
-  Box,
   IconButton,
   CardActions,
-  CircularProgress,
 } from "@mui/material";
-import { useNavigate, useLocation } from "react-router-dom";
-import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
-import FavoriteIcon from "@mui/icons-material/Favorite";
-import { jwtDecode } from "jwt-decode";
-import axios from "axios";
 
+// Function to convert binary data to base64
 const convertBinaryToBase64 = (binaryData, contentType) => {
   if (binaryData && binaryData instanceof Uint8Array) {
     const binaryString = Array.from(binaryData)
@@ -30,14 +36,19 @@ const convertBinaryToBase64 = (binaryData, contentType) => {
   }
 };
 
-function EventGrids({ listOfEvent, setListOfEvent, category }) {
+const Event = () => {
+  //useStates
   const [userRole, setUserRole] = useState("");
-  const [userId, setUserId] = useState("");
-  const [favorites, setFavorites] = useState([]);
   const [responseData, setResponseData] = useState([]);
   const [registeredList, setRegisteredList] = useState([]);
-  console.log(category);
+  const [listOfEvent, setListOfEvent] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [category, setCategory] = useState("");
+  const [userId, setUserId] = useState("");
+  const [favorites, setFavorites] = useState([]);
+  const { user } = useAuthContext();
 
+  // useEffects
   // Fetch user data from local storage
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("user"));
@@ -62,27 +73,60 @@ function EventGrids({ listOfEvent, setListOfEvent, category }) {
     }
   }, []);
 
-  //useEffect to fetch events based on category
+  //fetch all events
   useEffect(() => {
     const fetchEvent = async () => {
       try {
-        // if (category) {
         const response = await axios.get(
-          `http://localhost:5000/api/event/getCategory/?category=${category}`
+          "http://localhost:5000/api/event/getEvent"
         );
-        setResponseData(response.data);
-        // } else {
-        //   const response = await axios.get(
-        //     "http://localhost:5000/api/event/getEvent"
-        //   );
-        //   setResponseData(response.data);
-        //   console.log(responseData);
-        // }
 
-        // if (response.state === 404) {
-        //   console.log("No events found");
-        //   return;
-        // }
+        let res_data = response.data;
+
+        // Process the event data
+        const listOfEvents = res_data.map((event) => {
+          if (event.cover_image) {
+            const base64Image = convertBinaryToBase64(
+              new Uint8Array(event.cover_image.data),
+              event.cover_image.contentType
+            );
+            event.cover_image = base64Image;
+          }
+          return event;
+        });
+
+        setListOfEvent(listOfEvents);
+      } catch (error) {
+        console.error("Failed to fetch data:", error);
+        setError("Failed to fetch the event");
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchEvent();
+  }, [user]);
+
+  //fetch category based events
+  useEffect(() => {
+    const fetchEvent = async () => {
+      try {
+        if (category) {
+          const response = await axios.get(
+            `http://localhost:5000/api/event/getCategory/?category=${category}`
+          );
+          setResponseData(response.data);
+        } else {
+          const response = await axios.get(
+            "http://localhost:5000/api/event/getEvent"
+          );
+          setResponseData(response.data);
+          console.log(responseData);
+        }
+
+        if (response.state === 404) {
+          console.log("No events found");
+          return;
+        }
 
         let res_data = responseData;
         // Process the event dataa
@@ -112,99 +156,73 @@ function EventGrids({ listOfEvent, setListOfEvent, category }) {
     fetchEvent();
   }, [category]);
 
-  const navigate = useNavigate();
-
-  const handleCloseSnackbar = () => {
-    setSnackbarOpen(false);
-  };
-
-  const handleNavigate = (event) => {
-    navigate(`/event/${event._id}`);
-  };
-
-  const handleRegister = (event_id) => {
-    console.log(event_id);
-    const user = JSON.parse(localStorage.getItem("user"));
-    if (user && user.token) {
-      axios
-        .put(
-          `http://localhost:5000/api/user/edit/${userId}`,
-          {
-            registered_events: [...registeredList, event_id],
-          },
-          {
-            headers: {
-              Authorization: `Bearer ${user.token}`,
-            },
-          }
-        )
-        .then(() => {
-          setRegisteredList([...registeredList, event_id]);
-          console.log("Event registered successfully");
-        })
-        .catch((err) => {
-          alert("An error occurred. Please check the console");
-          console.error(err);
-        });
-    } else {
-      console.log("User not logged in or invalid access token");
-    }
-  };
-
-  const handleFav = (event_id) => {
-    const isFav = favorites.includes(event_id);
-    const updatedFavorites = isFav
-      ? favorites.filter((id) => id !== event_id)
-      : [...favorites, event_id];
-
-    const user = JSON.parse(localStorage.getItem("user"));
-    if (user && user.token) {
-      axios
-        .put(
-          `http://localhost:5000/api/user/edit/${userId}`,
-          {
-            favourite_events: updatedFavorites,
-          },
-          {
-            headers: {
-              Authorization: `Bearer ${user.token}`,
-            },
-          }
-        )
-        .then(() => {
-          setFavorites(updatedFavorites);
-          console.log(isFav ? "Removed from favorites" : "Added to favorites");
-          setSnackbarOpen(true);
-        })
-        .catch((err) => {
-          alert("An error occurred. Please check the console");
-          console.error(err);
-        });
-    } else {
-      console.log("User not logged in or invalid access token");
-    }
-  };
-
-  const gridItemProps = {
-    xs: 20,
-    sm: 12,
-    md: 8,
-    lg: 5,
-    sx: {
-      mt: 1,
-      pl: 8,
-      display: "flex",
-      flexDirection: "column",
-      gutterBottom: 2,
-    },
-  };
+  if (loading) {
+    return "Loading ...";
+  }
 
   return (
-    <div>
+    <Box>
+      <Container
+        fixed
+        sx={{
+          display: "flex",
+          m: 4,
+          gap: 2,
+          justifyContent: "center",
+        }}
+      >
+        <FormControl
+          fullWidth
+          variant="outlined"
+          sx={{
+            m: "auto",
+            boxShadow: 5,
+            transition: "box-shadow 0.3s ease-in-out",
+            "&:hover": {
+              boxShadow: "0 5px 15px 5px rgba(0, 0, 0, .2)",
+            },
+          }}
+        >
+          <InputLabel id="category-select-label">Category</InputLabel>
+          <Select
+            labelId="category-select-label"
+            id="category-select"
+            onChange={(e) => {
+              setCategory(e.target.value);
+            }}
+            label="Category"
+          >
+            <MenuItem value="">
+              <em>None</em>
+            </MenuItem>
+            <MenuItem value="event">Event</MenuItem>
+            <MenuItem value="sports">Sports</MenuItem>
+            <MenuItem value="parties">Parties</MenuItem>
+            <MenuItem value="communities">Communities</MenuItem>
+            <MenuItem value="theaters">Theaters</MenuItem>
+            <MenuItem value="concerts">Concerts</MenuItem>
+          </Select>
+        </FormControl>
+      </Container>
+
       <Container maxWidth="xl" fixed sx={{ mt: 9 }}>
         <Grid container spacing={8} columns={20}>
           {listOfEvent.map((event) => (
-            <Grid item key={event._id} {...gridItemProps}>
+            <Grid
+              item
+              key={event._id}
+              xs={20}
+              sm={12}
+              md={8}
+              lg={5}
+              sx={{
+                mt: 1,
+                pl: 8,
+                display: "flex",
+                flexDirection: "column",
+                gutterBottom: 2,
+              }}
+            >
               <Card
                 sx={{
                   height: 450,
@@ -300,8 +318,8 @@ function EventGrids({ listOfEvent, setListOfEvent, category }) {
           ))}
         </Grid>
       </Container>
-    </div>
+    </Box>
   );
-}
+};
 
-export default EventGrids;
+export default Event;

@@ -78,13 +78,11 @@ export const AdminDashboard = () => {
     setLoading(true); // Start overall loading
     setEventsLoading(true); // Start loading for events
     const user = JSON.parse(localStorage.getItem("user"));
-    if (user) {
-      const token = jwtDecode(user.token);
-
+    if (user && user.token) {
       // Fetch events
       axios
         .get("http://localhost:5000/api/event/getEvent", {
-          headers: { Authorization: `Bearer ${token}` },
+          headers: { Authorization: `Bearer ${user.token}` },
         })
         .then((res) => {
           const eventsData = res.data;
@@ -124,7 +122,7 @@ export const AdminDashboard = () => {
       // Fetch users
       axios
         .get("http://localhost:5000/api/user", {
-          headers: { Authorization: `Bearer ${token}` },
+          headers: { Authorization: `Bearer ${user.token}` },
         })
         .then((res) => {
           setUserData(res.data);
@@ -135,7 +133,7 @@ export const AdminDashboard = () => {
           setLoading(false);
         });
     } else {
-      console.error("No user token found.");
+      console.log("User not logged in or invalid access token");
       setLoading(false); // End overall loading
     }
   }, []);
