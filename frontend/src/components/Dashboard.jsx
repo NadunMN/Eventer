@@ -17,6 +17,7 @@ import TextField from "@mui/material/TextField";
 import { Avatar, Button, CircularProgress } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import Myprofile from "./Myprofile";
+import CreatedEvent from './CreatedEvent';
 import { jwtDecode } from "jwt-decode";
 
 export default function Dashboard() {
@@ -233,6 +234,43 @@ export default function Dashboard() {
               }}
             >
               <RegisteredEvent />
+            </Box>
+          </div>
+        );
+      case "Created Events":
+        return (
+          <div>
+            <Box
+              className="box"
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "flex-start",
+                // bgcolor: 'red',
+                my: 3,
+              }}
+            >
+              <div className="art-div"></div>
+              <Typography
+                variant="h5"
+                sx={{
+                  marginLeft: "50px",
+                  fontWeight: "bold",
+                }}
+              >
+                REGISTERED EVENTS
+              </Typography>
+            </Box>
+
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "flex-start",
+                gap: 3,
+                flexWrap: "wrap", // Enable wrapping of flex items
+              }}
+            >
+              <CreatedEvent />
             </Box>
           </div>
         );
