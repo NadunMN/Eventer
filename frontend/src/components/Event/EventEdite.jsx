@@ -36,23 +36,81 @@ const Input = styled("input")({
   display: "none",
 });
 
+// Convert binary data to base64
+const convertBinaryToBase64 = (binaryData, contentType) => {
+  if (binaryData && binaryData instanceof Uint8Array) {
+    const binaryString = Array.from(binaryData)
+      .map((byte) => String.fromCharCode(byte))
+      .join("");
+    return `data:${contentType};base64,${btoa(binaryString)}`;
+  } else {
+    console.error("Invalid binary data provided:", binaryData);
+    return null;
+  }
+};
 
-
-
-export const EventEdite = ({event_id}) => {
+export const EventEdite = () => {
   const [userId, setUserId] = useState("");
   const [category, setCategory] = useState(""); // For event category
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
   const [createdEvent, setCreatedEvent] = useState({});
-  const [event, setEvent] = useState({});
+  const [eventData, setEventdata] = useState({});
   const navigate = useNavigate();
   const { eventId } = useParams();
+  const [loading, setLoading] = useState(true);
+  const [coverImg, setCoverImg] = useState(null);
+  const [formData, setFormData] = useState({
+    title: "",
+    start_date: "",
+    start_time: "",
+    end_date: "",
+    end_time: "",
+    venue: "",
+    description: "",
+    capacity: "",
+  });
+  const [errors, setErrors] = useState({});
 
+  console.log(eventData);
+  //fetch the user
+  useEffect(() => {
+    const fetchEvent = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:5000/api/event/getEvent/${eventId}`
+        );
 
+        let eventData = response.data;
+        setFormData(eventData.title);
+        console.log(formData.title);
 
-console.log(event_id)
+        console.log("ljfoej", eventData);
 
+        if (eventData.cover_image) {
+          const base64Image = convertBinaryToBase64(
+            new Uint8Array(eventData.cover_image.data),
+            eventData.cover_image.contentType
+          );
+          eventData.cover_image = base64Image;
+        }
+
+        setEventdata(eventData);
+        setLoading(false);
+      } catch (error) {
+        console.error("Failed to fetch the event:", error);
+        setError("Failed to fetch the event");
+        setLoading(false);
+      } finally {
+        const timer = setTimeout(() => {
+          setLoading(false);
+        }, 1200);
+      }
+    };
+    fetchEvent();
+  }, [eventId]);
+
+  console.log(eventData);
 
   //get user id from local storage
   useEffect(() => {
@@ -63,54 +121,8 @@ console.log(event_id)
     setUserId(user_id);
   }, []);
 
-  // Fetch the event data
-  useEffect(() => {
-    const fetchEvent = async () => {
-      try {
-        const response = await axios.get(
-          `http://localhost:5000/api/event/getEvent/${eventId}`
-        );
-
-        let eventData = response.data;
-        console.log(eventData);
-
-        // Process the event data
-        if (eventData.cover_image) {
-          const base64Image = convertBinaryToBase64(
-            new Uint8Array(eventData.cover_image.data),
-            eventData.cover_image.contentType
-          );
-          eventData.cover_image = base64Image;
-        }
-
-        setEvent(eventData);
-        setLoading(false);
-      } catch (error) {
-        console.error("Failed to fetch the event:", error);
-        setError("Failed to fetch the event");
-        setLoading(false);
-      } 
-    };
-
-    fetchEvent();
-  }, [eventId]);
-
-  const [coverImg, setCoverImg] = useState(null);
-  const [formData, setFormData] = useState({
-    title: event.title,
-    start_date: event.start_date,
-    start_time: event.start_time,
-    end_date: event.end_date,
-    end_time: event.end_time,
-    venue: event.venue,
-    description: event.description,
-    capacity: event.capacity,
-  });
-  const [errors, setErrors] = useState({});
-
   // Handle input change
   const handleInputChange = (e) => {
-
     const { name, value } = e.target;
     setFormData((prevData) => ({
       ...prevData,
@@ -136,39 +148,6 @@ console.log(event_id)
     setCategory(e.target.value);
   };
 
-  // Update event Id in user collection
-  const updateUser = async (eventData) => {
-    const user = JSON.parse(localStorage.getItem("user"));
-    if (user && user.token) {
-      try {
-        const userData = await axios.get(
-          `http://localhost:5000/api/user/${userId}`,
-          {
-            headers: {
-              Authorization: `Bearer ${user.token}`,
-            },
-          }
-        );
-        const currentEvents = userData.data.created_event || [];
-
-        await axios.put(
-          `http://localhost:5000/api/user/edit/${userId}`,
-          {
-            created_event: [...currentEvents, eventData._id],
-          },
-          {
-            headers: {
-              Authorization: `Bearer ${user.token}`,
-            },
-          }
-        );
-      } catch (err) {
-        console.log("Error: ", err);
-      }
-    } else {
-      console.log("User not logged in or invalid access token");
-    }
-  };
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -186,7 +165,6 @@ console.log(event_id)
       setErrors(newErrors);
       return;
     }
-
     const formDataToSend = new FormData();
     Object.keys(formData).forEach((key) => {
       formDataToSend.append(key, formData[key]);
@@ -206,8 +184,8 @@ console.log(event_id)
     const user = JSON.parse(localStorage("user"));
     if (user && user.token) {
       try {
-        const result = await axios.post(
-          "http://localhost:5000/api/event/createEvent",
+        const result = await axios.put(
+          `http://localhost:5000/api/event/edit/${eventId}`,
           formDataToSend,
           {
             headers: {
@@ -250,7 +228,7 @@ console.log(event_id)
           gutterBottom
           sx={{ fontWeight: "bold", color: "#333" }}
         >
-          Edite Event
+          Edit Event
         </Typography>
         <Card
           elevation={0}
@@ -275,7 +253,7 @@ console.log(event_id)
                     variant="filled"
                     label="Event Title"
                     name="title"
-                    value={formData.title}
+                    value={eventData.title}
                     onChange={handleInputChange}
                     error={!!errors.title}
                     helperText={errors.title}
@@ -290,7 +268,7 @@ console.log(event_id)
                     label="Start Date"
                     name="start_date"
                     type="date"
-                    value={formData.start_date}
+                    value={eventData.start_date}
                     onChange={handleInputChange}
                     InputProps={{
                       startAdornment: (
@@ -310,7 +288,7 @@ console.log(event_id)
                     label="Start Time"
                     name="start_time"
                     type="time"
-                    value={formData.start_time}
+                    value={eventData.start_time}
                     onChange={handleInputChange}
                     InputProps={{
                       startAdornment: (
@@ -330,7 +308,7 @@ console.log(event_id)
                     label="End Date"
                     name="end_date"
                     type="date"
-                    value={formData.end_date}
+                    value={eventData.end_date}
                     onChange={handleInputChange}
                     InputProps={{
                       startAdornment: (
@@ -350,7 +328,7 @@ console.log(event_id)
                     label="End Time"
                     name="end_time"
                     type="time"
-                    value={formData.end_time}
+                    value={eventData.end_time}
                     onChange={handleInputChange}
                     InputProps={{
                       startAdornment: (
@@ -369,7 +347,7 @@ console.log(event_id)
                     fullWidth
                     label="Venue"
                     name="venue"
-                    value={formData.venue}
+                    value={eventData.venue}
                     onChange={handleInputChange}
                     InputProps={{
                       startAdornment: (
@@ -387,7 +365,7 @@ console.log(event_id)
                     fullWidth
                     label="Description (*Max 200 characters)"
                     name="description"
-                    value={formData.description}
+                    value={eventData.description}
                     onChange={handleInputChange}
                     multiline
                     rows={4}
@@ -409,7 +387,7 @@ console.log(event_id)
                     label="Capacity"
                     name="capacity"
                     type="number"
-                    value={formData.capacity}
+                    value={eventData.capacity}
                     onChange={handleInputChange}
                     InputProps={{
                       startAdornment: (
@@ -429,7 +407,7 @@ console.log(event_id)
                     <Select
                       labelId="category-label"
                       id="category"
-                      value={category}
+                      value={eventData.category}
                       onChange={handleCategoryChange}
                       error={!!errors.category}
                       sx={{
@@ -442,6 +420,7 @@ console.log(event_id)
                       <MenuItem value={"communities"}>Communities</MenuItem>
                       <MenuItem value={"theaters"}>Theaters</MenuItem>
                       <MenuItem value={"concerts"}>Concerts</MenuItem>
+                      <MenuItem value={"event"}>Event</MenuItem>
                     </Select>
                   </FormControl>
 
