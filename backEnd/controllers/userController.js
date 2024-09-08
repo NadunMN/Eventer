@@ -1,3 +1,4 @@
+const { ObjectId } = require('mongodb');
 const userModel = require("../models/userModel");
 const bcrypt = require("bcryptjs");
 const validator = require("validator");
@@ -136,6 +137,37 @@ const deleteUser = async (req, res) => {
   }
 };
 
+const updateUser = async (req, res) => {
+  const { id: eventId } = req.params; // Get eventId from URL params
+
+  try {
+    const result = await userModel.updateMany(
+      { 
+        $or: [
+          { registered_events: new ObjectId(eventId) },  
+          { favourite_events: new ObjectId(eventId) },
+          { created_event: new ObjectId(eventId) }    
+        ]
+      },
+      {
+        $pull: {
+          registered_events: new ObjectId(eventId),  
+          favourite_events: new ObjectId(eventId),
+          created_event: new ObjectId(eventId)
+        }
+      }
+    );
+
+    if (result.matchedCount === 0) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    res.status(200).json({ message: "Event removed successfully" });
+  } catch (err) {
+    res.status(500).send({ message: err.message });
+  }
+};
+
 
 module.exports = {
   getAllUser,
@@ -144,4 +176,5 @@ module.exports = {
   login,
   editUser,
   deleteUser,
+  updateUser,
 };
