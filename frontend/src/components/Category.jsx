@@ -131,7 +131,7 @@ export default function ButtonBaseDemo() {
   useEffect(() => {
     if (category) {
       console.log(category)
-      navigate(`/`, { state: { category } });
+      navigate(`/event`, { state: { category } });
     }
   },[category])
   return (

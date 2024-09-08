@@ -7,6 +7,7 @@ import teamMember4 from '../../asset/team-member4.jpg';
 import introImage from '../../asset/introImage.jpg';
 import introImage2 from '../../asset/introImage2.jpg'; // Import the intro image
 
+
 export const About = () => {
   return (
     <div className="about-container">

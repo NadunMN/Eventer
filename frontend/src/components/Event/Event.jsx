@@ -57,12 +57,22 @@ export const Event = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
+  // Function to handle closing the snackbar
   const handleSnackbarClose = (event, reason) => {
     if (reason === "clickaway") {
       return;
     }
     setSnackbarOpen(false); // Close the snackbar
   };
+
+  // Set the category from the location state
+  useEffect(() => {
+    const locationData = location.state || {};
+    console.log("locationData");
+    console.log(locationData.category);
+
+    locationData.category ? setCategory(locationData.category) : null;
+  }, []);
 
   //get user data from local storage
   useEffect(() => {
@@ -86,6 +96,8 @@ export const Event = () => {
   // Fetch event data
   useEffect(() => {
     const fetchEvent = async () => {
+      setLoading(true);
+
       try {
         const response = await axios.get(
           category
@@ -93,13 +105,9 @@ export const Event = () => {
             : "http://localhost:5000/api/event/getEvent"
         );
 
-        if (response.status === 404) {
-          setListOfEvent([]);
-          console.log("No events found (404)");
-          return;
-        }
-
         let res_data = response.data;
+        console.log("res_data");
+        console.log(res_data);
 
         // Process the event data
         const listOfEvents = res_data.map((event) => {
@@ -116,6 +124,12 @@ export const Event = () => {
         setListOfEvent(listOfEvents);
         setError("");
       } catch (error) {
+        if (error.response?.status === 404) {
+          setListOfEvent([]);
+          console.log("No events found (404)");
+          return;
+        }
+
         console.error("Failed to fetch data:", error);
         setError("Failed to fetch the event");
       } finally {
@@ -129,6 +143,10 @@ export const Event = () => {
   // Handle category change
   const handleCategoryChange = (event) => {
     const selectedCategory = event.target.value;
+    if (selectedCategory === "") {
+      setCategory("");
+      return;
+    }
     setCategory(selectedCategory);
   };
 
