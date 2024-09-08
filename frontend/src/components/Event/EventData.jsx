@@ -30,8 +30,7 @@ import {
 import { Reviews } from "../Reviews";
 import { EventParticipant } from "./EventParticipant";
 import FormDialogDelete from "./EventDeleteDialog";
-import EventEdite from "./EventEdite";
-
+import { EventEdite } from "./EventEdite";
 // Convert binary data to base64
 const convertBinaryToBase64 = (binaryData, contentType) => {
   if (binaryData && binaryData instanceof Uint8Array) {
@@ -211,6 +210,7 @@ export default function EventData() {
     }
   };
 
+  // Fetch the event data
   useEffect(() => {
     const fetchEvent = async () => {
       try {
@@ -421,7 +421,7 @@ export default function EventData() {
             </Button>
 
             {userId === eventCreatedId ? <FormDialogDelete /> : null}
-            {userId === eventCreatedId ? <EventEdite /> : null}
+            {userId === eventCreatedId ? <EventEdite event_id={event_id}/> : null}
             {/* <FormDialogDelete/> */}
               
           </Box>

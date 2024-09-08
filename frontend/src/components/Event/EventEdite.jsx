@@ -1,133 +1,235 @@
-import * as React from "react";
-import Button from "@mui/material/Button";
-import Dialog from "@mui/material/Dialog";
-import DialogActions from "@mui/material/DialogActions";
-import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
-import DialogTitle from "@mui/material/DialogTitle";
-import Box from "@mui/material/Box";
-import axios from "axios";
-import { useState, useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
-import Snackbar from "@mui/material/Snackbar";
-import Alert from "@mui/material/Alert";
-import { jwtDecode } from "jwt-decode";
+import React, { useEffect, useState } from "react";
+import {
+  Button,
+  Card,
+  CardContent,
+  Grid,
+  TextField,
+  InputAdornment,
+  IconButton,
+  Box,
+  Select,
+  MenuItem,
+  FormControl,
+  InputLabel,
+  Typography,
+  Snackbar,
+  Alert,
+} from "@mui/material";
+import { styled } from "@mui/material/styles";
+import {
+  CalendarToday,
+  AccessTime,
+  Room,
+  People,
+  Description,
+  AddPhotoAlternate,
+} from "@mui/icons-material";
 
-export default function EventEdite() {
-  const { eventId } = useParams();
-  const [open, setOpen] = useState(false);
+import addImg from "../../asset/addImage.jpg";
+import axios from "axios";
+import { jwtDecode } from "jwt-decode"; // Correct import
+import { useNavigate } from "react-router-dom";
+
+const Input = styled("input")({
+  display: "none",
+});
+
+
+
+
+export const EventEdite = ({event_id}) => {
+  const [userId, setUserId] = useState("");
+  const [category, setCategory] = useState(""); // For event category
   const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
-  const [alertSeverity, setAlertSeverity] = useState("success"); // Set default severity
-  const [userId, setUserId] = useState("");
-  const [user, setUser] = useState([]);
-
-  console.log(user);
-  const user_id = JSON.parse(localStorage.getItem("user"));
-
-  useEffect(() => {
-    if (user_id) {
-      const jsonString = JSON.stringify(user_id);
-      const jwtToken = jwtDecode(jsonString);
-      // console.log(jwtToken);
-      setUserId(jwtToken._id); // This will trigger the second useEffect
-    }
-  }, [user_id]);
-
-  useEffect(() => {
-    if (userId) {
-      const fetchUser = async () => {
-        try {
-          const response = await axios.get(
-            `http://localhost:5000/api/getUserById/${userId}`
-          );
-          let userData = response.data;
-          setUser(userData);
-        } catch (error) {
-          console.error("Failed to fetch the user:", error);
-          setError("Failed to fetch the user");
-        }
-      };
-
-      fetchUser();
-    }
-  }, [userId]);
-
+  const [createdEvent, setCreatedEvent] = useState({});
+  const [eventId, setEventId] = useState(event_id);
+  const [event, setEvent] = useState({});
   const navigate = useNavigate();
 
-  const handleDeleteClick = async () => {
+
+
+console.log(event_id)
+
+
+  //get user id from local storage
+  useEffect(() => {
+    const user = JSON.parse(localStorage.getItem("user"));
+    const token = user?.token;
+    const jwStr = jwtDecode(token);
+    const user_id = jwStr._id;
+    setUserId(user_id);
+  }, []);
+
+  // Fetch the event data
+  useEffect(() => {
+    const fetchEvent = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:5000/api/event/getEvent/${eventId}`
+        );
+
+        let eventData = response.data;
+        console.log(eventData);
+
+        // Process the event data
+        if (eventData.cover_image) {
+          const base64Image = convertBinaryToBase64(
+            new Uint8Array(eventData.cover_image.data),
+            eventData.cover_image.contentType
+          );
+          eventData.cover_image = base64Image;
+        }
+
+        setEvent(eventData);
+        setLoading(false);
+      } catch (error) {
+        console.error("Failed to fetch the event:", error);
+        setError("Failed to fetch the event");
+        setLoading(false);
+      } 
+    };
+
+    fetchEvent();
+  }, [eventId]);
+
+  const [coverImg, setCoverImg] = useState(null);
+  const [formData, setFormData] = useState({
+    title: "",
+    start_date: "",
+    start_time: "",
+    end_date: "",
+    end_time: "",
+    venue: "",
+    description: "",
+    capacity: "",
+  });
+  const [errors, setErrors] = useState({});
+
+  // Handle input change
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+
+    setErrors((prevErrors) => ({
+      ...prevErrors,
+      [name]: "",
+    }));
+  };
+
+  // Handle image change
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setCoverImg(file);
+    }
+  };
+
+  // Handle category change
+  const handleCategoryChange = (e) => {
+    setCategory(e.target.value);
+  };
+
+  // Update event Id in user collection
+  const updateUser = async (eventData) => {
     const user = JSON.parse(localStorage.getItem("user"));
     if (user && user.token) {
       try {
-        // Attempt to delete the event
-        await axios.delete(
-          `http://localhost:5000/api/event/delete/${eventId}`,
+        const userData = await axios.get(
+          `http://localhost:5000/api/user/${userId}`,
           {
             headers: {
               Authorization: `Bearer ${user.token}`,
             },
           }
         );
-        setAlertMessage("Event deleted successfully!");
-        setAlertSeverity("success");
-        setSnackbarOpen(true);
+        const currentEvents = userData.data.created_event || [];
 
-        try {
-          // Attempt to remove the event from all users
-          const response = await axios.post(
-            `http://localhost:5000/api/user/remove-event/${eventId}`,
-            {
-              headers: {
-                Authorization: `Bearer ${user.token}`,
-              },
-            }
-          );
-
-          if (response.status === 200) {
-            console.log("Event removed from all users:", response.data.message);
-            // Optionally, trigger some UI update or notification
-
-            // Only navigate if both operations succeed
-            setTimeout(() => {
-              navigate("/event", { replace: true });
-            }, 2000);
-          } else {
-            // Handle unexpected response status
-            setAlertMessage(
-              "Event deletion succeeded but failed to remove from users."
-            );
-            setAlertSeverity("warning");
-            setSnackbarOpen(true);
+        await axios.put(
+          `http://localhost:5000/api/user/edit/${userId}`,
+          {
+            created_event: [...currentEvents, eventData._id],
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${user.token}`,
+            },
           }
-        } catch (error) {
-          setAlertMessage("Failed to remove event from users.");
-          setAlertSeverity("error");
-          setSnackbarOpen(true);
-          console.error(
-            "Failed to remove event from users:",
-            error.response ? error.response.data.message : error.message
-          );
-        }
-      } catch (error) {
-        setAlertMessage("Failed to delete the event.");
-        setAlertSeverity("error");
-        setSnackbarOpen(true);
-        console.error(
-          "Failed to delete the event:",
-          error.response ? error.response.data.message : error.message
         );
+      } catch (err) {
+        console.log("Error: ", err);
+      }
+    } else {
+      console.log("User not logged in or invalid access token");
+    }
+  };
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const newErrors = {};
+    if (!formData.title) newErrors.title = "Event title is required";
+    if (!formData.start_date) newErrors.start_date = "Start Date is required";
+    if (!formData.start_time) newErrors.start_time = "Start Time is required";
+    if (!formData.end_date) newErrors.end_date = "End Date is required";
+    if (!formData.end_time) newErrors.end_time = "End Time is required";
+    if (!formData.venue) newErrors.venue = "Venue is required";
+    if (!formData.capacity) newErrors.capacity = "Capacity is required";
+    if (!category) newErrors.category = "Event category is required";
+
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      return;
+    }
+
+    const formDataToSend = new FormData();
+    Object.keys(formData).forEach((key) => {
+      formDataToSend.append(key, formData[key]);
+    });
+
+    if (coverImg) {
+      formDataToSend.append("cover_image", coverImg, coverImg.name);
+    } else {
+      setAlertMessage("No image selected. Please choose an image to upload.");
+      setSnackbarOpen(true);
+      return;
+    }
+    formDataToSend.append("created_by", userId);
+    const created_at = new Date().toISOString();
+    formDataToSend.append("created_at", created_at);
+    formDataToSend.append("category", category);
+    const user = JSON.parse(localStorage("user"));
+    if (user && user.token) {
+      try {
+        const result = await axios.post(
+          "http://localhost:5000/api/event/createEvent",
+          formDataToSend,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+              Authorization: `Bearer ${user.token}`,
+            },
+          }
+        );
+        setCreatedEvent(result.data);
+        updateUser(result.data);
+        setAlertMessage("Event created successfully!");
+        setSnackbarOpen(true);
+        setTimeout(() => {
+          navigate("/event");
+        }, 3000);
+      } catch (error) {
+        console.log("Error uploading event:", error);
       }
     } else {
       console.log("User not logged in or invalid access token");
     }
   };
 
-  console.log(eventId);
-
-  // const removeEventFromAllUsers = async (eventId) => {
-
-  // };
-
+  // Handle snackbar close
   const handleSnackbarClose = (event, reason) => {
     if (reason === "clickaway") {
       return;
@@ -135,78 +237,306 @@ export default function EventEdite() {
     setSnackbarOpen(false); // Close the snackbar
   };
 
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-  };
-
   return (
-    <React.Fragment>
+    <>
       <Box
-        sx={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
+        sx={{ height: "100vh", maxWidth: 1000, margin: "auto", p: 3, mt: 8 }}
       >
-        <Button
-          variant="contained"
-          color="error"
-          sx={{
-            width: "500px",
-            display: "flex",
-            height: 55,
-            justifyContent: "center",
-            alignItems: "center",
-            borderRadius: 10,
-          }}
-          onClick={handleClickOpen}
+        <Typography
+          variant="h3"
+          textAlign="center"
+          gutterBottom
+          sx={{ fontWeight: "bold", color: "#333" }}
         >
-          Delete this event
-        </Button>
+          Edite Event
+        </Typography>
+        <Card
+          elevation={0}
+          sx={{
+            borderRadius: 4,
+            p: 4,
+            backgroundColor: "#f9f9f9",
+            boxShadow: "0px 4px 20px rgba(0,0,0,0.1)",
+          }}
+        >
+          <CardContent>
+            <Grid container spacing={4}>
+              <Grid item xs={12} md={6}>
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: 4,
+                  }}
+                >
+                  <TextField
+                    variant="filled"
+                    label="Event Title"
+                    name="title"
+                    value={formData.title}
+                    onChange={handleInputChange}
+                    error={!!errors.title}
+                    helperText={errors.title}
+                    InputProps={{
+                      style: { fontSize: "18px", fontWeight: "bold" },
+                    }}
+                    sx={{ backgroundColor: "#fff", borderRadius: 2 }}
+                  />
+                  <TextField
+                    variant="filled"
+                    fullWidth
+                    label="Start Date"
+                    name="start_date"
+                    type="date"
+                    value={formData.start_date}
+                    onChange={handleInputChange}
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          <CalendarToday />
+                        </InputAdornment>
+                      ),
+                    }}
+                    InputLabelProps={{ shrink: true }}
+                    error={!!errors.start_date}
+                    helperText={errors.start_date}
+                    sx={{ backgroundColor: "#fff", borderRadius: 2 }}
+                  />
+                  <TextField
+                    variant="filled"
+                    fullWidth
+                    label="Start Time"
+                    name="start_time"
+                    type="time"
+                    value={formData.start_time}
+                    onChange={handleInputChange}
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          <AccessTime />
+                        </InputAdornment>
+                      ),
+                    }}
+                    InputLabelProps={{ shrink: true }}
+                    error={!!errors.start_time}
+                    helperText={errors.start_time}
+                    sx={{ backgroundColor: "#fff", borderRadius: 2 }}
+                  />
+                  <TextField
+                    variant="filled"
+                    fullWidth
+                    label="End Date"
+                    name="end_date"
+                    type="date"
+                    value={formData.end_date}
+                    onChange={handleInputChange}
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          <CalendarToday />
+                        </InputAdornment>
+                      ),
+                    }}
+                    InputLabelProps={{ shrink: true }}
+                    error={!!errors.end_date}
+                    helperText={errors.end_date}
+                    sx={{ backgroundColor: "#fff", borderRadius: 2 }}
+                  />
+                  <TextField
+                    variant="filled"
+                    fullWidth
+                    label="End Time"
+                    name="end_time"
+                    type="time"
+                    value={formData.end_time}
+                    onChange={handleInputChange}
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          <AccessTime />
+                        </InputAdornment>
+                      ),
+                    }}
+                    InputLabelProps={{ shrink: true }}
+                    error={!!errors.end_time}
+                    helperText={errors.end_time}
+                    sx={{ backgroundColor: "#fff", borderRadius: 2 }}
+                  />
+                  <TextField
+                    variant="filled"
+                    fullWidth
+                    label="Venue"
+                    name="venue"
+                    value={formData.venue}
+                    onChange={handleInputChange}
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          <Room />
+                        </InputAdornment>
+                      ),
+                    }}
+                    error={!!errors.venue}
+                    helperText={errors.venue}
+                    sx={{ backgroundColor: "#fff", borderRadius: 2 }}
+                  />
+                  <TextField
+                    variant="filled"
+                    fullWidth
+                    label="Description (*Max 200 characters)"
+                    name="description"
+                    value={formData.description}
+                    onChange={handleInputChange}
+                    multiline
+                    rows={4}
+                    inputProps={{
+                      maxLength: 200,
+                    }}
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          <Description />
+                        </InputAdornment>
+                      ),
+                    }}
+                    sx={{ backgroundColor: "#fff", borderRadius: 2 }}
+                  />
+                  <TextField
+                    variant="filled"
+                    fullWidth
+                    label="Capacity"
+                    name="capacity"
+                    type="number"
+                    value={formData.capacity}
+                    onChange={handleInputChange}
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          <People />
+                        </InputAdornment>
+                      ),
+                    }}
+                    error={!!errors.capacity}
+                    helperText={errors.capacity}
+                    sx={{ backgroundColor: "#fff", borderRadius: 2 }}
+                  />
+
+                  {/* Category Dropdown */}
+                  <FormControl variant="filled" fullWidth required>
+                    <InputLabel id="category-label">Category</InputLabel>
+                    <Select
+                      labelId="category-label"
+                      id="category"
+                      value={category}
+                      onChange={handleCategoryChange}
+                      error={!!errors.category}
+                      sx={{
+                        backgroundColor: "#fff",
+                        borderRadius: 2,
+                      }}
+                    >
+                      <MenuItem value={"sports"}>Sports</MenuItem>
+                      <MenuItem value={"parties"}>Parties</MenuItem>
+                      <MenuItem value={"communities"}>Communities</MenuItem>
+                      <MenuItem value={"theaters"}>Theaters</MenuItem>
+                      <MenuItem value={"concerts"}>Concerts</MenuItem>
+                    </Select>
+                  </FormControl>
+
+                  <Button
+                    type="submit"
+                    fullWidth
+                    variant="contained"
+                    color="primary"
+                    onClick={handleSubmit}
+                    sx={{
+                      height: "50px",
+                      fontSize: "18px",
+                      fontWeight: "bold",
+                      textTransform: "none",
+                      borderRadius: "12px",
+                      transition: "background-color 0.3s ease",
+                      "&:hover": {
+                        backgroundColor: "#0056b3",
+                      },
+                    }}
+                  >
+                    Edite Event
+                  </Button>
+                </Box>
+              </Grid>
+
+              {/* Image Upload */}
+              <Grid item xs={12} md={6}>
+                <Box
+                  sx={{
+                    position: "relative",
+                    mb: 2,
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    flexDirection: "column",
+                    mt: { xs: 4, md: 0 },
+                    width: "100%",
+                  }}
+                >
+                  <Box
+                    sx={{
+                      width: "100%",
+                      height: "300px",
+                      backgroundColor: "#e0e0e0",
+                      borderRadius: 4,
+                      overflow: "hidden",
+                      boxShadow: "0px 4px 10px rgba(0,0,0,0.1)",
+                      position: "relative",
+                      "&:hover": {
+                        boxShadow: "0px 6px 15px rgba(0,0,0,0.2)",
+                      },
+                    }}
+                  >
+                    <img
+                      src={coverImg ? URL.createObjectURL(coverImg) : addImg}
+                      alt="Event cover"
+                      style={{
+                        width: "100%",
+                        height: "100%",
+                        objectFit: "cover",
+                      }}
+                    />
+                    <label htmlFor="icon-button-file">
+                      <Input
+                        accept="image/*"
+                        id="icon-button-file"
+                        type="file"
+                        onChange={handleImageChange}
+                      />
+                      <IconButton
+                        color="primary"
+                        aria-label="upload picture"
+                        component="span"
+                        sx={{
+                          position: "absolute",
+                          bottom: 16,
+                          right: 16,
+                          backgroundColor: "white",
+                          borderRadius: "50%",
+                          boxShadow: 2,
+                          "&:hover": {
+                            backgroundColor: "#f5f5f5",
+                          },
+                        }}
+                      >
+                        <AddPhotoAlternate />
+                      </IconButton>
+                    </label>
+                  </Box>
+                </Box>
+              </Grid>
+            </Grid>
+          </CardContent>
+        </Card>
       </Box>
-
-      <Dialog
-        open={open}
-        onClose={handleClose}
-        PaperProps={{
-          component: "form",
-          onSubmit: (event) => {
-            event.preventDefault();
-            handleClose();
-          },
-        }}
-      >
-        <DialogTitle>Delete the event</DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            Once you delete an account, there is no going back. Please be
-            certain.
-          </DialogContentText>
-          <DialogContentText variant="body2" color="error" m="2">
-            "All your data will be permanently erased, and it cannot be
-            recovered."
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions sx={{ display: "flex", justifyContent: "center" }}>
-          <Button variant="contained" onClick={handleClose}>
-            Cancel
-          </Button>
-          <Button
-            variant="contained"
-            color="error"
-            type="submit"
-            onClick={handleDeleteClick} // Add parentheses to call the function
-            // removeEventFromAllUsers();  Add parentheses to call the function
-          >
-            Delete
-          </Button>
-        </DialogActions>
-      </Dialog>
-
+      {/* Alert for Successfull review */}
       <Snackbar
         open={snackbarOpen}
         autoHideDuration={3000}
@@ -215,12 +545,17 @@ export default function EventEdite() {
       >
         <Alert
           onClose={handleSnackbarClose}
-          severity={alertSeverity}
+          severity={
+            alertMessage ===
+            "No image selected. Please choose an image to upload."
+              ? "error"
+              : "success"
+          }
           sx={{ width: "100%" }}
         >
           {alertMessage}
         </Alert>
       </Snackbar>
-    </React.Fragment>
+    </>
   );
-}
+};
