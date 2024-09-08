@@ -30,6 +30,7 @@ import {
 import { Reviews } from "../Reviews";
 import { EventParticipant } from "./EventParticipant";
 import FormDialogDelete from "./EventDeleteDialog";
+import EventEdite from "./EventEdite";
 
 // Convert binary data to base64
 const convertBinaryToBase64 = (binaryData, contentType) => {
@@ -420,6 +421,7 @@ export default function EventData() {
             </Button>
 
             {userId === eventCreatedId ? <FormDialogDelete /> : null}
+            {userId === eventCreatedId ? <EventEdite /> : null}
             {/* <FormDialogDelete/> */}
               
           </Box>
