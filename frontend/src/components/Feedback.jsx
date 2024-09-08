@@ -194,20 +194,13 @@ export const Feedback = () => {
                     sx={{
                       fontWeight: 500,
                       color: fb.processed ? "text.secondary" : "text.primary",
-                      textDecoration: fb.processed ? "line-through" : "none", // Strikethrough for processed feedback
                     }}
                   >
                     {fb.message.length > 50
                       ? fb.message.substring(0, 50) + "..."
                       : fb.message}
                   </Typography>
-                  <Typography
-                    variant="body2"
-                    color="text.secondary"
-                    sx={{
-                      textDecoration: fb.processed ? "line-through" : "none",
-                    }}
-                  >
+                  <Typography variant="body2" color="text.secondary" sx={{}}>
                     {fb.name}
                   </Typography>
                 </Box>

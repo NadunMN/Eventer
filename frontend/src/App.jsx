@@ -15,6 +15,7 @@ import { Navigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { jwtDecode } from "jwt-decode";
 import { Event } from "./components/Event/Event";
+import { NotFoundPage } from "./components/NotFoundPage";
 
 function App() {
   const [userRole, setUserRole] = useState("");
@@ -66,8 +67,10 @@ function App() {
           path="signup"
           element={!userId ? <Signup /> : <Navigate to="/" />}
         />
-        <Route path="create-event" element={<AddEvent />} />
-        <Route path="admin-dashboard" element={<AdminDashboard />} />
+        <Route
+          path="create-event"
+          element={userId ? <AddEvent /> : <Navigate to="/login" />}
+        />
         <Route path="Event" element={<Event />} />
         <Route path="event/:eventId" element={<EventData />} />
         <Route path="event/category" element={<Event />} />
@@ -87,6 +90,7 @@ function App() {
             )
           }
         />
+        <Route path="*" element={<NotFoundPage />} />
       </Routes>
       {showNavBarAndFooter && <Footer />}
     </>
