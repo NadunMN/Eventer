@@ -9,7 +9,7 @@ import Typography from "@mui/material/Typography";
 import { Box, CircularProgress } from "@mui/material";
 import Button from "@mui/material/Button";
 import { jwtDecode } from "jwt-decode";
-
+import { useNavigate } from "react-router-dom";
 // Function to convert binary data to base64
 const convertBinaryToBase64 = (binaryData, contentType) => {
   if (binaryData && binaryData instanceof Uint8Array) {
@@ -30,8 +30,8 @@ export default function FavoriteEvent() {
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const navigate = useNavigate();
 
-  
   const user_id = JSON.parse(localStorage.getItem("user"));
 
   useEffect(() => {
@@ -110,20 +110,19 @@ export default function FavoriteEvent() {
   return (
     <div className="card-container">
       {loading ? (
-        
-            <Box
-              sx={{
-                mt:20,
-                ml: 50,
-                display: "flex",
-                // justifyContent: "center",
-                // alignItems: "center",
-                height: '100vh',
-                // bgcolor:'black'
-              }}
-            >
-              <CircularProgress />
-            </Box>
+        <Box
+          sx={{
+            mt: 20,
+            ml: 50,
+            display: "flex",
+            // justifyContent: "center",
+            // alignItems: "center",
+            height: "100vh",
+            // bgcolor:'black'
+          }}
+        >
+          <CircularProgress />
+        </Box>
       ) : error ? (
         <p>{error}</p>
       ) : events.length > 0 ? (
@@ -155,10 +154,11 @@ export default function FavoriteEvent() {
               <CardActions
                 sx={{ display: "flex", position: "absolute", bottom: 0 }}
               >
-                <Button sx={{ color: "#311b92" }} size="small">
-                  Share
-                </Button>
-                <Button size="small" sx={{ color: "#311b92" }}>
+                <Button
+                  onClick={() => navigate(`/event/${event._id}`)}
+                  size="small"
+                  sx={{ color: "#311b92" }}
+                >
                   Learn More
                 </Button>
               </CardActions>
