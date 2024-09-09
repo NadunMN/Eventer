@@ -144,7 +144,7 @@ useEffect(() => {
           </div>
         ))
       ) : (
-        <p>No Favorite events found.</p>
+        <p>No Created events found.</p>
       )}
     </div>
   );
