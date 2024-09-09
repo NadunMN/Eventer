@@ -16,6 +16,7 @@ import { useEffect, useState } from "react";
 import { jwtDecode } from "jwt-decode";
 import { Event } from "./components/Event/Event";
 import { NotFoundPage } from "./components/NotFoundPage";
+import { EventEdit } from "./components/Event/EventEdit";
 
 function App() {
   const [userRole, setUserRole] = useState("");
@@ -71,6 +72,9 @@ function App() {
           path="create-event"
           element={userId ? <AddEvent /> : <Navigate to="/login" />}
         />
+        <Route path="create-event" element={<AddEvent />} />
+        <Route path="edit-event/:eventId" element={<EventEdit />} />
+        <Route path="admin-dashboard" element={<AdminDashboard />} />
         <Route path="Event" element={<Event />} />
         <Route path="event/:eventId" element={<EventData />} />
         <Route path="event/category" element={<Event />} />

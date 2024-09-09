@@ -113,3 +113,29 @@
   flex: 1;
   margin-left: 50px;
 }
+
+.about-div-img1 {
+  width: 320px;
+  height: 250px;
+  /* background-color: black; */
+  background-image: url('../../asset/Event/10.jpg');
+  background-size: cover; /* Image covers the entire div */
+    background-position: center; /* Center the image */
+    background-repeat: no-repeat; /* Prevent the image from repeating */
+  border-radius: 30px;
+  overflow: hidden;
+}
+
+.about-div-img2 {
+  width: 320px;
+  height: 250px;
+  /* background-color: black; */
+  background-image: url('../../asset/Event/11.jpg');
+  background-size: cover; /* Image covers the entire div */
+    background-position: center; /* Center the image */
+    background-repeat: no-repeat; /* Prevent the image from repeating */
+  border-radius: 30px;
+  overflow: hidden;
+}
+
+
