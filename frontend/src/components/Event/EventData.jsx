@@ -72,7 +72,7 @@ export default function EventData() {
     setSnackbarOpen(false); // Close the snackbar
   };
   // console.log(userId);
-  // console.log(eventCreatedId);
+  console.log(eventCreatedId);
 
   useEffect(() => {
     if (event && event.created_by) {
@@ -102,6 +102,7 @@ export default function EventData() {
           console.error("Failed to fetch user data", err);
         });
     } else {
+      navigate("/login");
       console.log("User not logged in or invalid access token");
     }
   }, []);
