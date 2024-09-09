@@ -46,12 +46,45 @@ export const Reviews = () => {
 
     const user = JSON.parse(localStorage.getItem("user"));
     if (user) {
-      const jsonString = JSON.stringify(user);
-
-      const jwtToken = jwtDecode(jsonString);
+      const jwtToken = jwtDecode(user.token);
       setUserId(jwtToken._id);
     }
-  }, []);
+    if (user && user.token) {
+      axios
+        .get(`http://localhost:5000/api/review/getReview/${eventId}`, {
+          headers: {
+            Authorization: `Bearer ${user.token}`,
+          },
+        })
+        .then((res) => {
+          setReviews(res.data);
+        });
+    } else {
+      console.log("User not logged in or invalid access token");
+    }
+  }, [eventId]);
+
+  useEffect(() => {
+    const user = JSON.parse(localStorage.getItem("user"));
+
+    if (user && user.token) {
+      axios
+        .get(`http://localhost:5000/api/user/${userId}`, {
+          headers: {
+            Authorization: `Bearer ${user.token}`,
+          },
+        })
+        .then((res) => {
+          setUserName(`${res.data.first_name} ${res.data.last_name}`);
+          console.log("DATA:", res.data.first_name);
+        })
+        .catch((err) => {
+          console.log("Error fetching user name:", err);
+        });
+    } else {
+      console.log("User not logged in or invalid access token");
+    }
+  }, [userId]);
 
   // Get reviews from DB
   useEffect(() => {
@@ -69,7 +102,7 @@ export const Reviews = () => {
     } else {
       console.log("User not logged in or invalid access token");
     }
-  }, [eventId]);
+  }, []);
 
   // Get userName and eventTitle
   useEffect(() => {
@@ -92,31 +125,9 @@ export const Reviews = () => {
     }
   }, [eventId]);
 
-  useEffect(() => {
-    const user = JSON.parse(localStorage.getItem("user"));
-    if (user && user.token) {
-      axios
-        .get(`http://localhost:5000/api/user/${userId}`, {
-          headers: {
-            Authorization: `Bearer ${user.token}`,
-          },
-        })
-        .then((res) => {
-          setUserName(`${res.data.first_name} ${res.data.last_name}`);
-        })
-        .catch((err) => {
-          console.log("Error fetching user name:", err);
-        });
-    } else {
-      console.log("User not logged in or invalid access token");
-    }
-  }, [userId]);
-
   const handleReview = (event) => {
     setUserReview(event.target.value);
   };
-  console.log(eventTitle);
-  console.log(userName);
 
   // Handler for add new review
   const handleClick = async () => {
@@ -128,7 +139,6 @@ export const Reviews = () => {
       user_name: userName,
       event_title: eventTitle,
     };
-    console.log(rev);
     const user = JSON.parse(localStorage.getItem("user"));
     if (user && user.token) {
       try {

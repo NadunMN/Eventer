@@ -15,20 +15,14 @@ import {
   ListItemIcon,
   ListItemText,
   Box,
-  CircularProgress,
 } from "@mui/material";
 import { styled } from "@mui/system";
 import { Link, useNavigate } from "react-router-dom";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import LogoutIcon from "@mui/icons-material/Logout";
-import DashboardIcon from "@mui/icons-material/Dashboard";
-import LoginIcon from "@mui/icons-material/Login";
 import logo from "../asset/logoOriginal.png";
-import { useLogout } from "../hooks/useLogout";
 import { useAuthContext } from "../hooks/useAuthContext";
-import { jwtDecode } from "jwt-decode";
 import axios from "axios";
-import { BorderBottom, Scale } from "@mui/icons-material";
 
 const StyledAppBar = styled(AppBar)(({ theme }) => ({
   background: "linear-gradient(45deg, #673ab7 30%, #3f51b5 90%)",
