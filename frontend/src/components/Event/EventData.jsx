@@ -437,6 +437,7 @@ export default function EventData() {
             {userId === eventCreatedId ? <FormDialogDelete /> : null}
             {userId === eventCreatedId ? (
               <Button
+                sx={{bgcolor: '#ede7f6', borderRadius:10}}
                 onClick={() => {
                   navigate(`/edit-event/${eventId}`);
                 }}
