@@ -437,7 +437,10 @@ export const Event = () => {
             fontSize: '15px',
             borderRadius: '50%'
 
-          }}><AddIcon/></Button>
+          }}
+          onClick={() => navigate("/create-event")}
+        
+          ><AddIcon/></Button>
           </Box>
 
 
