@@ -8,6 +8,7 @@ import CardActions from "@mui/material/CardActions";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import { jwtDecode } from "jwt-decode";
+import { useNavigate } from "react-router-dom";
 
 // Function to convert binary data to base64
 const convertBinaryToBase64 = (binaryData, contentType) => {
@@ -29,6 +30,7 @@ export default function CreatedEvent() {
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const navigate = useNavigate();
 
  
   const user_id = JSON.parse(localStorage.getItem("user"));
@@ -133,10 +135,10 @@ useEffect(() => {
                 </Typography>
               </CardContent>
               <CardActions sx={{ display: 'flex', position: 'absolute', bottom: 0 }}>
-                <Button sx={{ color: "#311b92" }} size="small">
-                  Share
-                </Button>
-                <Button size="small" sx={{ color: "#311b92" }}>
+                
+                <Button onClick={()=>{
+                  navigate(`/event/${event._id}`);
+                }} size="small" sx={{ color: "#311b92" }}>
                   Learn More
                 </Button>
               </CardActions>
