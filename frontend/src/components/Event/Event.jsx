@@ -25,6 +25,7 @@ import { jwtDecode } from "jwt-decode";
 import "bootstrap/dist/css/bootstrap.min.css";
 import SearchForm from "./SearchForm";
 import { useLocation, useNavigate } from "react-router-dom";
+import AddIcon from '@mui/icons-material/Add';
 
 // Function to convert binary data to base64
 const convertBinaryToBase64 = (binaryData, contentType) => {
@@ -379,7 +380,7 @@ export const Event = () => {
             sx={{
               // boxShadow: 4,
               maxWidth: 600,
-              width: 150,
+              width: 200,
               m: 1,
               bgcolor:'white',
               borderRadius: 4,
@@ -427,6 +428,19 @@ export const Event = () => {
           <Box sx={{ ml: 2, width: "100%", maxWidth: 500 }}>
             <SearchForm setListOfEvents={setListOfEvent} />
           </Box>
+          <Button variant="contained" sx={{
+            bgcolor: 'white',
+            color: 'black',
+            ml:2,
+            width: 'auto',
+            height: '60px',
+            fontSize: '15px',
+            borderRadius: '50%'
+
+          }}
+          onClick={() => navigate("/create-event")}
+        
+          ><AddIcon/></Button>
           </Box>
 
 

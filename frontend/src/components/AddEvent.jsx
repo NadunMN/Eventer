@@ -405,6 +405,7 @@ export const AddEvent = () => {
                         borderRadius: 2,
                       }}
                     >
+                      <MenuItem value={"event"}>Event</MenuItem>
                       <MenuItem value={"sports"}>Sports</MenuItem>
                       <MenuItem value={"parties"}>Parties</MenuItem>
                       <MenuItem value={"communities"}>Communities</MenuItem>
