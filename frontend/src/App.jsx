@@ -32,7 +32,7 @@ function App() {
       const jwtToken = jwtDecode(user.token);
       setUserId(jwtToken._id);
       setUserRole(jwtToken.role);
-      setToken(jwtToken);
+      setToken(user.token);
     }
     setLoading(false);
   }, [navigate]);
@@ -50,7 +50,12 @@ function App() {
     <>
       {/* <NavBar logout={logout} userId={userId} userRole={userRole} /> */}
       {showNavBarAndFooter && (
-        <NavBar logout={logout} userId={userId} userRole={userRole} />
+        <NavBar
+          logout={logout}
+          userId={userId}
+          userRole={userRole}
+          token={token}
+        />
       )}
       <Routes>
         <Route path="/" element={<Home token={token} />} />

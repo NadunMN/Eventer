@@ -1,11 +1,11 @@
 import React from 'react';
-import './Abouts.css'; // Import the CSS file for styling
+import './Abouts.css'; 
 import teamMember1 from '../../asset/team-member1.jpg';
 import teamMember2 from '../../asset/team-member2.jpg';
 import teamMember3 from '../../asset/team-member3.jpg';
 import teamMember4 from '../../asset/team-member4.jpg';
-import introImage from '../../asset/introImage.jpg';
-import introImage2 from '../../asset/introImage2.jpg'; // Import the intro image
+import introImage from '../../asset/Event/10.jpg';
+import introImage2 from '../../asset/Event/11.jpg'; 
 import { useState, useEffect } from 'react';
 import { Avatar, CircularProgress } from "@mui/material";
 import Box from "@mui/material/Box";
@@ -21,7 +21,7 @@ export const About = () => {
     setLoading(true);
     setTimeout(()=>{
       setLoading(false);
-    },2000);
+    },1000);
   }, []);  // Empty dependency array means this runs only once on mount
 
   if (loading) {
@@ -42,7 +42,11 @@ export const About = () => {
     <div className="about-container">
       <section className="about-intro">
         <div className="intro-content ">
-          <img src={introImage} alt="Introduction Image" className="intro-image"/>
+        <div className='about-div-img1'>
+          
+          {/* <img src={introImage2} alt="Mission Image" className="intro-image"/> */}
+
+          </div>
           <div className="intro-text">
             <h2>Introduction</h2>
             <p>Eventer is your go-to tool for planning and managing university events. From campus activities to student gatherings, our app makes it easy to organize, track, and execute events smoothly. With Eventer, you can handle everything in one place and ensure your events are a success.</p>
@@ -52,7 +56,10 @@ export const About = () => {
 
       <section className="about-mission">
         <div className="intro-content">
-          <img src={introImage2} alt="Mission Image" className="intro-image"/>
+          <div className='about-div-img2'>
+          {/* <img src={introImage} alt="Mission Image" className="intro-image"/> */}
+
+          </div>
           <div className="intro-text">
             <h2>Our Mission</h2>
             <p>At Eventer, we simplify event planning for universities by providing an intuitive and efficient platform. We aim to support organizers in creating exceptional events that enhance student engagement and campus life.</p>

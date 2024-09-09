@@ -18,7 +18,7 @@ export const Home = ({ token }) => {
     setLoading(true);
     setTimeout(()=>{
       setLoading(false);
-    },2000);
+    },1000);
   }, []);  // Empty dependency array means this runs only once on mount
 
   if (loading) {
@@ -238,10 +238,8 @@ export const Home = ({ token }) => {
 
       <div className="upcoming-para">
         <div className="section-para">
-          Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam
-          nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat
-          volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation
-          ullamcorper suscipit lobortis nisl ut.
+        Don’t miss out on our exciting upcoming events! Stay tuned for unforgettable experiences, amazing speakers,
+         and opportunities to connect with the community. Mark your calendar and be part of the excitement!
         </div>
         <Button
           variant="contained"
@@ -266,13 +264,13 @@ export const Home = ({ token }) => {
 
       <div className="image-section-upcoming">
         <div className="image-section-img">
-          <img src="/src/asset/woman-5275027_1280.jpg"></img>
+          <img src="/src/asset/Event/1.jpg"></img>
         </div>
         <div className="image-section-img">
-          <img src="/src/asset/stock-photo-smartphone-hand-concert-purple-light-stage.jpg"></img>
+          <img src="/src/asset/Event/3.jpg"></img>
         </div>
         <div className="image-section-img">
-          <img src="/src/asset/photo-1492684223066-81342ee5ff30.jpg"></img>
+          <img src="/src/asset/Event/2.jpg"></img>
         </div>
       </div>
 
@@ -362,11 +360,10 @@ export const Home = ({ token }) => {
             }}
           >
             <Typography variant="h4" sx={{ color: "white" }}>
-              Share experiences with your friends
+              Share experiences with Us
             </Typography>
             <Typography variant="h6" sx={{ color: "white" }}>
-              Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam
-              nonummy.
+            Your experiences are valuable to us! let's create a meaningful connection together.
             </Typography>
           </Stack>
           <Button

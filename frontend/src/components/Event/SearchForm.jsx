@@ -90,7 +90,9 @@ const SearchForm = ({ setListOfEvents }) => {
   return (
     <>
       <form onSubmit={handleSearchEvent} >
-        <SearchWrapper>
+        <SearchWrapper sx={{
+          maxWidth:"lg"
+        }}>
           <StyledInputBase
            
             placeholder="Search events..."

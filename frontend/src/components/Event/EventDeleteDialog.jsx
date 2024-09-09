@@ -59,6 +59,7 @@ export default function FormDialogDelete() {
     const user = JSON.parse(localStorage.getItem("user"));
     if (user && user.token) {
       try {
+        const user = JSON.parse(localStorage.getItem("user"));
         // Attempt to delete the event
         await axios.delete(
           `http://localhost:5000/api/event/delete/${eventId}`,
