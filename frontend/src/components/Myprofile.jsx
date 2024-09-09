@@ -6,6 +6,8 @@ import {
   TextField,
   Divider,
   CircularProgress,
+  Snackbar,
+  Alert,
 } from "@mui/material";
 
 import React, { useState, useEffect } from "react";
@@ -28,7 +30,9 @@ function Myprofile() {
     bio: "",
     phone: "",
   });
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [userId, setUserId] = useState("");
+  const [alert, setAlert] = useState(false);
 
   const user_id = JSON.parse(localStorage.getItem("user"));
 
@@ -93,12 +97,23 @@ function Myprofile() {
           ...editedValues,
         }));
         setIsEditing(false);
+        setAlert(true);
+        setSnackbarOpen(true);
       } catch (error) {
         console.error("Failed to save the user:", error);
+        setAlert(false);
+        setSnackbarOpen(true);
       }
     } else {
       console.log("User not logged in or invalid access token");
     }
+  };
+
+  const handleSnackbarClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setSnackbarOpen(false); // Close the snackbar
   };
 
   if (loading) {
@@ -121,310 +136,341 @@ function Myprofile() {
   if (error) return <Typography>{error}</Typography>;
 
   return (
-    <Stack
-      sx={{
-        display: "flex",
-        flexDirection: "row",
-        justifyContent: "flex-start",
-        width: "auto",
-        height: "auto",
-        // pl:15,
-        alignItems: "flex-start",
-      }}
-    >
-      <Box
+    <>
+      <Stack
         sx={{
           display: "flex",
-          flexDirection: "column",
+          flexDirection: "row",
           justifyContent: "flex-start",
-          gap: 3,
-          // alignItems: 'center'
+          width: "auto",
+          height: "auto",
+          // pl:15,
+          alignItems: "flex-start",
         }}
       >
         <Box
           sx={{
             display: "flex",
-            width: 950,
-            justifyContent: "space-between",
-            alignItems: "center",
-          }}
-        >
-          <Box sx={{ display: "flex", gap: 4 }}>
-            <div className="art-div"></div>
-            <Typography
-              variant="h4"
-              color="#311b92"
-              sx={{ fontWeight: "bold" }}
-            >
-              Personal Account Details
-            </Typography>
-          </Box>
-          <Button
-            variant="outlined"
-            endIcon={isEditing ? <SaveIcon /> : <EditIcon />}
-            size="large"
-            sx={{
-              color: isEditing ? "darkgreen" : "darkred",
-              width: 130,
-              fontSize: "15px",
-              height: 40,
-              borderRadius: 20,
-              "&:hover": {
-                color: isEditing ? "green" : "#512da8",
-                cursor: "pointer",
-              },
-            }}
-            disableElevation
-            onClick={isEditing ? handleSaveClick : handleEditClick}
-          >
-            {isEditing ? "Save" : "Edit"}
-          </Button>
-        </Box>
-        <Box
-          sx={{
-            width: 950,
-            bgcolor: "#ede7f6",
-            borderRadius: 3,
-            height: "auto",
-            display: "flex",
             flexDirection: "column",
-          }}
-        >
-          <Box sx={{ display: "flex", alignItems: "center", gap: 4 }}>
-            <TextField
-              id="first-name-input"
-              value={
-                isEditing
-                  ? editedValues.first_name
-                  : user.first_name || "First name"
-              }
-              helperText="Your first-name may appear around GitHub where you contribute or are mentioned."
-              label={isEditing ? "Edit" : "Disabled"}
-              onChange={(e) =>
-                setEditedValues({ ...editedValues, first_name: e.target.value })
-              }
-              sx={{ width: "90%", ml: 5, my: 5 }}
-              InputProps={{
-                readOnly: !isEditing,
-              }}
-            />
-          </Box>
-          <Box
-            sx={{ display: "flex", alignItems: "center", gap: 4, height: 50 }}
-          >
-            <TextField
-              id="last-name-input"
-              value={
-                isEditing
-                  ? editedValues.last_name
-                  : user.last_name || "last name"
-              }
-              helperText="Your last-name may appear around GitHub where you contribute or are mentioned. "
-              label={isEditing ? "Edit" : "Disabled"}
-              onChange={(e) =>
-                setEditedValues({ ...editedValues, last_name: e.target.value })
-              }
-              sx={{ width: "90%", ml: 5, my: 5 }}
-              InputProps={{
-                readOnly: !isEditing,
-              }}
-            />
-          </Box>
-          <Box sx={{ display: "flex", alignItems: "center", gap: 4 }}>
-            <TextField
-              id="phone-number-input"
-              value={
-                isEditing
-                  ? editedValues.phone_number
-                  : user.phone_number || "07x xxx xxxx"
-              }
-              helperText="Enter a valid phone number including the country code."
-              label={isEditing ? "Edit" : "Disabled"}
-              onChange={(e) =>
-                setEditedValues({
-                  ...editedValues,
-                  phone_number: e.target.value,
-                })
-              }
-              sx={{ width: "90%", ml: 5, my: 5 }}
-              InputProps={{
-                readOnly: !isEditing,
-              }}
-            />
-          </Box>
-
-          <Box
-            sx={{ display: "flex", alignItems: "center", gap: 4, height: 50 }}
-          >
-            <TextField
-              id="email-input"
-              value={
-                isEditing
-                  ? editedValues.email
-                  : user.email || "xxxxxxx@gmial.com"
-              }
-              helperText="Enter a valid email address you frequently check. 
-                        This email will be used for account notifications and recovery."
-              label={isEditing ? "Edit" : "Disabled"}
-              onChange={(e) =>
-                setEditedValues({ ...editedValues, email: e.target.value })
-              }
-              sx={{ width: "90%", ml: 5, my: 5 }}
-              InputProps={{
-                readOnly: !isEditing,
-              }}
-            />
-          </Box>
-
-          <Box sx={{ display: "flex", alignItems: "center", gap: 4 }}>
-            <TextField
-              id="bio-input"
-              value={
-                isEditing
-                  ? editedValues.Bio
-                  : user.Bio || "Introduce your self..."
-              }
-              helperText="Write a brief introduction about yourself. Max 150 characters. 
-                        Share something interesting about yourself, such as hobbies or profession."
-              label={isEditing ? "Edit" : "Disabled"}
-              onChange={(e) =>
-                setEditedValues({ ...editedValues, Bio: e.target.value })
-              }
-              sx={{ width: "90%", ml: 5, my: 5 }}
-              InputProps={{
-                readOnly: !isEditing,
-              }}
-            />
-          </Box>
-        </Box>
-
-        <Stack
-          sx={{
-            display: "flex",
-            flexDirection: "row",
+            justifyContent: "flex-start",
             gap: 3,
-            width: 950,
-            justifyContent: "space-between",
+            // alignItems: 'center'
           }}
         >
           <Box
             sx={{
-              width: "100%", // Responsive width based on breakpoints
-              height: { xs: "auto", md: 500 }, // Responsive height
-              bgcolor: "#ede7f6", // Background color
-              borderRadius: 3, // Smooth borders
               display: "flex",
-              flexDirection: "column",
-              alignItems: "center", // Center the content horizontally
-              justifyContent: "center", // Center the content vertically
-              p: { xs: 2, sm: 3 }, // Padding for internal spacing
-              boxSizing: "border-box", // Ensure padding is accounted for in width
+              width: 950,
+              justifyContent: "space-between",
+              alignItems: "center",
             }}
           >
-            <ImageUpload />
+            <Box sx={{ display: "flex", gap: 4 }}>
+              <div className="art-div"></div>
+              <Typography
+                variant="h4"
+                color="#311b92"
+                sx={{ fontWeight: "bold" }}
+              >
+                Personal Account Details
+              </Typography>
+            </Box>
+            <Button
+              variant="outlined"
+              endIcon={isEditing ? <SaveIcon /> : <EditIcon />}
+              size="large"
+              sx={{
+                color: isEditing ? "darkgreen" : "darkred",
+                width: 130,
+                fontSize: "15px",
+                height: 40,
+                borderRadius: 20,
+                "&:hover": {
+                  color: isEditing ? "green" : "#512da8",
+                  cursor: "pointer",
+                },
+              }}
+              disableElevation
+              onClick={isEditing ? handleSaveClick : handleEditClick}
+            >
+              {isEditing ? "Save" : "Edit"}
+            </Button>
           </Box>
-
           <Box
             sx={{
-              width: "100%", // Responsive width
-              height: "auto",
-              maxHeight: { xs: "none", sm: 500, md: 500 }, // Responsive maxHeight
+              width: 950,
               bgcolor: "#ede7f6",
               borderRadius: 3,
+              height: "auto",
               display: "flex",
               flexDirection: "column",
-              p: 2, // Add padding
-              // boxSizing: 'border-box',
             }}
           >
-            <Typography
-              variant="h4"
-              color="error"
-              sx={{ m: 3, display: "flex", maxWidth: 400, fontWeight: "bold" }}
+            <Box sx={{ display: "flex", alignItems: "center", gap: 4 }}>
+              <TextField
+                id="first-name-input"
+                value={
+                  isEditing
+                    ? editedValues.first_name
+                    : user.first_name || "First name"
+                }
+                helperText="Your first-name may appear around the system where you contribute."
+                label={isEditing ? "Edit" : "Disabled"}
+                onChange={(e) =>
+                  setEditedValues({
+                    ...editedValues,
+                    first_name: e.target.value,
+                  })
+                }
+                sx={{ width: "90%", ml: 5, my: 5 }}
+                InputProps={{
+                  readOnly: !isEditing,
+                }}
+              />
+            </Box>
+            <Box
+              sx={{ display: "flex", alignItems: "center", gap: 4, height: 50 }}
             >
-              *Danger Zone
-            </Typography>
-            <Typography variant="h6" sx={{ ml: 3, maxWidth: 400 }}>
-              Delete this Account
-            </Typography>
-            <Typography variant="body1" sx={{ ml: 3, mt: 1, maxWidth: 400 }}>
-              Once you delete a Account, there is no going back. Please be
-              certain.
-            </Typography>
-            <Typography
-              variant="body2"
-              color="darkred"
-              sx={{
-                ml: 3,
-                mt: 1,
-                maxWidth: 400,
-                fontFamily: "monospace",
-                fontSize: 13,
-              }}
+              <TextField
+                id="last-name-input"
+                value={
+                  isEditing
+                    ? editedValues.last_name
+                    : user.last_name || "last name"
+                }
+                helperText="Your last-name may appear around system where you contribute. "
+                label={isEditing ? "Edit" : "Disabled"}
+                onChange={(e) =>
+                  setEditedValues({
+                    ...editedValues,
+                    last_name: e.target.value,
+                  })
+                }
+                sx={{ width: "90%", ml: 5, my: 5 }}
+                InputProps={{
+                  readOnly: !isEditing,
+                }}
+              />
+            </Box>
+            <Box sx={{ display: "flex", alignItems: "center", gap: 4 }}>
+              <TextField
+                id="phone-number-input"
+                value={
+                  isEditing
+                    ? editedValues.phone_number
+                    : user.phone_number || "07x xxx xxxx"
+                }
+                helperText="Enter a valid phone number including the country code."
+                label={isEditing ? "Edit" : "Disabled"}
+                onChange={(e) =>
+                  setEditedValues({
+                    ...editedValues,
+                    phone_number: e.target.value,
+                  })
+                }
+                sx={{ width: "90%", ml: 5, my: 5 }}
+                InputProps={{
+                  readOnly: !isEditing,
+                }}
+              />
+            </Box>
+
+            <Box
+              sx={{ display: "flex", alignItems: "center", gap: 4, height: 50 }}
             >
-              "All your data will be permanently erased, and it cannot be
-              recovered."
-            </Typography>
-            <Typography
-              variant="body2"
-              color="darkred"
-              sx={{
-                ml: 3,
-                mt: 1,
-                maxWidth: 400,
-                fontFamily: "monospace",
-                fontSize: 13,
-              }}
-            >
-              "You will lose access to all your content, subscriptions, and
-              services."
-            </Typography>
-            <Typography
-              variant="body2"
-              color="darkred"
-              sx={{
-                ml: 3,
-                mt: 1,
-                maxWidth: 400,
-                fontFamily: "monospace",
-                fontSize: 13,
-              }}
-            >
-              "Any remaining balances or credits in your account will be
-              forfeited."
-            </Typography>
-            <Typography
-              variant="body2"
-              color="darkred"
-              sx={{
-                ml: 3,
-                mt: 1,
-                maxWidth: 400,
-                fontFamily: "monospace",
-                fontSize: 13,
-              }}
-            >
-              "Your profile, including any saved preferences, will be deleted."
-            </Typography>
-            <Typography
-              variant="body2"
-              color="darkred"
-              sx={{
-                ml: 3,
-                mt: 1,
-                maxWidth: 400,
-                fontFamily: "monospace",
-                fontSize: 13,
-              }}
-            >
-              "This action is irreversible, so make sure you have saved any
-              important information."
-            </Typography>
-            <FormDialog />
+              <TextField
+                id="email-input"
+                value={
+                  isEditing
+                    ? editedValues.email
+                    : user.email || "xxxxxxx@gmial.com"
+                }
+                helperText="Enter a valid email address you frequently check. 
+                        This email will be used for account notifications and recovery."
+                label={isEditing ? "Edit" : "Disabled"}
+                onChange={(e) =>
+                  setEditedValues({ ...editedValues, email: e.target.value })
+                }
+                sx={{ width: "90%", ml: 5, my: 5 }}
+                InputProps={{
+                  readOnly: !isEditing,
+                }}
+              />
+            </Box>
+
+            <Box sx={{ display: "flex", alignItems: "center", gap: 4 }}>
+              <TextField
+                id="bio-input"
+                value={
+                  isEditing
+                    ? editedValues.Bio
+                    : user.Bio || "Introduce your self..."
+                }
+                helperText="Write a brief introduction about yourself. Max 150 characters. 
+                        Share something interesting about yourself, such as hobbies or profession."
+                label={isEditing ? "Edit" : "Disabled"}
+                onChange={(e) =>
+                  setEditedValues({ ...editedValues, Bio: e.target.value })
+                }
+                sx={{ width: "90%", ml: 5, my: 5 }}
+                InputProps={{
+                  readOnly: !isEditing,
+                }}
+              />
+            </Box>
           </Box>
-        </Stack>
-      </Box>
-    </Stack>
+
+          <Stack
+            sx={{
+              display: "flex",
+              flexDirection: "row",
+              gap: 3,
+              width: 950,
+              justifyContent: "space-between",
+            }}
+          >
+            <Box
+              sx={{
+                width: "100%", // Responsive width based on breakpoints
+                height: { xs: "auto", md: 500 }, // Responsive height
+                bgcolor: "#ede7f6", // Background color
+                borderRadius: 3, // Smooth borders
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center", // Center the content horizontally
+                justifyContent: "center", // Center the content vertically
+                p: { xs: 2, sm: 3 }, // Padding for internal spacing
+                boxSizing: "border-box", // Ensure padding is accounted for in width
+              }}
+            >
+              <ImageUpload />
+            </Box>
+
+            <Box
+              sx={{
+                width: "100%", // Responsive width
+                height: "auto",
+                maxHeight: { xs: "none", sm: 500, md: 500 }, // Responsive maxHeight
+                bgcolor: "#ede7f6",
+                borderRadius: 3,
+                display: "flex",
+                flexDirection: "column",
+                p: 2, // Add padding
+                // boxSizing: 'border-box',
+              }}
+            >
+              <Typography
+                variant="h4"
+                color="error"
+                sx={{
+                  m: 3,
+                  display: "flex",
+                  maxWidth: 400,
+                  fontWeight: "bold",
+                }}
+              >
+                *Danger Zone
+              </Typography>
+              <Typography variant="h6" sx={{ ml: 3, maxWidth: 400 }}>
+                Delete this Account
+              </Typography>
+              <Typography variant="body1" sx={{ ml: 3, mt: 1, maxWidth: 400 }}>
+                Once you delete a Account, there is no going back. Please be
+                certain.
+              </Typography>
+              <Typography
+                variant="body2"
+                color="darkred"
+                sx={{
+                  ml: 3,
+                  mt: 1,
+                  maxWidth: 400,
+                  fontFamily: "monospace",
+                  fontSize: 13,
+                }}
+              >
+                "All your data will be permanently erased, and it cannot be
+                recovered."
+              </Typography>
+              <Typography
+                variant="body2"
+                color="darkred"
+                sx={{
+                  ml: 3,
+                  mt: 1,
+                  maxWidth: 400,
+                  fontFamily: "monospace",
+                  fontSize: 13,
+                }}
+              >
+                "You will lose access to all your content, subscriptions, and
+                services."
+              </Typography>
+              <Typography
+                variant="body2"
+                color="darkred"
+                sx={{
+                  ml: 3,
+                  mt: 1,
+                  maxWidth: 400,
+                  fontFamily: "monospace",
+                  fontSize: 13,
+                }}
+              >
+                "Any remaining balances or credits in your account will be
+                forfeited."
+              </Typography>
+              <Typography
+                variant="body2"
+                color="darkred"
+                sx={{
+                  ml: 3,
+                  mt: 1,
+                  maxWidth: 400,
+                  fontFamily: "monospace",
+                  fontSize: 13,
+                }}
+              >
+                "Your profile, including any saved preferences, will be
+                deleted."
+              </Typography>
+              <Typography
+                variant="body2"
+                color="darkred"
+                sx={{
+                  ml: 3,
+                  mt: 1,
+                  maxWidth: 400,
+                  fontFamily: "monospace",
+                  fontSize: 13,
+                }}
+              >
+                "This action is irreversible, so make sure you have saved any
+                important information."
+              </Typography>
+              <FormDialog />
+            </Box>
+          </Stack>
+        </Box>
+      </Stack>
+      {/* Alert for Successfull review */}
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={3000}
+        onClose={handleSnackbarClose}
+        anchorOrigin={{ vertical: "top", horizontal: "right" }}
+      >
+        <Alert
+          onClose={handleSnackbarClose}
+          severity={alert ? "success" : "error"}
+          sx={{ width: "100%" }}
+        >
+          {alert
+            ? "Profile updated successfully"
+            : "Error occured! Please Try again later"}
+        </Alert>
+      </Snackbar>
+    </>
   );
 }
 
