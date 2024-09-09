@@ -15,6 +15,7 @@ import { Navigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { jwtDecode } from "jwt-decode";
 import { Event } from "./components/Event/Event";
+import { NotFoundPage } from "./components/NotFoundPage";
 import { EventEdit } from "./components/Event/EventEdit";
 
 function App() {
@@ -67,6 +68,10 @@ function App() {
           path="signup"
           element={!userId ? <Signup /> : <Navigate to="/" />}
         />
+        <Route
+          path="create-event"
+          element={userId ? <AddEvent /> : <Navigate to="/login" />}
+        />
         <Route path="create-event" element={<AddEvent />} />
         <Route path="edit-event/:eventId" element={<EventEdit />} />
         <Route path="admin-dashboard" element={<AdminDashboard />} />
@@ -89,6 +94,7 @@ function App() {
             )
           }
         />
+        <Route path="*" element={<NotFoundPage />} />
       </Routes>
       {showNavBarAndFooter && <Footer />}
     </>

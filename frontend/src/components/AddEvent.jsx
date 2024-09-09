@@ -30,12 +30,12 @@ import addImg from "../asset/addImage.jpg";
 import axios from "axios";
 import { jwtDecode } from "jwt-decode"; // Correct import
 import { useNavigate } from "react-router-dom";
-import Ceatlogo from '../asset/Icon/colombo.png';
-import Maxxislogo from '../asset/Icon/compsoc.jpg';
-import Bridgestonelogo from '../asset/Icon/IEEE.jpg';
-import Dunloplogo from '../asset/Icon/images (1).jpg';
-import Michelinlogo from '../asset/Icon/Systemlogo2.jpg';
-import Federallogo from '../asset/Icon/rotaract.jpg';
+import Ceatlogo from "../asset/Icon/colombo.png";
+import Maxxislogo from "../asset/Icon/compsoc.jpg";
+import Bridgestonelogo from "../asset/Icon/IEEE.jpg";
+import Dunloplogo from "../asset/Icon/images (1).jpg";
+import Michelinlogo from "../asset/Icon/Systemlogo2.jpg";
+import Federallogo from "../asset/Icon/rotaract.jpg";
 
 const Input = styled("input")({
   display: "none",
@@ -200,10 +200,15 @@ export const AddEvent = () => {
   return (
     <>
       <Box
-        sx={{ height:"100%", width: '100%' ,display: 'flex', p: 3,
-          justifyContent: 'flex-start', flexDirection: 'column', alignItems: 'center',
-                
-            }}
+        sx={{
+          height: "100%",
+          width: "100%",
+          display: "flex",
+          p: 3,
+          justifyContent: "flex-start",
+          flexDirection: "column",
+          alignItems: "center",
+        }}
       >
         <Typography
           variant="h3"
@@ -216,15 +221,15 @@ export const AddEvent = () => {
         <Card
           elevation={0}
           sx={{
-            width: '65%',
+            width: "65%",
             borderRadius: 4,
             p: 4,
             backgroundColor: "white",
             boxShadow: "0px 4px 20px rgba(0,0,0,0.1)",
-            mt:4
+            mt: 4,
           }}
         >
-          <CardContent >
+          <CardContent>
             <Grid container spacing={4}>
               <Grid item xs={12} md={6}>
                 <Box
@@ -405,6 +410,7 @@ export const AddEvent = () => {
                       <MenuItem value={"communities"}>Communities</MenuItem>
                       <MenuItem value={"theaters"}>Theaters</MenuItem>
                       <MenuItem value={"concerts"}>Concerts</MenuItem>
+                      <MenuItem value={"event"}>Event</MenuItem>
                     </Select>
                   </FormControl>
 
@@ -492,46 +498,59 @@ export const AddEvent = () => {
                         }}
                       >
                         <AddPhotoAlternate />
-                        
                       </IconButton>
-                      
                     </label>
                   </Box>
-                 
 
-                  <Box sx={{
-                    mt:3,
-                    display:'flex',
-                    justifyContent:'center',
-                    alignItems:'center',
-                    width: '90%',
-                    gap:4,
-                    flexWrap: 'wrap',
-                    height: 'auto',
-                    p:2
-                  }}>
-                  <img src={Michelinlogo} style={{
-                        width:180,
-                        height:100
-                      }}/>
-                  <img src={Maxxislogo} style={{
-                        width:180,
-                        height:100
-                      }}/>
-                  <img src={Bridgestonelogo} style={{
-                       width:180,
-                       height:100
-                      }}/>
-                  <img src={Dunloplogo} style={{
-                        width:180,
-                        height:100
-                      }}/>
-                  <img src={Ceatlogo} style={{
-                       width:180,
-                       height:100
-                      }}/>
+                  <Box
+                    sx={{
+                      mt: 3,
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      width: "90%",
+                      gap: 4,
+                      flexWrap: "wrap",
+                      height: "auto",
+                      p: 2,
+                    }}
+                  >
+                    <img
+                      src={Michelinlogo}
+                      style={{
+                        width: 180,
+                        height: 100,
+                      }}
+                    />
+                    <img
+                      src={Maxxislogo}
+                      style={{
+                        width: 180,
+                        height: 100,
+                      }}
+                    />
+                    <img
+                      src={Bridgestonelogo}
+                      style={{
+                        width: 180,
+                        height: 100,
+                      }}
+                    />
+                    <img
+                      src={Dunloplogo}
+                      style={{
+                        width: 180,
+                        height: 100,
+                      }}
+                    />
+                    <img
+                      src={Ceatlogo}
+                      style={{
+                        width: 180,
+                        height: 100,
+                      }}
+                    />
                   </Box>
-
                 </Box>
               </Grid>
             </Grid>
