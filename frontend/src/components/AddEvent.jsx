@@ -162,7 +162,7 @@ export const AddEvent = () => {
     const created_at = new Date().toISOString();
     formDataToSend.append("created_at", created_at);
     formDataToSend.append("category", category);
-    const user = JSON.parse(localStorage("user"));
+    const user = JSON.parse(localStorage.getItem("user"));
     if (user && user.token) {
       try {
         const result = await axios.post(
@@ -405,6 +405,7 @@ export const AddEvent = () => {
                         borderRadius: 2,
                       }}
                     >
+                      <MenuItem value={"event"}>Event</MenuItem>
                       <MenuItem value={"sports"}>Sports</MenuItem>
                       <MenuItem value={"parties"}>Parties</MenuItem>
                       <MenuItem value={"communities"}>Communities</MenuItem>

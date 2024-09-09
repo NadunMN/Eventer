@@ -181,7 +181,7 @@ export const EventEdit = () => {
   return (
     <>
       <Box
-        sx={{ height: "100vh", maxWidth: 1000, margin: "auto", p: 3, mt: 8 }}
+        sx={{ height: "100%", maxWidth: 1000, margin: "auto", p: 3, my: 8, }}
       >
         <Typography
           variant="h3"
@@ -201,7 +201,9 @@ export const EventEdit = () => {
           }}
         >
           <CardContent>
-            <Grid container spacing={4}>
+            <Grid container spacing={4} sx={{
+              
+            }}>
               <Grid item xs={12} md={12}>
                 <Box
                   sx={{
