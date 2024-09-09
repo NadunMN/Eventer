@@ -74,26 +74,25 @@ export default function FormDialogDelete() {
         setSnackbarOpen(true);
 
         try {
-          // Attempt to remove the event from all users
+          //remove the event from all users
           const response = await axios.post(
             `http://localhost:5000/api/user/remove-event/${eventId}`,
+            {}, 
             {
               headers: {
                 Authorization: `Bearer ${user.token}`,
               },
             }
           );
-
+        
           if (response.status === 200) {
             console.log("Event removed from all users:", response.data.message);
-            // Optionally, trigger some UI update or notification
-
-            // Only navigate if both operations succeed
+            
             setTimeout(() => {
               navigate("/event", { replace: true });
             }, 2000);
           } else {
-            // Handle unexpected response status
+            
             setAlertMessage(
               "Event deletion succeeded but failed to remove from users."
             );
@@ -109,6 +108,7 @@ export default function FormDialogDelete() {
             error.response ? error.response.data.message : error.message
           );
         }
+        
       } catch (error) {
         setAlertMessage("Failed to delete the event.");
         setAlertSeverity("error");
