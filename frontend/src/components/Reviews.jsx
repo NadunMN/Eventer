@@ -66,10 +66,12 @@ export const Reviews = () => {
 
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("user"));
+    const token = jwtDecode(user.token);
+    const user_id = token._id;
 
     if (user && user.token) {
       axios
-        .get(`http://localhost:5000/api/user/${userId}`, {
+        .get(`http://localhost:5000/api/user/${user_id}`, {
           headers: {
             Authorization: `Bearer ${user.token}`,
           },
