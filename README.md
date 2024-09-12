@@ -1,17 +1,5 @@
 # Eventer (MERN)
 
-## Table of Contents
-- [Introduction](#introduction)
-- [Features](#features)
-- [Technologies Used](#technologies-used)
-- [Installation](#installation)
-- [Usage](#usage)
-- [Folder Structure](#folder-structure)
-- [API Endpoints](#api-endpoints)
-- [Admin Panel](#admin-panel)
-- [Contributing](#contributing)
-- [License](#license)
-
 ## Introduction
 This is an Event Management System built using the MERN stack (MongoDB, Express.js, React, and Node.js). It provides a platform for users to publish, manage, and attend events. Admins can manage users, events, and other system settings.
 
