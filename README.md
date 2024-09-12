@@ -1,4 +1,4 @@
-# Event Management System (MERN)
+# Eventer (MERN)
 
 ## Table of Contents
 - [Introduction](#introduction)
